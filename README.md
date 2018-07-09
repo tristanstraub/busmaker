@@ -5,7 +5,9 @@ generates the selected recipe.
 
 Visit https://tristanstraub.github.io/busmaker/build/index.html
 
-## Example
+## Example -- building radars
+
+![Image of factory generation](resources/busmaker-example.png)
 
 ![Image of factory generating radars](resources/radar-factory-example.png)
 
