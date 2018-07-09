@@ -39,5 +39,14 @@ cp target/public/js/app.js build/js
 cp target/public/css/garden.css build/css
 ```
 
+## Development
+
+```sh
+boot dev
+```
+
+Visit http://localhost:3000/public/index.html
+
+
 
 
