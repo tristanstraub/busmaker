@@ -11,6 +11,9 @@ Visit https://tristanstraub.github.io/busmaker/build/index.html
 2. Press generate, and wait for the blueprint to be generated and rendered (may take some seconds).
 3. Click on the base64 encoded blueprint (will be copied to the clipboard)
 4. Import via blueprints in factorio
+5. Stamp the blueprint on the ground.
+6. Feed in ore on the appropriate transport belts
+7. Feed in fluids (oil/water) into the appropriate pipes
 
 ## Issues:
 
