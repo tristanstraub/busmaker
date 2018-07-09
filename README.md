@@ -47,6 +47,10 @@ boot dev
 
 Visit http://localhost:3000/public/index.html
 
+## Release
 
-
-
+```sh
+make
+git checkout gh-pages
+git push
+```
