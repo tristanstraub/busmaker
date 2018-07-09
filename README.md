@@ -5,6 +5,10 @@ generates the selected recipe.
 
 Visit https://tristanstraub.github.io/busmaker/build/index.html
 
+## Example
+
+![Image of factory generating radars](resources/radar-factory-example.png)
+
 ## Building
 
 boot production build target
