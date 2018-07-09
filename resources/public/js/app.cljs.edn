@@ -1,0 +1,8 @@
+{:require  [busmaker.app]
+ :init-fns [busmaker.app/init]
+ :compiler-options {:asset-path "js/app.out"
+                    :install-deps true
+                    :npm-deps {:pako "1.0.6"
+                               "@cljs-oss/module-deps" "1.1.1"
+                               }}}
+

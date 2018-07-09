@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg4645"
+   version="1.1"
+   viewBox="0 0 16 16"
+   height="16"
+   width="16"
+   sodipodi:docname="transport-belt.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview8253"
+     showgrid="false"
+     inkscape:zoom="4.6032639"
+     inkscape:cx="27.119153"
+     inkscape:cy="22.418625"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4645"
+     units="px" />
+  <defs
+     id="defs4639" />
+  <metadata
+     id="metadata4642">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="g9017">
+    <g
+       style="display:inline"
+       id="g4607"
+       transform="matrix(1.1805724,0,0,1.2414095,-8.7010884,-7.9147978)">
+      <rect
+         style="fill:#ffff00;stroke-width:0.26458332"
+         id="rect3719"
+         width="13.229166"
+         height="13.229166"
+         x="7.9375"
+         y="5.9583335" />
+      <path
+         id="path3762"
+         style="fill:none;stroke:#000000;stroke-width:0.67098331;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 7.9375003,19.187492 H 21.166667 L 14.552081,6.8572359 Z"
+         inkscape:connector-curvature="0" />
+    </g>
+    <rect
+       y="0.46538401"
+       x="0.51472491"
+       height="15.454887"
+       width="15.594344"
+       id="rect8989"
+       style="fill:none;stroke:#000000;stroke-width:0.79350734;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  </g>
+</svg>
