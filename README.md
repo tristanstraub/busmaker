@@ -1,9 +1,14 @@
-# busmaker
+# busmaker -- alpha version
 
 Generates a simple bus architecture for factorio, which
 generates the selected recipe.
 
 Visit https://tristanstraub.github.io/busmaker/build/index.html
+
+Issues:
+
+- Always includes oil processing
+- Doesn't use correct factory for rocket-silo
 
 ## Example -- building radars
 
