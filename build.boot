@@ -62,8 +62,7 @@
 
 (deftask development []
   (task-options! cljs {:optimizations :none}
-                 reload {:on-jsload 'busmaker.app/init
-                         :asset-path "/public"})
+                 reload {:on-jsload 'busmaker.app/init})
   identity)
 
 (deftask dev
