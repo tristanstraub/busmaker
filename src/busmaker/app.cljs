@@ -13,7 +13,8 @@
 (enable-console-print!)
 
 (defonce state (atom {:widgets widgets/widgets
-                      :recipes (map :name recipes/recipes)}))
+                      :recipes (map :name recipes/recipes)
+                      :recipe-names #{}}))
 
 (rum/defc recipe-selector < rum/reactive
   [state]
@@ -27,7 +28,11 @@
       [:option "Select recipe"]
       (for [recipe (sort recipes)]
         
-        [:option {:key recipe :value recipe} recipe])]]))
+        [:option {:key recipe :value recipe} recipe])]
+     [:button
+      {:on-click (fn [_]
+                   (swap! state update :recipe-names conj recipe))}
+      "+"]]))
 
 (rum/defc canvas < rum/reactive
   [state]
@@ -36,14 +41,31 @@
     [:div.cursor
      (web/print-entities state solution widgets)]))
 
+(rum/defc recipe-name-list < rum/reactive
+  [state]
+  (let [recipe-names (:recipe-names (rum/react state))]
+    (if (seq recipe-names)
+      [:div.card
+       [:h6 "Recipes"]
+       [:ul.components
+        (for [recipe-name recipe-names]
+          [:li {:key recipe-name}
+           recipe-name
+           [:button
+            {:on-click (fn [_]
+                         (swap! state update :recipe-names disj recipe-name))}
+            "-"]])]])))
+
 (rum/defc components < rum/reactive
   [state]
-  [:div.card
-   [:h6 "Components"]
-   (if-let [recipe (:recipe (rum/react state))]
-     [:ul.components
-      (for [ingredient (main-bus/ingredients-by-recipe recipe)]
-        [:li ingredient])])])
+  (let [recipe-names (rum/react (rum/cursor-in state [:recipe-names]))]
+    (if (seq recipe-names)
+      [:div.card
+       [:h6 "Components"]
+       [:ul.components
+        (for [ingredient (sort (set (mapcat main-bus/ingredients-by-recipe recipe-names)))]
+          [:li {:key ingredient}
+           ingredient])]])))
 
 (rum/defc entity-details < rum/reactive
   [state]
@@ -101,23 +123,30 @@
                                  (let [solution (rum/react (rum/cursor-in state [:solution]))]
                                    (js/JSON.stringify (clj->js (wrap-entities solution))))}]])
 
+(rum/defc generate-button < rum/reactive
+  [state]
+  [:button {:on-click (fn [_]
+                        (let [solution (doall (plan/plan (:recipe-names @state)))]
+                          (swap! state assoc :solution solution)))
+            :disabled (not (seq (rum/react (rum/cursor-in state [:recipe-names]))))}
+   "Generate"])
+
 (rum/defc blueprint < rum/reactive
   [state]
   [:div.container-fluid.bg-light
    [:div.d-flex.flex-row
     [:div.d-flex.flex-column {:style {:min-width "300px"
                                       :width "300px"}}
-     (recipe-selector state)
+     [:div
+      (recipe-selector state)]
 
-     [:button {:on-click (fn [_]
-                           (let [solution (doall (plan/plan (:recipe @state)))]
-                             (swap! state assoc :solution solution)
-                             (prn :generate)))}
-      "Generate"]
+     (generate-button state)
+
      [:button {:on-click (fn [_]
                            (swap! state dissoc :solution))}
       "Clear"]
 
+     (recipe-name-list state)
      (components state)
      (entity-details state)
      (blueprint-encoded state)
