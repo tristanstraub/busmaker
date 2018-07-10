@@ -22,5 +22,7 @@
   [:.canvas {:width "2000px"
              :overflow "scroll"
              :height "3500px"}]
+  [:.components {:height "150px"
+                 :overflow "scroll"}]
   [:.cell-row {:height "16px"}]
   [:.cursor {:cursor "pointer"}])

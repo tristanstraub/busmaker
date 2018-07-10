@@ -7,7 +7,8 @@
             [busmaker.recipes :as recipes]
             [busmaker.widgets :as widgets]
             [busmaker.plan :as plan]
-            [busmaker.web :as web]))
+            [busmaker.web :as web]
+            [busmaker.main-bus :as main-bus]))
 
 (enable-console-print!)
 
@@ -34,6 +35,15 @@
         widgets  (rum/react (rum/cursor-in state [:widgets]))]
     [:div.cursor
      (web/print-entities state solution widgets)]))
+
+(rum/defc components < rum/reactive
+  [state]
+  [:div.card
+   [:h6 "Components"]
+   (if-let [recipe (:recipe (rum/react state))]
+     [:ul.components
+      (for [ingredient (main-bus/ingredients-by-recipe recipe)]
+        [:li ingredient])])])
 
 (rum/defc entity-details < rum/reactive
   [state]
@@ -107,7 +117,8 @@
      [:button {:on-click (fn [_]
                            (swap! state dissoc :solution))}
       "Clear"]
-     
+
+     (components state)
      (entity-details state)
      (blueprint-encoded state)
      (blueprint-decoded state)]
