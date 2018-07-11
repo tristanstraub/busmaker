@@ -16,7 +16,9 @@
 
 (def default-value
   {:widgets widgets/widgets
-   :recipes (map :name recipes/recipes)
+   :recipes (->> recipes/recipes
+                 (map :name)
+                 (remove #(#{"advanced-oil-processing"} %)))
    :recipe-names #{}})
 
 (defonce state (atom default-value))

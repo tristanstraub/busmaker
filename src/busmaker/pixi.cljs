@@ -136,7 +136,7 @@
 
     (impi/mount :blueprint
                 {:pixi/renderer  {:pixi.renderer/size [w h]}
-
+                 
                  :pixi/stage     (merge (solution-stage children
                                                         [(get @drag :x 0)
                                                          (get @drag :y 0)])
