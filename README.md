@@ -51,6 +51,7 @@ Visit http://localhost:3000/public/index.html
 
 ```sh
 make
+git commit -am "RELEASE"
 git checkout gh-pages
 git push
 ```
