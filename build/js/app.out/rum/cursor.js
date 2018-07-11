@@ -139,5 +139,3 @@ rum.cursor.__GT_Cursor = (function rum$cursor$__GT_Cursor(ref,path,meta){
 return (new rum.cursor.Cursor(ref,path,meta));
 });
 
-
-//# sourceMappingURL=cursor.js.map

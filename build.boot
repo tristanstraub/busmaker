@@ -67,6 +67,10 @@
                  reload {:on-jsload 'busmaker.app/reload!})
   identity)
 
+(deftask whitespace []
+  (task-options! cljs {:optimizations :whitespace})
+  identity)
+
 (deftask dev
   "Simple alias to run application in development mode"
   []

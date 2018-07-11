@@ -18,8 +18,8 @@ cljs.tools.reader.impl.commons.read_past = (function cljs$tools$reader$impl$comm
 var ch = cljs.tools.reader.reader_types.read_char.call(null,rdr);
 while(true){
 if(pred.call(null,ch)){
-var G__1261 = cljs.tools.reader.reader_types.read_char.call(null,rdr);
-ch = G__1261;
+var G__4894 = cljs.tools.reader.reader_types.read_char.call(null,rdr);
+ch = G__4894;
 continue;
 } else {
 return ch;
@@ -82,8 +82,8 @@ return parseFloat(s);
 }
 });
 cljs.tools.reader.impl.commons.matches_QMARK_ = (function cljs$tools$reader$impl$commons$matches_QMARK_(pattern,s){
-var vec__1262 = cljs.core.re_find.call(null,pattern,s);
-var match = cljs.core.nth.call(null,vec__1262,(0),null);
+var vec__4895 = cljs.core.re_find.call(null,pattern,s);
+var match = cljs.core.nth.call(null,vec__4895,(0),null);
 return (match === s);
 });
 cljs.tools.reader.impl.commons.match_number = (function cljs$tools$reader$impl$commons$match_number(s){
@@ -133,14 +133,14 @@ return null;
 });
 cljs.tools.reader.impl.commons.read_comment = (function cljs$tools$reader$impl$commons$read_comment(var_args){
 var args__4534__auto__ = [];
-var len__4531__auto___1267 = arguments.length;
-var i__4532__auto___1268 = (0);
+var len__4531__auto___4900 = arguments.length;
+var i__4532__auto___4901 = (0);
 while(true){
-if((i__4532__auto___1268 < len__4531__auto___1267)){
-args__4534__auto__.push((arguments[i__4532__auto___1268]));
+if((i__4532__auto___4901 < len__4531__auto___4900)){
+args__4534__auto__.push((arguments[i__4532__auto___4901]));
 
-var G__1269 = (i__4532__auto___1268 + (1));
-i__4532__auto___1268 = G__1269;
+var G__4902 = (i__4532__auto___4901 + (1));
+i__4532__auto___4901 = G__4902;
 continue;
 } else {
 }
@@ -158,36 +158,34 @@ return cljs.tools.reader.impl.commons.skip_line.call(null,rdr);
 cljs.tools.reader.impl.commons.read_comment.cljs$lang$maxFixedArity = (1);
 
 /** @this {Function} */
-cljs.tools.reader.impl.commons.read_comment.cljs$lang$applyTo = (function (seq1265){
-var G__1266 = cljs.core.first.call(null,seq1265);
-var seq1265__$1 = cljs.core.next.call(null,seq1265);
+cljs.tools.reader.impl.commons.read_comment.cljs$lang$applyTo = (function (seq4898){
+var G__4899 = cljs.core.first.call(null,seq4898);
+var seq4898__$1 = cljs.core.next.call(null,seq4898);
 var self__4518__auto__ = this;
-return self__4518__auto__.cljs$core$IFn$_invoke$arity$variadic(G__1266,seq1265__$1);
+return self__4518__auto__.cljs$core$IFn$_invoke$arity$variadic(G__4899,seq4898__$1);
 });
 
 cljs.tools.reader.impl.commons.throwing_reader = (function cljs$tools$reader$impl$commons$throwing_reader(msg){
 return (function() { 
-var G__1270__delegate = function (rdr,_){
+var G__4903__delegate = function (rdr,_){
 return cljs.tools.reader.impl.errors.reader_error.call(null,rdr,msg);
 };
-var G__1270 = function (rdr,var_args){
+var G__4903 = function (rdr,var_args){
 var _ = null;
 if (arguments.length > 1) {
-var G__1271__i = 0, G__1271__a = new Array(arguments.length -  1);
-while (G__1271__i < G__1271__a.length) {G__1271__a[G__1271__i] = arguments[G__1271__i + 1]; ++G__1271__i;}
-  _ = new cljs.core.IndexedSeq(G__1271__a,0,null);
+var G__4904__i = 0, G__4904__a = new Array(arguments.length -  1);
+while (G__4904__i < G__4904__a.length) {G__4904__a[G__4904__i] = arguments[G__4904__i + 1]; ++G__4904__i;}
+  _ = new cljs.core.IndexedSeq(G__4904__a,0,null);
 } 
-return G__1270__delegate.call(this,rdr,_);};
-G__1270.cljs$lang$maxFixedArity = 1;
-G__1270.cljs$lang$applyTo = (function (arglist__1272){
-var rdr = cljs.core.first(arglist__1272);
-var _ = cljs.core.rest(arglist__1272);
-return G__1270__delegate(rdr,_);
+return G__4903__delegate.call(this,rdr,_);};
+G__4903.cljs$lang$maxFixedArity = 1;
+G__4903.cljs$lang$applyTo = (function (arglist__4905){
+var rdr = cljs.core.first(arglist__4905);
+var _ = cljs.core.rest(arglist__4905);
+return G__4903__delegate(rdr,_);
 });
-G__1270.cljs$core$IFn$_invoke$arity$variadic = G__1270__delegate;
-return G__1270;
+G__4903.cljs$core$IFn$_invoke$arity$variadic = G__4903__delegate;
+return G__4903;
 })()
 ;
 });
-
-//# sourceMappingURL=commons.js.map

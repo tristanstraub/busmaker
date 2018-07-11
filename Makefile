@@ -18,5 +18,5 @@ target/public/css/garden.css: boot-prod
 .PHONY: boot-prod
 boot-prod:
 	# TODO replace with production build. Externs are neededin pixi.cljs
-	boot development build target
+	boot whitespace build target
 
