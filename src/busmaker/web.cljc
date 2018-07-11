@@ -85,6 +85,8 @@
            ["electric-furnace" _ _] (g furnace :translate [-16 -16])
            ["fast-splitter" _ _] (g splitter))))
 
+(def margin-x 2)
+
 (defn print-entities
   [state entities widgets]
   (let [indexed (into {} (map (juxt #(vector (Math/floor (double (get-in % ["position" "y"])))
@@ -104,5 +106,5 @@
        (for [x (range dx)]
          [:g {:key x}
           (when-let [entity (get indexed [(+ y min-y) (+ x min-x)])]
-            (cell state entity x y :widgets widgets))]))]))
+            (cell state entity (+ margin-x x) y :widgets widgets))]))]))
 

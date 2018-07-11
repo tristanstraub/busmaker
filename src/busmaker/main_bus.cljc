@@ -625,12 +625,17 @@
 (defn main-bus
   [recipe-names & {:keys [n-factories depth] :or {n-factories 2
                                                  depth 1000}}]
-  (let [products (reduce (fn [products recipe-name]
-                           (apply conj products (remove (set products)
-                                                        (remove #(#{"advanced-oil-processing"} (recipe-type %))
-                                                                (ingredients-by-recipe recipe-name)))))
-                         ["heavy-oil"]
-                         recipe-names)
+  (let [oil?        (seq (mapcat (fn [recipe-name]
+                                   (filter #(#{"advanced-oil-processing"} (recipe-type %))
+                                           (ingredients-by-recipe recipe-name)))
+                                 recipe-names))
+
+        products    (reduce (fn [products recipe-name]
+                              (apply conj products (remove (set products)
+                                                           (remove #(#{"advanced-oil-processing"} (recipe-type %))
+                                                                   (ingredients-by-recipe recipe-name)))))
+                            (if oil? ["heavy-oil"] [])
+                            recipe-names)
         
         others      (set/difference (set (concat (map :name (mapcat :results (filter (comp #{"advanced-oil-processing"} :name)
                                                                                      recipes/recipes)))
