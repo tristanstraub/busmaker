@@ -33,11 +33,13 @@
   [entity x y]
   (let [g (fn [v & {:keys [rotate translate] :or {translate [0 0]
                                                   rotate    0}}]
-            {:pixi.object/type     :pixi.object.type/sprite
-             :pixi.object/position (mapv + [(* 16 x) (* 16 y)] translate)
-             :pixi.sprite/anchor   [0.5 0.5]
-             :pixi.sprite/texture  {:pixi.texture/source (widgets v)}
-             :pixi.object/rotation (* Math/PI (/ rotate 180))})]
+            {:pixi.object/type         :pixi.object.type/sprite
+             :pixi.object/position     (mapv + [(* 16 x) (* 16 y)] translate)
+             :pixi.sprite/anchor       [0.5 0.5]
+             :pixi.sprite/texture      {:pixi.texture/source (widgets v)}
+             :pixi.object/rotation     (* Math/PI (/ rotate 180))
+             :pixi.object/interactive? true
+             :pixi.event/mouse-over    [:mouse-over entity]})]
     (match [(get entity "name")
             (direction (get entity "direction"))
             (keyword (get entity "type"))]
@@ -109,17 +111,20 @@
    :pixi.container/children (vec (entities-stage-children entities))})
 
 (defn render-stage!
-  [dom-node stage]
+  [state dom-node stage]
   (impi/mount :blueprint
-              {:pixi/renderer {:pixi.renderer/size [2000 1400]}
-               :pixi/stage    stage}
+              {:pixi/renderer            {:pixi.renderer/size [2000 800]}
+               :pixi/stage               stage
+               :pixi/listeners           {:mouse-over (fn [_ entity]
+                                                        (swap! state assoc :entity entity))}}
               dom-node))
 
 (defn render-dom-stage!
   [state]
   (let [[app-state] (:rum/args state)
         stage       (solution-stage (:solution @app-state))]
-    (render-stage! (rum/dom-node state)
+    (render-stage! app-state
+                   (rum/dom-node state)
                    stage)))
 
 (def impi
