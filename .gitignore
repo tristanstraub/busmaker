@@ -1,6 +1,4 @@
 target
 *~
-node_modules
 .nrepl-port
-package-lock.json
-package.json
+
