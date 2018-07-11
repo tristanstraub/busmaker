@@ -14,9 +14,10 @@ goog.require('busmaker.main_bus');
 goog.require('busmaker.pixi');
 goog.require('impi.core');
 cljs.core.enable_console_print_BANG_.call(null);
-busmaker.app.default_value = new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"widgets","widgets",-159098978),busmaker.widgets.widgets,new cljs.core.Keyword(null,"recipes","recipes",-325236209),cljs.core.remove.call(null,(function (p1__8634_SHARP_){
+busmaker.app.default_recipe_names = new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 2, ["copper-plate",null,"iron-plate",null], null), null);
+busmaker.app.default_value = new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"widgets","widgets",-159098978),busmaker.widgets.widgets,new cljs.core.Keyword(null,"recipes","recipes",-325236209),cljs.core.remove.call(null,(function (p1__8634_SHARP_){
 return new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["advanced-oil-processing",null], null), null).call(null,p1__8634_SHARP_);
-}),cljs.core.map.call(null,new cljs.core.Keyword(null,"name","name",1843675177),busmaker.recipes.recipes)),new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892),cljs.core.PersistentHashSet.EMPTY], null);
+}),cljs.core.map.call(null,new cljs.core.Keyword(null,"name","name",1843675177),busmaker.recipes.recipes)),new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892),busmaker.app.default_recipe_names,new cljs.core.Keyword(null,"solution","solution",-1727231491),busmaker.plan.plan.call(null,busmaker.app.default_recipe_names)], null);
 if((typeof busmaker !== 'undefined') && (typeof busmaker.app !== 'undefined') && (typeof busmaker.app.state !== 'undefined')){
 } else {
 busmaker.app.state = cljs.core.atom.call(null,busmaker.app.default_value);
