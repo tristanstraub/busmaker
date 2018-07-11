@@ -147,9 +147,9 @@
       "Clear"]
 
      (recipe-name-list state)
+     (blueprint-encoded state)
      (components state)
      (entity-details state)
-     (blueprint-encoded state)
      (blueprint-decoded state)]
     [:div.d-flex.flex-column.canvas-wrapper
      (canvas state)]]])
