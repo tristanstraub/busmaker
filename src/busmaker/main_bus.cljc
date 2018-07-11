@@ -624,7 +624,7 @@
 
 (defn main-bus
   [recipe-names & {:keys [n-factories depth] :or {n-factories 2
-                                                 depth 1000}}]
+                                                  depth 1000}}]
   (let [oil?        (seq (mapcat (fn [recipe-name]
                                    (filter #(#{"advanced-oil-processing"} (recipe-type %))
                                            (ingredients-by-recipe recipe-name)))
@@ -637,11 +637,12 @@
                             (if oil? ["heavy-oil"] [])
                             recipe-names)
         
-        others      (set/difference (set (concat (map :name (mapcat :results (filter (comp #{"advanced-oil-processing"} :name)
-                                                                                     recipes/recipes)))
-                                                 (map :name (mapcat :ingredients (filter (comp #{"advanced-oil-processing"} :name)
-                                                                                         recipes/recipes)))))
-                                    (set products))
+        others      (when oil?
+                      (set/difference (set (concat (map :name (mapcat :results (filter (comp #{"advanced-oil-processing"} :name)
+                                                                                       recipes/recipes)))
+                                                   (map :name (mapcat :ingredients (filter (comp #{"advanced-oil-processing"} :name)
+                                                                                           recipes/recipes)))))
+                                      (set products)))
 
         deps        (map-indexed vector products)
 
