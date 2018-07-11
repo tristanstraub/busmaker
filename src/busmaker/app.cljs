@@ -14,12 +14,17 @@
 
 (enable-console-print!)
 
+(def default-recipe-names
+  #{"iron-plate"
+    "copper-plate"})
+
 (def default-value
   {:widgets widgets/widgets
    :recipes (->> recipes/recipes
                  (map :name)
                  (remove #(#{"advanced-oil-processing"} %)))
-   :recipe-names #{}})
+   :recipe-names default-recipe-names
+   :solution (plan/plan default-recipe-names)})
 
 (defonce state (atom default-value))
 
