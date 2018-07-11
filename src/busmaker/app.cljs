@@ -133,10 +133,9 @@
 
 (rum/defc blueprint < rum/reactive
   [state]
-  [:div.container-fluid.bg-light
+  [:div.bg-light.d-flex
    [:div.d-flex.flex-row
-    [:div.d-flex.flex-column {:style {:min-width "300px"
-                                      :width "300px"}}
+    [:div.d-flex.flex-column
      [:div
       (recipe-selector state)]
 
@@ -149,13 +148,18 @@
      (recipe-name-list state)
      (blueprint-encoded state)
      (components state)
-     (entity-details state)
      (blueprint-decoded state)]
-    [:div.d-flex.flex-column.canvas-wrapper
-     (canvas state)]]])
+    
+    [:div.d-flex.flex-column.flex-grow-1
+     (canvas state)
+     [:div.entity-details-wrapper
+      (entity-details state)]]]])
 
 (defn ^:expose init
   []
   (rum/mount (blueprint state)
              (. js/document (getElementById "container"))))
 
+(defn reload!
+  []
+  (init))

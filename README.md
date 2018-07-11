@@ -53,5 +53,6 @@ Visit http://localhost:3000/public/index.html
 make
 git commit -am "RELEASE"
 git checkout gh-pages
+git merge master
 git push
 ```

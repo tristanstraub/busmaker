@@ -62,7 +62,7 @@
 
 (deftask development []
   (task-options! cljs {:optimizations :none}
-                 reload {:on-jsload 'busmaker.app/init})
+                 reload {:on-jsload 'busmaker.app/reload!})
   identity)
 
 (deftask dev

@@ -1,6 +1,8 @@
 (ns busmaker.web
-  (:require #?(:clj [clojure.core.match :as match :refer [match]]
-               :cljs [cljs.core.match :refer-macros [match]])))
+  (:require [rum.core :as rum]
+            #?(:clj [clojure.core.match :as match :refer [match]]
+               :cljs [cljs.core.match :refer-macros [match]])
+            ))
 
 (defn direction
   [d]
@@ -87,7 +89,78 @@
 
 (def margin-x 2)
 
-(defn print-entities
+(def viewport-window
+  {:width 1000
+   :height 1000})
+
+(def svg-scroll
+  #?(:clj {}
+     :cljs
+     {:did-update (fn [state]
+                    (.. (rum/ref state "svg")
+                        (setAttribute "viewBox"
+                                      (str 0
+                                           " "
+                                           0
+                                           " "
+                                           (:width viewport-window)
+                                           " "
+                                           (:height viewport-window))))
+                    (swap! (::drag state) merge {:dragging? false
+                                                 :x         0
+                                                 :y         0})
+                    state)
+      :did-mount (fn [state]
+                   (let [drag (atom {:dragging? false
+                                     :x         0
+                                     :y         0})]
+                     (.addEventListener (rum/ref state "svg")
+                                        "mousedown"
+                                        (fn [e]
+                                          (.preventDefault e)
+                                          
+                                          (let [{:keys [x y]} @drag]
+                                            (reset! drag
+                                                    {:mx0       (.. e -clientX)
+                                                     :my0       (.. e -clientY)
+                                                     :x0        x
+                                                     :y0        y
+                                                     :dragging? true}))))
+                     (.addEventListener (rum/ref state "svg")
+                                        "mousemove"
+                                        (fn [e]
+                                          (when (:dragging? @drag)
+                                            (let [{:keys [x y
+                                                          mx0 my0
+                                                          x0 y0]} @drag
+                                                  dmx (- mx0 (.. e -clientX))
+                                                  dmy (- my0 (.. e -clientY))]
+                                              (swap! drag
+                                                     assoc
+                                                     :x (+ x0 dmx)
+                                                     :y (+ y0 dmy))
+                                              
+                                              (.. (rum/ref state "svg")
+                                                  (setAttribute "viewBox"
+                                                                (str (+ x0 dmx)
+                                                                     " "
+                                                                     (+ y0 dmy)
+                                                                     " "
+                                                                     (:width viewport-window)
+                                                                     " "
+                                                                     (:height viewport-window))))))))
+                     (.addEventListener (rum/ref state "svg")
+                                        "mouseup"
+                                        (fn [e]
+                                          (swap! drag assoc :dragging? false)))
+                     (.addEventListener (rum/ref state "svg")
+                                        "mouseleave"
+                                        (fn [e]
+                                          (swap! drag assoc :dragging? false)))
+                     (assoc state ::drag drag)))}))
+
+(rum/defc print-entities
+  < svg-scroll
   [state entities widgets]
   (let [indexed (into {} (map (juxt #(vector (Math/floor (double (get-in % ["position" "y"])))
                                              (Math/floor (double (get-in % ["position" "x"]))))
@@ -99,9 +172,12 @@
         max-x   (apply max (map second (keys indexed)))
         dx      (inc (- max-x min-x))
         dy      (inc (- max-y min-y))]
-    [:svg.canvas {:xmlns "http://www.w3.org/2000/svg"          
-                  ;;           :viewBox "0 0 2000 4000"
-                  }
+    [:svg.canvas {:xmlns "http://www.w3.org/2000/svg"
+                  :viewBox (str "0 0 "
+                                (:width viewport-window)
+                                " "
+                                (:height viewport-window))
+                  :ref "svg"}
      (for [y (range dy)]
        (for [x (range dx)]
          [:g {:key x}
