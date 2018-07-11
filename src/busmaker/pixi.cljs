@@ -1,8 +1,9 @@
 (ns busmaker.pixi
   (:require [impi.core :as impi]
             [rum.core :as rum]
-            [cljs.core.match :refer-macros [match]]))
-
+            [cljs.core.match :refer-macros [match]]
+            [goog.style :as style]
+            [goog.dom :as dom]))
 
 (defn direction
   [d]
@@ -85,6 +86,11 @@
 
 (def margin-x 2)
 
+(def viewport-window
+  {:width 1000
+   :height 1000})
+
+
 (defn entities-stage-children
   [entities]
   (let [indexed (into {} (map (juxt #(vector (Math/floor (double (get-in % ["position" "y"])))
@@ -105,46 +111,114 @@
              :impi/key (str (* y dy) "-" x)))))
 
 (defn solution-stage
-  [entities]
-  {:impi/key :stage
-   :pixi.object/type :pixi.object.type/container
-   :pixi.container/children (vec (entities-stage-children entities))})
+  [children position]
+  {:impi/key                :stage
+   :pixi.object/position    position
+   :pixi.object/type        :pixi.object.type/container
+   :pixi.container/children children})
+
+(defmethod impi/update-prop! :pixi.event/pointer-down [object index _ listener]
+  (impi/replace-listener object "pointerdown" index listener))
+
+(defmethod impi/update-prop! :pixi.event/pointer-up [object index _ listener]
+  (impi/replace-listener object "pointerup" index listener))
+
+(defmethod impi/update-prop! :pixi.event/pointer-move [object index _ listener]
+  (impi/replace-listener object "pointermove" index listener))
+
+(defmethod impi/update-prop! :pixi.object/button-mode? [object _ _ button-mode?]
+  (set! (.-buttonMode object) button-mode?))
 
 (defn render-stage!
-  [state dom-node stage]
-  (impi/mount :blueprint
-              {:pixi/renderer            {:pixi.renderer/size [2000 800]}
-               :pixi/stage               stage
-               :pixi/listeners           {:mouse-over (fn [_ entity]
-                                                        (swap! state assoc :entity entity))}}
-              dom-node))
+  [state drag children id]
+  (let [[w h]       [2000 800]
+        [app-state] (:rum/args state)]
 
-(defn render-dom-stage!
-  [state]
-  (let [[app-state] (:rum/args state)
-        stage       (solution-stage (:solution @app-state))]
-    (render-stage! app-state
-                   (rum/dom-node state)
-                   stage)))
+    (impi/mount :blueprint
+                {:pixi/renderer  {:pixi.renderer/size [w h]}
+
+                 :pixi/stage     (merge (solution-stage children
+                                                        [(get @drag :x 0)
+                                                         (get @drag :y 0)])
+                                        
+                                        {:pixi.object/interactive? true
+                                         :pixi.object/contains-point (constantly true)
+                                         :pixi.event/pointer-down  [:pointer-down]
+                                         :pixi.event/pointer-up    [:pointer-up]
+                                         :pixi.event/pointer-move  [:pointer-move]})
+                 
+                 :pixi/listeners {:mouse-over   (fn [_ entity]
+                                                  (swap! app-state assoc :entity entity))
+
+                                  :pointer-down (fn [e]
+                                                  (let [e             (.. e -data -originalEvent)
+                                                        {:keys [x y]} @drag]
+                                                    (swap! drag assoc
+                                                           :mx0       (.. e -clientX)
+                                                           :my0       (.. e -clientY)
+                                                           :x0        x
+                                                           :y0        y
+                                                           :dragging? true)))
+                                  
+                                  :pointer-move (fn [e]
+                                                  (let [e (.. e -data -originalEvent)]
+                                                    (when (:dragging? @drag)
+                                                      (let [{:keys [x y
+                                                                    mx0 my0
+                                                                    x0 y0]} @drag
+                                                            dmx (- mx0 (.. e -clientX))
+                                                            dmy (- my0 (.. e -clientY))]
+                                                        (swap! drag
+                                                               assoc
+                                                               :x (- x0 dmx)
+                                                               :y (- y0 dmy))))))
+
+                                  :pointer-up   (fn [e]
+                                                  (swap! drag assoc :dragging? false))}}
+                (rum/dom-node state))))
 
 (def impi
   {:did-mount (fn [state]
-                (render-dom-stage! state)
-                state)
+                (let [drag        (atom {:dragging? false
+                                         :x         0
+                                         :y         0})
+                      [app-state] (:rum/args state)
+                      children    (atom (vec (entities-stage-children (:solution @app-state))))
+                      id          (rand-int 10000)]
+
+                  (render-stage! state drag @children id)
+
+                  (add-watch drag ::drag (fn [& _]
+                                           (render-stage! state drag @children id)))
+
+                  (assoc state ::drag drag ::children children ::id id)))
 
    :will-update (fn [state]
-                  (render-dom-stage! state)
+                  (let [[app-state] (:rum/args state)]
+                    (render-stage! state
+                                   (::drag state)
+                                   (reset! (::children state)
+                                           (vec (entities-stage-children (:solution @app-state))))
+                                   (::id state))
+
+                    (add-watch (::drag state) ::drag
+                               (fn [k r o n]
+                                 (render-stage! state
+                                                (::drag state)
+                                                @(::children state)
+                                                (::id state)))))
                   state)
    
    :will-unmount (fn [state]
+                   (remove-watch (::drag state) ::drag)
                    (impi/unmount :blueprint)
-                   state)})
+                   (dissoc state ::drag ::children))})
 
-(rum/defc panel
-  < impi
-    rum/reactive
+(rum/defc panel < impi rum/reactive
   [state]
-  (let [_ (rum/react (rum/cursor-in state [:solution]))]
-    [:div]))
+  (rum/react (rum/cursor-in state [:solution]))
+  
+  [:div])
+
 
 

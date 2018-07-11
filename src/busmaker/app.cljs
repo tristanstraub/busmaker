@@ -9,13 +9,17 @@
             [busmaker.plan :as plan]
             [busmaker.web :as web]
             [busmaker.main-bus :as main-bus]
-            [busmaker.pixi :as pixi]))
+            [busmaker.pixi :as pixi]
+            [impi.core]))
 
 (enable-console-print!)
 
-(defonce state (atom {:widgets widgets/widgets
-                      :recipes (map :name recipes/recipes)
-                      :recipe-names #{}}))
+(def default-value
+  {:widgets widgets/widgets
+   :recipes (map :name recipes/recipes)
+   :recipe-names #{}})
+
+(defonce state (atom default-value))
 
 (rum/defc recipe-selector < rum/reactive
   [state]
@@ -143,9 +147,7 @@
      (generate-button state)
 
      [:button {:on-click (fn [_]
-                           (swap! state #(-> %
-                                             (dissoc :solution)
-                                             (assoc :recipe-names #{}))))}
+                           (reset! state default-value))}
       "Clear"]
 
      (recipe-name-list state)
