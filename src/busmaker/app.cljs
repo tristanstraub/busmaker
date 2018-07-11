@@ -8,7 +8,8 @@
             [busmaker.widgets :as widgets]
             [busmaker.plan :as plan]
             [busmaker.web :as web]
-            [busmaker.main-bus :as main-bus]))
+            [busmaker.main-bus :as main-bus]
+            [busmaker.pixi :as pixi]))
 
 (enable-console-print!)
 
@@ -142,7 +143,9 @@
      (generate-button state)
 
      [:button {:on-click (fn [_]
-                           (swap! state dissoc :solution))}
+                           (swap! state #(-> %
+                                             (dissoc :solution)
+                                             (assoc :recipe-names #{}))))}
       "Clear"]
 
      (recipe-name-list state)
@@ -151,7 +154,9 @@
      (blueprint-decoded state)]
     
     [:div.d-flex.flex-column.flex-grow-1
-     (canvas state)
+     (pixi/panel state)
+     
+;;     (canvas state)
      [:div.entity-details-wrapper
       (entity-details state)]]]])
 

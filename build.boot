@@ -22,7 +22,9 @@
                           [cljs-http "0.1.45"]
                           [org.clojure/core.async "0.4.474"]
                           [ring-middleware-accept "2.0.3"]
-                          [integrant "0.6.3"]]
+
+                          [integrant "0.6.3"]
+                          [impi "0.0.10"]]
           :source-paths #{"src"}
           :resource-paths #{"resources"})
 

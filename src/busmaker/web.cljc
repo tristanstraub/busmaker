@@ -110,10 +110,16 @@
                                                  :x         0
                                                  :y         0})
                     state)
+      
+      :will-unmount (fn [state]
+                      (.removeEventListener js/window "scroll" (::scroll-hander state))
+                      state)
+      
       :did-mount (fn [state]
-                   (let [drag (atom {:dragging? false
-                                     :x         0
-                                     :y         0})]
+                   (let [drag           (atom {:dragging? false
+                                               :x         0
+                                               :y         0})]
+
                      (.addEventListener (rum/ref state "svg")
                                         "mousedown"
                                         (fn [e]
@@ -126,6 +132,7 @@
                                                      :x0        x
                                                      :y0        y
                                                      :dragging? true}))))
+
                      (.addEventListener (rum/ref state "svg")
                                         "mousemove"
                                         (fn [e]
@@ -149,10 +156,12 @@
                                                                      (:width viewport-window)
                                                                      " "
                                                                      (:height viewport-window))))))))
+
                      (.addEventListener (rum/ref state "svg")
                                         "mouseup"
                                         (fn [e]
                                           (swap! drag assoc :dragging? false)))
+
                      (.addEventListener (rum/ref state "svg")
                                         "mouseleave"
                                         (fn [e]
@@ -179,8 +188,9 @@
                                 (:height viewport-window))
                   :ref "svg"}
      (for [y (range dy)]
-       (for [x (range dx)]
-         [:g {:key x}
-          (when-let [entity (get indexed [(+ y min-y) (+ x min-x)])]
-            (cell state entity (+ margin-x x) y :widgets widgets))]))]))
+       [:g {:key y}
+        (for [x (range dx)]
+          [:g {:key x}
+           (when-let [entity (get indexed [(+ y min-y) (+ x min-x)])]
+             (cell state entity (+ margin-x x) y :widgets widgets))])])]))
 
