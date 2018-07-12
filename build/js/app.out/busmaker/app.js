@@ -15,15 +15,10 @@ goog.require('busmaker.pixi');
 goog.require('impi.core');
 cljs.core.enable_console_print_BANG_.call(null);
 busmaker.app.default_recipe_names = new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 2, ["copper-plate",null,"iron-plate",null], null), null);
-busmaker.app.empty_value = new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"widgets","widgets",-159098978),busmaker.widgets.widgets,new cljs.core.Keyword(null,"recipes","recipes",-325236209),cljs.core.remove.call(null,(function (p1__8647_SHARP_){
-return new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["advanced-oil-processing",null], null), null).call(null,p1__8647_SHARP_);
+busmaker.app.empty_value = new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"widgets","widgets",-159098978),busmaker.widgets.widgets,new cljs.core.Keyword(null,"recipes","recipes",-325236209),cljs.core.remove.call(null,(function (p1__8648_SHARP_){
+return new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["advanced-oil-processing",null], null), null).call(null,p1__8648_SHARP_);
 }),cljs.core.map.call(null,new cljs.core.Keyword(null,"name","name",1843675177),busmaker.recipes.recipes))], null);
-busmaker.app.default_factories = (function busmaker$app$default_factories(recipe_names){
-return cljs.core.into.call(null,cljs.core.PersistentArrayMap.EMPTY,cljs.core.map.call(null,(function (p1__8648_SHARP_){
-return (new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[p1__8648_SHARP_,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"n","n",562130025),(1),new cljs.core.Keyword(null,"facility","facility",-2118099900),busmaker.main_bus.factory_type.call(null,p1__8648_SHARP_)], null)],null));
-}),cljs.core.filter.call(null,busmaker.main_bus.created_QMARK_,new cljs.core.Keyword(null,"products","products",1876973544).cljs$core$IFn$_invoke$arity$1(busmaker.main_bus.recipe_products.call(null,recipe_names)))));
-});
-busmaker.app.default_value = cljs.core.merge.call(null,busmaker.app.empty_value,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892),busmaker.app.default_recipe_names,new cljs.core.Keyword(null,"factories","factories",1443149712),busmaker.app.default_factories.call(null,busmaker.app.default_recipe_names),new cljs.core.Keyword(null,"solution","solution",-1727231491),busmaker.plan.plan.call(null,busmaker.app.default_recipe_names,busmaker.app.default_factories.call(null,busmaker.app.default_recipe_names))], null));
+busmaker.app.default_value = cljs.core.merge.call(null,busmaker.app.empty_value,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892),busmaker.app.default_recipe_names,new cljs.core.Keyword(null,"factories","factories",1443149712),busmaker.main_bus.default_factories.call(null,busmaker.app.default_recipe_names),new cljs.core.Keyword(null,"solution","solution",-1727231491),busmaker.plan.plan.call(null,busmaker.app.default_recipe_names,busmaker.main_bus.default_factories.call(null,busmaker.app.default_recipe_names))], null));
 if((typeof busmaker !== 'undefined') && (typeof busmaker.app !== 'undefined') && (typeof busmaker.app.state !== 'undefined')){
 } else {
 busmaker.app.state = cljs.core.atom.call(null,busmaker.app.default_value);
@@ -93,7 +88,7 @@ cljs.core.swap_BANG_.call(null,state,((function (recipe_names,recipe,recipes){
 return (function (p1__8649_SHARP_){
 return cljs.core.update.call(null,cljs.core.assoc.call(null,p1__8649_SHARP_,new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892),recipe_names),new cljs.core.Keyword(null,"factories","factories",1443149712),((function (recipe_names,recipe,recipes){
 return (function (factories){
-return cljs.core.merge.call(null,busmaker.app.default_factories.call(null,recipe_names),factories);
+return cljs.core.merge.call(null,busmaker.main_bus.default_factories.call(null,recipe_names),factories);
 });})(recipe_names,recipe,recipes))
 );
 });})(recipe_names,recipe,recipes))
