@@ -36,13 +36,15 @@
         nil))
 
 (defn ingredients
-  [recipe-name]
+  [recipe-name facility]
   (let [recipe-name (if (#{"petroleum-gas" "heavy-oil" "light-oil"} recipe-name)
                       "advanced-oil-processing"
                       recipe-name)]
     (-> recipes/recipes
         (recipe recipe-name)
-        recipe-ingredients)))
+        recipe-ingredients
+        (cond->
+            (#{"stone-furnace"} facility) (conj "coal")))))
 
 (defn blueprint-direction
   [[x y]]
@@ -371,7 +373,7 @@
 
 (defn ingredient-height
   [ingredient facility]
-  (let [n (count (ingredients ingredient))]
+  (let [n (count (ingredients ingredient facility))]
     (cond (#{"stone-furnace"} facility)                               11
           (#{"electric-furnace"} facility)                            9
           (#{"oil-refinery"} facility)                                16
@@ -407,7 +409,7 @@
                                                    y  (+ y 4 (- (ingredient-height ingredient facility))
                                                          (cond (#{"oil-refinery"} facility) 3
                                                                :else 0))
-                                                   n  (count (ingredients ingredient))
+                                                   n  (count (ingredients ingredient facility))
                                                    dy (cond (#{"chemical-plant"} facility) 4
                                                             (#{"oil-refinery"} facility) 2
                                                             (#{"electric-furnace"} facility) 1
@@ -427,7 +429,7 @@
                      ;; RHS -- output tap (transport belt)
                      (concat (let [x                     (+ x 6)
                                    y                     (+ y 6)
-                                   non-fluid-ingredients (map-indexed vector (sort (map buses (remove fluid? (ingredients ingredient)))))]
+                                   non-fluid-ingredients (map-indexed vector (sort (map buses (remove fluid? (ingredients ingredient facility)))))]
                                (concat (when (and (> (count non-fluid-ingredients) 3)
                                                   (#{"assembling-machine-2" "electric-furnace"} facility))
                                          (apply concat (for [i    (range n-factories)
@@ -521,7 +523,7 @@
                                                                  :y-extension y-extension))))))
 
                          ;; LHS fluid input tap
-                         (some fluid? (ingredients ingredient))
+                         (some fluid? (ingredients ingredient facility))
                          (concat (apply concat (for [i                          (range n-factories)
                                                      [input-recipe input-index] (input-tap-indexes ingredient)
                                                      :let                       [dx (* i (cond (#{"oil-refinery"} facility) -8
@@ -618,45 +620,45 @@
      (step coll #{}))))
 
 (defn ingredients-by-recipe
-  ([]
-   (ingredients-by-recipe "underground-belt"))
-  ([name]
-   (distinct (sorted-recipe-order name))))
+  [recipe-name facility]
+  (let [ingredients (sorted-recipe-order recipe-name)]
+    (distinct (cond (#{"stone-furnace"} facility) (into ["coal"] ingredients)
+                    :else                         ingredients))))
 
-(defn products
-  [recipe-names]
-  (let [oil?        (seq (mapcat (fn [recipe-name]
-                                   (filter #(#{"advanced-oil-processing"} (recipe-type %))
-                                           (ingredients-by-recipe recipe-name)))
-                                 recipe-names))
+(defn recipe-products
+  ([recipe-names]
+   (recipe-products recipe-names nil))
+  ([recipe-names factories]
+   (let [oil?        (seq (mapcat (fn [recipe-name]
+                                    (let [facility (get-in factories [recipe-name :facility] (factory-type recipe-name))]
+                                      (filter #(#{"advanced-oil-processing"} (recipe-type %))
+                                              (ingredients-by-recipe recipe-name facility))))
+                                  recipe-names))
 
-        products    (reduce (fn [products recipe-name]
-                              (apply conj products (remove (set products)
-                                                           (remove #(#{"advanced-oil-processing"} (recipe-type %))
-                                                                   (ingredients-by-recipe recipe-name)))))
-                            (if oil? ["heavy-oil"] [])
-                            recipe-names)
-         
-        others      (when oil?
-                      (set/difference (set (concat (map :name (mapcat :results (filter (comp #{"advanced-oil-processing"} :name)
-                                                                                       recipes/recipes)))
-                                                   (map :name (mapcat :ingredients (filter (comp #{"advanced-oil-processing"} :name)
-                                                                                           recipes/recipes)))))
-                                      (set products)))
+         products    (reduce (fn [products recipe-name]
+                               (let [facility (get-in factories [recipe-name :facility] (factory-type recipe-name))]
+                                 (apply conj products (remove (set products)
+                                                              (remove #(#{"advanced-oil-processing"} (recipe-type %))
+                                                                      (ingredients-by-recipe recipe-name facility))))))
+                             (if oil? ["heavy-oil"] [])
+                             recipe-names)
 
-        deps                           (map-indexed vector products)
+         others      (when oil?
+                       (set/difference (set (concat (map :name (mapcat :results (filter (comp #{"advanced-oil-processing"} :name)
+                                                                                        recipes/recipes)))
+                                                    (map :name (mapcat :ingredients (filter (comp #{"advanced-oil-processing"} :name)
+                                                                                            recipes/recipes)))))
+                                       (set products)))
 
-        bus-outputs                    (->> others
-                                            (concat products)
-                                            (map-indexed vector)
-                                            (map (comp vec reverse))
-                                            (into {}))]
-    
-    {:oil?        oil?
-     :products    products
-     :others      others
-     :deps        deps
-     :bus-outputs bus-outputs}))
+         bus-outputs                    (->> (concat others products)
+                                             (map-indexed vector)
+                                             (map (comp vec reverse))
+                                             (into {}))]
+     
+     {:oil?        oil?
+      :products    products
+      :others      others
+      :bus-outputs bus-outputs})))
 
 (defn created?
   [recipe-name]
@@ -664,10 +666,16 @@
 
 (defn main-bus
   [recipe-names factories]
-  (let [{:keys [oil? products others deps bus-outputs]} (products recipe-names)]    
+  (let [{:keys [oil? products others bus-outputs]} (recipe-products recipe-names factories)
+        coal?                                      (some #{"stone-furnace"} (map (comp :facility second) factories))
+        products                                   (if coal?
+                                                     (into ["coal"] products)
+                                                     products)
+        deps                                       (map-indexed vector products)]
+    (println :deps deps)
     (apply concat (:output (reduce (fn [{:keys [y] :as acc} [output-index ingredient]]
-                                     (let [input-indexes (map bus-outputs (ingredients ingredient))
-                                           facility      (get-in factories [ingredient :facility])]
+                                     (let [facility      (get-in factories [ingredient :facility])
+                                           input-indexes (map bus-outputs (ingredients ingredient facility))]
                                        (-> acc
                                            (update :output conj
                                                    (main-bus-line :buses bus-outputs

@@ -29,7 +29,8 @@
   [recipe-names]
   (into {} (map #(vector % {:n 1
                             :facility (main-bus/factory-type %)})
-                (filter main-bus/created? (:products (main-bus/products recipe-names))))))
+                (filter main-bus/created? (:products (main-bus/recipe-products recipe-names))))))
+
 
 (def default-value
   (merge empty-value
@@ -121,7 +122,8 @@
   (let [factories    (rum/react (rum/cursor-in state [:factories]))
         recipe-names (keys factories)
         products     (filter #(main-bus/created? %)
-                             (:products (main-bus/products recipe-names)))]
+                             (:products (main-bus/recipe-products recipe-names)))]
+    
 
     (if (seq factories)
       [:div.card
@@ -146,12 +148,16 @@
 
 (rum/defc components < rum/reactive
   [state]
-  (let [recipe-names (rum/react (rum/cursor-in state [:recipe-names]))]
+  (let [recipe-names (rum/react (rum/cursor-in state [:recipe-names]))
+        factories (rum/react (rum/cursor-in state [:factories]))]
     (if (seq recipe-names)
       [:div.card
        [:h6 "Components"]
        [:ul.components
-        (for [ingredient (sort (set (mapcat main-bus/ingredients-by-recipe recipe-names)))]
+        (for [ingredient (sort (set (mapcat (fn [recipe-name]
+                                              (let [facility (get-in factories [recipe-name :facility])]
+                                                (main-bus/ingredients-by-recipe recipe-name facility)))
+                                            recipe-names)))]
           [:li {:key ingredient}
            ingredient])]])))
 
