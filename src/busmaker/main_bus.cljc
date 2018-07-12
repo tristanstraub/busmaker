@@ -409,7 +409,8 @@
                                                                               (+ (- n 3) 1)
                                                                               0))
           (#{"chemical-plant"} facility)                              12
-          :else                                                       (throw (ex-info "Unknown ingredient height" {})))))
+          :else                                                       (throw (ex-info "Unknown ingredient height" {:ingredient ingredient
+                                                                                                                   :facility facility})))))
 
 (defn main-bus-line
   [& {:keys [x y n-factories facility buses output-index ingredient input-indexes ready-indexes] :or {buses       []
@@ -676,7 +677,6 @@
   [recipe-names factories]
   (let [{:keys [oil? products others bus-outputs]} (recipe-products recipe-names factories)
         deps                                       (map-indexed vector products)]
-    (println :deps deps)
     (apply concat (:output (reduce (fn [{:keys [y] :as acc} [output-index ingredient]]
                                      (let [facility      (get-in factories [ingredient :facility])
                                            input-indexes (map bus-outputs (ingredients ingredient facility))]

@@ -23,10 +23,8 @@
   {:widgets      widgets/widgets
    :recipes      (->> recipes/recipes
                       (map :name)
-                      (remove #(#{"advanced-oil-processing"} %)))})
-
-
-
+                      (remove #(#{"advanced-oil-processing"} %)))
+   :recipe-names #{}})
 
 (def default-value
   (merge empty-value
@@ -76,6 +74,13 @@
     [:div.cursor
      (web/print-entities state solution widgets)]))
 
+(defn required-ingredients
+  [recipe-names factories]
+  (set (mapcat (fn [recipe-name]
+                 (let [facility (get-in factories [recipe-name :facility])]
+                   (main-bus/ingredients-by-recipe recipe-name facility)))
+               recipe-names)))
+
 (rum/defc recipe-name-list < rum/reactive
   [state]
   (let [recipe-names (:recipe-names (rum/react state))]
@@ -90,7 +95,9 @@
             {:on-click (fn [_]
                          (swap! state #(-> %
                                            (update :recipe-names disj recipe-name)
-                                           (update :factories dissoc recipe-name)))
+                                           (update :factories (fn [factories]
+                                                                (select-keys factories (required-ingredients (disj (:recipe-names %) recipe-name)
+                                                                                                             factories))))))
                          (solve! state))}
             "-"]])]])))
 
@@ -150,10 +157,8 @@
       [:div.card
        [:h6 "Components"]
        [:ul.components
-        (for [ingredient (sort (set (mapcat (fn [recipe-name]
-                                              (let [facility (get-in factories [recipe-name :facility])]
-                                                (main-bus/ingredients-by-recipe recipe-name facility)))
-                                            recipe-names)))]
+        (for [ingredient (sort (required-ingredients recipe-names
+                                                     factories))]
           [:li {:key ingredient}
            ingredient])]])))
 
