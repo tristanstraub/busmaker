@@ -372,14 +372,14 @@
 (defn ingredient-height
   [ingredient facility]
   (let [n (count (ingredients ingredient))]
-    (cond (#{"stone-furnace"} facility)        11
-          (#{"electric-furnace"} facility)     9
-          (#{"oil-refinery"} facility)         16
-          (#{"assembling-machine-2"} facility) (+ 11 (if (> n 3)
-                                                       (+ (- n 3) 1)
-                                                       0))
-          (#{"chemical-plant"} facility)       12
-          :else                                (throw (ex-info "Unknown ingredient height" {})))))
+    (cond (#{"stone-furnace"} facility)                               11
+          (#{"electric-furnace"} facility)                            9
+          (#{"oil-refinery"} facility)                                16
+          (#{"assembling-machine-1" "assembling-machine-2"} facility) (+ 11 (if (> n 3)
+                                                                              (+ (- n 3) 1)
+                                                                              0))
+          (#{"chemical-plant"} facility)                              12
+          :else                                                       (throw (ex-info "Unknown ingredient height" {})))))
 
 (defn main-bus-line
   [& {:keys [x y n-factories facility buses output-index ingredient input-indexes ready-indexes] :or {buses       []
