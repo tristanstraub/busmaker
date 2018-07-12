@@ -16,7 +16,12 @@
 
 (def default-recipe-names
   #{"iron-plate"
-    "copper-plate"})
+    #_ "science-pack-1"
+    #_ "science-pack-2"
+    #_"stone-brick" #_ "iron-plate" #_ "concrete" #_"battery" #_ "rocket-silo"}
+  #_ #{"iron-plate"
+    "copper-plate"
+    "inserter"})
 
 
 (def empty-value
@@ -24,22 +29,32 @@
    :recipes      (->> recipes/recipes
                       (map :name)
                       (remove #(#{"advanced-oil-processing"} %)))
-   :recipe-names #{}})
+   :recipe-names #{}
+   :bus-outputs  nil
+   :products     nil})
 
 (def default-value
-  (merge empty-value
-         {:recipe-names default-recipe-names
-          :factories    (main-bus/default-factories default-recipe-names)
-          
-          :solution     (plan/plan default-recipe-names
-                                   (main-bus/default-factories default-recipe-names))}))
+  (let [factories                      (main-bus/default-factories default-recipe-names)
+        {:keys [bus-outputs products]} (main-bus/recipe-products default-recipe-names)]
+    (merge empty-value
+           {:recipe-names default-recipe-names
+            :factories    factories
+            :products     products
+            :bus-outputs  bus-outputs
+
+            :solution     (plan/plan default-recipe-names
+                                     factories
+                                     products
+                                     bus-outputs)})))
 
 (defonce state (atom default-value))
 
 (defn solve!
   [state]
   (let [solution (doall (plan/plan (:recipe-names @state)
-                                   (:factories @state)))]
+                                   (:factories @state)
+                                   (:products @state)
+                                   (:bus-outputs @state)))]
     (swap! state assoc :solution solution)))
 
 (rum/defc recipe-selector < rum/reactive
@@ -63,7 +78,8 @@
                                        (assoc :recipe-names recipe-names)
                                        (update :factories (fn [factories]
                                                             (merge (main-bus/default-factories recipe-names)
-                                                                   factories)))))
+                                                                   factories)))
+                                       (merge (main-bus/recipe-products recipe-names))))
                      (solve! state)))}
       "+"]]))
 
@@ -106,27 +122,48 @@
    "electric-furnace"
    "steel-furnace"
    "oil-refinery"
-   "chemical-plant"])
+   "chemical-plant"
+   "assembling-machine-1"
+   "assembling-machine-2"])
 
 (rum/defc facility-selector
   [state ingredient facility]
   [:select {:value     facility
             :on-change (fn [e]
                          (swap! state assoc-in [:factories ingredient :facility] (.. e -target -value))
-                         (solve! state)
-                         (println :solving))}
+                         (solve! state))}
    (for [facility facilities]
      [:option {:key facility
                :value facility}
       facility])])
 
+(rum/defc bus < rum/reactive
+  [state]
+  (let [factories    (rum/react (rum/cursor-in state [:factories]))
+        outputs      (rum/react (rum/cursor-in state [:bus-outputs]))]
+    
+    (if (seq outputs)
+      [:div.card
+       [:table.components.table
+        [:thead
+         [:tr
+          [:th "Output"]
+          [:th "Bus index"]]]
+        [:tbody
+         (for [[output bus-index] (sort-by second outputs)]
+           [:tr {:key bus-index}
+
+            [:td output]
+            [:td bus-index]])]]])))
+
 (rum/defc factories < rum/reactive
   [state]
   (let [factories    (rum/react (rum/cursor-in state [:factories]))
         recipe-names (keys factories)
-        products     (filter #(main-bus/created? %)
-                             (:products (main-bus/recipe-products recipe-names)))]
-    
+        ;; products     (filter #(main-bus/created? %)
+        ;;                      (:products (main-bus/recipe-products recipe-names)))
+        products     (keys factories)
+        ]
 
     (if (seq factories)
       [:div.card
@@ -144,10 +181,17 @@
             [:td (facility-selector state ingredient facility)]
             [:td [:input {:type "number" :value n
                           :on-change (fn [e]
-                                       
                                        (swap! state assoc-in [:factories ingredient :n]
                                               (js/parseInt (.. e -target -value)))
-                                       (solve! state))}]]])]]])))
+                                       (solve! state))}]]
+            [:td [:button {:on-click (fn [e]
+                                       (enable-console-print!)
+                                       (swap! state #(-> %
+                                                         (update :factories dissoc ingredient)
+                                                         (update :products (fn [ps] (vec (remove #{ingredient} ps))))))
+
+                                       (solve! state))}
+                  "-"]]])]]])))
 
 (rum/defc components < rum/reactive
   [state]
@@ -243,6 +287,7 @@
 
      (recipe-name-list state)
      (factories state)
+     (bus state)
      (blueprint-encoded state)
      (components state)
      (blueprint-decoded state)]
@@ -262,4 +307,5 @@
 (defn reload!
   []
   (init))
+
 

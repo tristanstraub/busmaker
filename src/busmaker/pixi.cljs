@@ -31,7 +31,8 @@
    :underground-pipe        "widgets/underground-pipe.svg"
    :underground-belt-input  "widgets/underground-belt-input.svg"
    :underground-belt-output "widgets/underground-belt-output.svg"
-   :stone-furnace           "widgets/stone-furnace.svg"}) 
+   :stone-furnace           "widgets/stone-furnace.svg"
+   :lab                     "widgets/lab.svg"}) 
 
 (defn cell
   [entity x y]
@@ -86,6 +87,8 @@
            ["chemical-plant" _ _] (g :chemical-plant)
            ["oil-refinery" _ _] (g :oil-refinery)
 
+
+           ["lab" _ _] (g :lab)
            ["electric-furnace" _ _] (g :furnace)
            ["stone-furnace" _ _] (g :stone-furnace :translate [8 8])
            ["splitter" _ _] (g :splitter :translate [8 0]))))
