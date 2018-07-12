@@ -469,7 +469,6 @@
                      (concat (let [x                     (+ x 6)
                                    y                     (+ y 6)
                                    non-fluid-ingredients (map-indexed vector (sort (map buses (remove fluid? (ingredients ingredient facility)))))]
-                               (println :buses buses)
                                (concat (when (and (> (count non-fluid-ingredients) 3)
                                                   (#{"assembling-machine-1" "assembling-machine-2" "electric-furnace"} facility))
                                          (apply concat (for [i    (range n-factories)
@@ -650,7 +649,6 @@
   ([recipe-names]
    (recipe-products recipe-names nil))
   ([recipe-names factories]
-   (println :recipe-products recipe-names)
    (let [oil?        (seq (mapcat (fn [recipe-name]
                                     (let [facility (get-in factories [recipe-name :facility] (factory-type recipe-name))]
                                       (filter #(#{"advanced-oil-processing"} (recipe-type %))

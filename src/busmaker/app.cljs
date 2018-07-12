@@ -1,5 +1,7 @@
 (ns busmaker.app
   (:require [rum.core :as rum]
+            [cljs.reader]
+            [busmaker.template :as template]
             [cljs.tools.reader.edn :as edn]
             [clojure.walk :as walk]
             ["pako" :as pako]
@@ -13,6 +15,21 @@
             [impi.core]))
 
 (enable-console-print!)
+
+(defn set-item!
+  "Set `key' in browser's localStorage to `val`."
+  [key val]
+  (.setItem (.-localStorage js/window) key val))
+
+(defn get-item
+  "Returns value of `key' from browser's localStorage."
+  [key]
+  (.getItem (.-localStorage js/window) key))
+
+(defn remove-item!
+  "Remove the browser's localStorage value for the given `key`"
+  [key]
+  (.removeItem (.-localStorage js/window) key))
 
 (def default-recipe-names
   #{"iron-plate"
@@ -34,6 +51,9 @@
    :products     nil})
 
 (def default-value
+  (merge empty-value template/template2))
+
+#_ (def default-value
   (let [factories                      (main-bus/default-factories default-recipe-names)
         {:keys [bus-outputs products]} (main-bus/recipe-products default-recipe-names)]
     (merge empty-value
@@ -55,7 +75,8 @@
                                    (:factories @state)
                                    (:products @state)
                                    (:bus-outputs @state)))]
-    (swap! state assoc :solution solution)))
+    (swap! state assoc :solution solution)
+    (set-item! "busmaker" (pr-str (dissoc @state :solution :recipes :widgets)))))
 
 (rum/defc recipe-selector < rum/reactive
   [state]
@@ -301,11 +322,11 @@
 
 (defn ^:expose init
   []
+  (swap! state merge (cljs.reader/read-string (get-item "busmaker")))
+  (solve! state)
   (rum/mount (blueprint state)
              (. js/document (getElementById "container"))))
 
 (defn reload!
   []
   (init))
-
-
