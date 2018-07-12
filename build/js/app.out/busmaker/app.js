@@ -15,9 +15,9 @@ goog.require('busmaker.pixi');
 goog.require('impi.core');
 cljs.core.enable_console_print_BANG_.call(null);
 busmaker.app.default_recipe_names = new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 2, ["copper-plate",null,"iron-plate",null], null), null);
-busmaker.app.empty_value = new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"widgets","widgets",-159098978),busmaker.widgets.widgets,new cljs.core.Keyword(null,"recipes","recipes",-325236209),cljs.core.remove.call(null,(function (p1__8648_SHARP_){
+busmaker.app.empty_value = new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"widgets","widgets",-159098978),busmaker.widgets.widgets,new cljs.core.Keyword(null,"recipes","recipes",-325236209),cljs.core.remove.call(null,(function (p1__8648_SHARP_){
 return new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["advanced-oil-processing",null], null), null).call(null,p1__8648_SHARP_);
-}),cljs.core.map.call(null,new cljs.core.Keyword(null,"name","name",1843675177),busmaker.recipes.recipes))], null);
+}),cljs.core.map.call(null,new cljs.core.Keyword(null,"name","name",1843675177),busmaker.recipes.recipes)),new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892),cljs.core.PersistentHashSet.EMPTY], null);
 busmaker.app.default_value = cljs.core.merge.call(null,busmaker.app.empty_value,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892),busmaker.app.default_recipe_names,new cljs.core.Keyword(null,"factories","factories",1443149712),busmaker.main_bus.default_factories.call(null,busmaker.app.default_recipe_names),new cljs.core.Keyword(null,"solution","solution",-1727231491),busmaker.plan.plan.call(null,busmaker.app.default_recipe_names,busmaker.main_bus.default_factories.call(null,busmaker.app.default_recipe_names))], null));
 if((typeof busmaker !== 'undefined') && (typeof busmaker.app !== 'undefined') && (typeof busmaker.app.state !== 'undefined')){
 } else {
@@ -104,6 +104,12 @@ var widgets = rum.core.react.call(null,rum.core.cursor_in.call(null,state,new cl
 var attrs8657 = busmaker.web.print_entities.call(null,state,solution,widgets);
 return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8657))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["cursor"], null)], null),attrs8657)):({"className": "cursor"})),((cljs.core.map_QMARK_.call(null,attrs8657))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8657)], null)));
 }),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [rum.core.reactive], null),"canvas");
+busmaker.app.required_ingredients = (function busmaker$app$required_ingredients(recipe_names,factories){
+return cljs.core.set.call(null,cljs.core.mapcat.call(null,(function (recipe_name){
+var facility = cljs.core.get_in.call(null,factories,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [recipe_name,new cljs.core.Keyword(null,"facility","facility",-2118099900)], null));
+return busmaker.main_bus.ingredients_by_recipe.call(null,recipe_name,facility);
+}),recipe_names));
+});
 busmaker.app.recipe_name_list = rum.core.build_defc.call(null,(function (state){
 var recipe_names = new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892).cljs$core$IFn$_invoke$arity$1(rum.core.react.call(null,state));
 if(cljs.core.seq.call(null,recipe_names)){
@@ -128,7 +134,11 @@ cljs.core.chunk_append.call(null,b__8664,React.createElement("li",({"key": recip
 return (function (_){
 cljs.core.swap_BANG_.call(null,state,((function (i__8663,recipe_name,c__4322__auto__,size__4323__auto__,b__8664,s__8662__$2,temp__5457__auto__,recipe_names){
 return (function (p1__8658_SHARP_){
-return cljs.core.update.call(null,cljs.core.update.call(null,p1__8658_SHARP_,new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892),cljs.core.disj,recipe_name),new cljs.core.Keyword(null,"factories","factories",1443149712),cljs.core.dissoc,recipe_name);
+return cljs.core.update.call(null,cljs.core.update.call(null,p1__8658_SHARP_,new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892),cljs.core.disj,recipe_name),new cljs.core.Keyword(null,"factories","factories",1443149712),((function (i__8663,recipe_name,c__4322__auto__,size__4323__auto__,b__8664,s__8662__$2,temp__5457__auto__,recipe_names){
+return (function (factories){
+return cljs.core.select_keys.call(null,factories,busmaker.app.required_ingredients.call(null,cljs.core.disj.call(null,new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892).cljs$core$IFn$_invoke$arity$1(p1__8658_SHARP_),recipe_name),factories));
+});})(i__8663,recipe_name,c__4322__auto__,size__4323__auto__,b__8664,s__8662__$2,temp__5457__auto__,recipe_names))
+);
 });})(i__8663,recipe_name,c__4322__auto__,size__4323__auto__,b__8664,s__8662__$2,temp__5457__auto__,recipe_names))
 );
 
@@ -155,7 +165,11 @@ return cljs.core.cons.call(null,React.createElement("li",({"key": recipe_name}),
 return (function (_){
 cljs.core.swap_BANG_.call(null,state,((function (recipe_name,s__8662__$2,temp__5457__auto__,recipe_names){
 return (function (p1__8658_SHARP_){
-return cljs.core.update.call(null,cljs.core.update.call(null,p1__8658_SHARP_,new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892),cljs.core.disj,recipe_name),new cljs.core.Keyword(null,"factories","factories",1443149712),cljs.core.dissoc,recipe_name);
+return cljs.core.update.call(null,cljs.core.update.call(null,p1__8658_SHARP_,new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892),cljs.core.disj,recipe_name),new cljs.core.Keyword(null,"factories","factories",1443149712),((function (recipe_name,s__8662__$2,temp__5457__auto__,recipe_names){
+return (function (factories){
+return cljs.core.select_keys.call(null,factories,busmaker.app.required_ingredients.call(null,cljs.core.disj.call(null,new cljs.core.Keyword(null,"recipe-names","recipe-names",-94810892).cljs$core$IFn$_invoke$arity$1(p1__8658_SHARP_),recipe_name),factories));
+});})(recipe_name,s__8662__$2,temp__5457__auto__,recipe_names))
+);
 });})(recipe_name,s__8662__$2,temp__5457__auto__,recipe_names))
 );
 
@@ -367,12 +381,7 @@ break;
 ,null,null));
 });})(recipe_names,factories))
 ;
-return iter__4324__auto__.call(null,cljs.core.sort.call(null,cljs.core.set.call(null,cljs.core.mapcat.call(null,((function (iter__4324__auto__,recipe_names,factories){
-return (function (recipe_name){
-var facility = cljs.core.get_in.call(null,factories,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [recipe_name,new cljs.core.Keyword(null,"facility","facility",-2118099900)], null));
-return busmaker.main_bus.ingredients_by_recipe.call(null,recipe_name,facility);
-});})(iter__4324__auto__,recipe_names,factories))
-,recipe_names))));
+return iter__4324__auto__.call(null,cljs.core.sort.call(null,busmaker.app.required_ingredients.call(null,recipe_names,factories)));
 })())));
 } else {
 return null;
