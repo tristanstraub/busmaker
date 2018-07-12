@@ -25,20 +25,16 @@
                       (map :name)
                       (remove #(#{"advanced-oil-processing"} %)))})
 
-(defn default-factories
-  [recipe-names]
-  (into {} (map #(vector % {:n 1
-                            :facility (main-bus/factory-type %)})
-                (filter main-bus/created? (:products (main-bus/recipe-products recipe-names))))))
+
 
 
 (def default-value
   (merge empty-value
          {:recipe-names default-recipe-names
-          :factories    (default-factories default-recipe-names)
+          :factories    (main-bus/default-factories default-recipe-names)
           
           :solution     (plan/plan default-recipe-names
-                                   (default-factories default-recipe-names))}))
+                                   (main-bus/default-factories default-recipe-names))}))
 
 (defonce state (atom default-value))
 
@@ -68,7 +64,7 @@
                      (swap! state #(-> %
                                        (assoc :recipe-names recipe-names)
                                        (update :factories (fn [factories]
-                                                            (merge (default-factories recipe-names)
+                                                            (merge (main-bus/default-factories recipe-names)
                                                                    factories)))))
                      (solve! state)))}
       "+"]]))

@@ -35,17 +35,6 @@
         :else
         nil))
 
-(defn ingredients
-  [recipe-name facility]
-  (let [recipe-name (if (#{"petroleum-gas" "heavy-oil" "light-oil"} recipe-name)
-                      "advanced-oil-processing"
-                      recipe-name)]
-    (-> recipes/recipes
-        (recipe recipe-name)
-        recipe-ingredients
-        (cond->
-            (#{"stone-furnace"} facility) (conj "coal")))))
-
 (defn blueprint-direction
   [[x y]]
   (case [x y]
@@ -371,6 +360,45 @@
   (let [n (* 3 output-index)]
     `[~@(output-tap-common :x x :y y :output-index output-index :y-extension y-extension)]))
 
+(defn ingredients
+  [recipe-name facility]
+  (let [recipe-name (if (#{"petroleum-gas" "heavy-oil" "light-oil"} recipe-name)
+                      "advanced-oil-processing"
+                      recipe-name)]
+    (-> recipes/recipes
+        (recipe recipe-name)
+        recipe-ingredients
+        (cond->
+            (#{"stone-furnace"} facility) (conj "coal")))))
+
+
+(defn recipe-by-name
+  [recipes recipe-name]
+  (first (filter (comp #{recipe-name} :name) recipes)))
+
+(defn recipe-order
+  [g recipes recipe-name]
+  (let [r (recipe-by-name recipes recipe-name)]
+    (if-not r
+      g
+      (reduce (fn [g ingredient]
+                (let [g (dep/depend g recipe-name ingredient)]
+                  (recipe-order g recipes ingredient)))
+              g
+              (recipe-ingredients r)))))
+
+(defn sorted-recipe-order
+  [recipe-name]
+  (dep/topo-sort (recipe-order (dep/graph)
+                               recipes/recipes
+                               recipe-name)))
+
+(defn ingredients-by-recipe
+  [recipe-name facility]
+  (let [ingredients (sorted-recipe-order recipe-name)]
+    (distinct (cond (#{"stone-furnace"} facility) (into ["coal"] ingredients)
+                    :else                         ingredients))))
+
 (defn ingredient-height
   [ingredient facility]
   (let [n (count (ingredients ingredient facility))]
@@ -571,27 +599,6 @@
                                                                                        :else 0))))))))
                  (iterate inc 0)))))
 
-(defn recipe-by-name
-  [recipes recipe-name]
-  (first (filter (comp #{recipe-name} :name) recipes)))
-
-(defn recipe-order
-  [g recipes recipe-name]
-  (let [r (recipe-by-name recipes recipe-name)]
-    (if-not r
-      g
-      (reduce (fn [g ingredient]
-                (let [g (dep/depend g recipe-name ingredient)]
-                  (recipe-order g recipes ingredient)))
-              g
-              (recipe-ingredients r)))))
-
-(defn sorted-recipe-order
-  [recipe-name]
-  (dep/topo-sort (recipe-order (dep/graph)
-                               recipes/recipes
-                               recipe-name)))
-
 (defn distinct-by
   "Returns a lazy sequence of the elements of coll removing duplicates of (f item).
   Returns a stateful transducer when no collection is provided."
@@ -619,11 +626,10 @@
                   xs seen)))]
      (step coll #{}))))
 
-(defn ingredients-by-recipe
-  [recipe-name facility]
-  (let [ingredients (sorted-recipe-order recipe-name)]
-    (distinct (cond (#{"stone-furnace"} facility) (into ["coal"] ingredients)
-                    :else                         ingredients))))
+
+(defn created?
+  [recipe-name]
+  (not (re-find #".*ore|water|coal|^stone$" recipe-name)))
 
 (defn recipe-products
   ([recipe-names]
@@ -650,27 +656,25 @@
                                                                                             recipes/recipes)))))
                                        (set products)))
 
-         bus-outputs                    (->> (concat others products)
-                                             (map-indexed vector)
-                                             (map (comp vec reverse))
-                                             (into {}))]
+         bus-outputs (->> (concat others products)
+                          (map-indexed vector)
+                          (map (comp vec reverse))
+                          (into {}))]
      
      {:oil?        oil?
       :products    products
       :others      others
       :bus-outputs bus-outputs})))
 
-(defn created?
-  [recipe-name]
-  (not (re-find #".*ore|water|coal|^stone$" recipe-name)))
+(defn default-factories
+  [recipe-names]
+  (into {} (map #(vector % {:n 1
+                            :facility (factory-type %)})
+                (filter created? (:products (recipe-products recipe-names))))))
 
 (defn main-bus
   [recipe-names factories]
   (let [{:keys [oil? products others bus-outputs]} (recipe-products recipe-names factories)
-        coal?                                      (some #{"stone-furnace"} (map (comp :facility second) factories))
-        products                                   (if coal?
-                                                     (into ["coal"] products)
-                                                     products)
         deps                                       (map-indexed vector products)]
     (println :deps deps)
     (apply concat (:output (reduce (fn [{:keys [y] :as acc} [output-index ingredient]]
