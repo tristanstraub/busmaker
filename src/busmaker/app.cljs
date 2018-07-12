@@ -27,7 +27,8 @@
 
 (defn default-factories
   [recipe-names]
-  (into {} (map #(vector % {:n 1})
+  (into {} (map #(vector % {:n 1
+                            :facility (main-bus/factory-type %)})
                 (filter main-bus/created? (:products (main-bus/products recipe-names))))))
 
 (def default-value
@@ -96,6 +97,25 @@
                          (solve! state))}
             "-"]])]])))
 
+(def facilities
+  ["stone-furnace"
+   "electric-furnace"
+   "steel-furnace"
+   "oil-refinery"
+   "chemical-plant"])
+
+(rum/defc facility-selector
+  [state ingredient facility]
+  [:select {:value     facility
+            :on-change (fn [e]
+                         (swap! state assoc-in [:factories ingredient :facility] (.. e -target -value))
+                         (solve! state)
+                         (println :solving))}
+   (for [facility facilities]
+     [:option {:key facility
+               :value facility}
+      facility])])
+
 (rum/defc factories < rum/reactive
   [state]
   (let [factories    (rum/react (rum/cursor-in state [:factories]))
@@ -113,10 +133,10 @@
           [:th "Count"]]]
         [:tbody
          (for [ingredient (reverse products)
-               :let       [{:keys [n]} (get factories ingredient)]]
+               :let       [{:keys [facility n]} (get factories ingredient)]]
            [:tr {:key ingredient}
             [:td ingredient]
-            [:td (main-bus/factory-type ingredient)]
+            [:td (facility-selector state ingredient facility)]
             [:td [:input {:type "number" :value n
                           :on-change (fn [e]
                                        

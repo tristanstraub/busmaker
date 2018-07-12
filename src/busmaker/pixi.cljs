@@ -30,7 +30,8 @@
    :oil-refinery            "widgets/oil-refinery.svg"
    :underground-pipe        "widgets/underground-pipe.svg"
    :underground-belt-input  "widgets/underground-belt-input.svg"
-   :underground-belt-output "widgets/underground-belt-output.svg"}) 
+   :underground-belt-output "widgets/underground-belt-output.svg"
+   :stone-furnace           "widgets/stone-furnace.svg"}) 
 
 (defn cell
   [entity x y]
@@ -69,7 +70,7 @@
            ["pipe-to-ground" :w _] (g :underground-pipe :rotate 90)
            ["pipe-to-ground" :e _] (g :underground-pipe :rotate -90)
 
-           ["assembling-machine-2" _ _]  (g :assembling-machine :translate [0 0])
+           ["assembling-machine-2" _ _]  (g :assembling-machine)
            ["fast-inserter" :s nil]       (g :inserter :rotate 90)
            ["fast-inserter" :n nil]       (g :inserter :rotate -90)
            ["fast-inserter" :e nil]       (g :inserter)
@@ -80,10 +81,11 @@
            ["long-handed-inserter" :e nil]       (g :long-handed-inserter)
            ["long-handed-inserter" :w nil]       (g :long-handed-inserter :rotate 180)
            
-           ["chemical-plant" _ _] (g :chemical-plant :translate [0 0])
+           ["chemical-plant" _ _] (g :chemical-plant)
            ["oil-refinery" _ _] (g :oil-refinery)
 
-           ["electric-furnace" _ _] (g :furnace :translate [0 0])
+           ["electric-furnace" _ _] (g :furnace)
+           ["stone-furnace" _ _] (g :stone-furnace :translate [8 8])
            ["fast-splitter" _ _] (g :splitter :translate [8 0]))))
 
 (def margin-x 2)
