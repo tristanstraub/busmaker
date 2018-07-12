@@ -48,20 +48,20 @@
             (direction (get entity "direction"))
             (keyword (get entity "type"))]
            ["grass" _ _] (g :grass)
-           ["fast-underground-belt" :n :input]  (g :underground-belt-input)
-           ["fast-underground-belt" :s :input]  (g :underground-belt-input :rotate 180)
-           ["fast-underground-belt" :w :input]  (g :underground-belt-input :rotate -90)
-           ["fast-underground-belt" :e :input]  (g :underground-belt-input :rotate 90)
+           ["underground-belt" :n :input]  (g :underground-belt-input)
+           ["underground-belt" :s :input]  (g :underground-belt-input :rotate 180)
+           ["underground-belt" :w :input]  (g :underground-belt-input :rotate -90)
+           ["underground-belt" :e :input]  (g :underground-belt-input :rotate 90)
 
-           ["fast-underground-belt" :n :output] (g :underground-belt-output)
-           ["fast-underground-belt" :s :output] (g :underground-belt-output :rotate 180)
-           ["fast-underground-belt" :w :output] (g :underground-belt-output :rotate -90)
-           ["fast-underground-belt" :e :output] (g :underground-belt-output :rotate 90)
+           ["underground-belt" :n :output] (g :underground-belt-output)
+           ["underground-belt" :s :output] (g :underground-belt-output :rotate 180)
+           ["underground-belt" :w :output] (g :underground-belt-output :rotate -90)
+           ["underground-belt" :e :output] (g :underground-belt-output :rotate 90)
 
-           ["fast-transport-belt" :n nil]       (g :transport-belt)
-           ["fast-transport-belt" :s nil]       (g :transport-belt :rotate 180)
-           ["fast-transport-belt" :w nil]       (g :transport-belt :rotate -90)
-           ["fast-transport-belt" :e nil]       (g :transport-belt :rotate 90)
+           ["transport-belt" :n nil]       (g :transport-belt)
+           ["transport-belt" :s nil]       (g :transport-belt :rotate 180)
+           ["transport-belt" :w nil]       (g :transport-belt :rotate -90)
+           ["transport-belt" :e nil]       (g :transport-belt :rotate 90)
 
            ["medium-electric-pole" _ _] (g :electrical-pole)
 
@@ -70,11 +70,13 @@
            ["pipe-to-ground" :w _] (g :underground-pipe :rotate 90)
            ["pipe-to-ground" :e _] (g :underground-pipe :rotate -90)
 
+           ["assembling-machine-1" _ _]  (g :assembling-machine)
            ["assembling-machine-2" _ _]  (g :assembling-machine)
-           ["fast-inserter" :s nil]       (g :inserter :rotate 90)
-           ["fast-inserter" :n nil]       (g :inserter :rotate -90)
-           ["fast-inserter" :e nil]       (g :inserter)
-           ["fast-inserter" :w nil]       (g :inserter :rotate 180)
+           
+           ["inserter" :s nil]       (g :inserter :rotate 90)
+           ["inserter" :n nil]       (g :inserter :rotate -90)
+           ["inserter" :e nil]       (g :inserter)
+           ["inserter" :w nil]       (g :inserter :rotate 180)
 
            ["long-handed-inserter" :s nil]       (g :long-handed-inserter :rotate 90)
            ["long-handed-inserter" :n nil]       (g :long-handed-inserter :rotate -90)
@@ -86,7 +88,7 @@
 
            ["electric-furnace" _ _] (g :furnace)
            ["stone-furnace" _ _] (g :stone-furnace :translate [8 8])
-           ["fast-splitter" _ _] (g :splitter :translate [8 0]))))
+           ["splitter" _ _] (g :splitter :translate [8 0]))))
 
 (def margin-x 2)
 
