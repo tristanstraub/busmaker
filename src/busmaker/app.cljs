@@ -18,15 +18,33 @@
   #{"iron-plate"
     "copper-plate"})
 
+
+(def empty-value
+  {:widgets      widgets/widgets
+   :recipes      (->> recipes/recipes
+                      (map :name)
+                      (remove #(#{"advanced-oil-processing"} %)))})
+
+(defn default-factories
+  [recipe-names]
+  (into {} (map #(vector % {:n 1})
+                (filter main-bus/created? (:products (main-bus/products recipe-names))))))
+
 (def default-value
-  {:widgets widgets/widgets
-   :recipes (->> recipes/recipes
-                 (map :name)
-                 (remove #(#{"advanced-oil-processing"} %)))
-   :recipe-names default-recipe-names
-   :solution (plan/plan default-recipe-names)})
+  (merge empty-value
+         {:recipe-names default-recipe-names
+          :factories    (default-factories default-recipe-names)
+          
+          :solution     (plan/plan default-recipe-names
+                                   (default-factories default-recipe-names))}))
 
 (defonce state (atom default-value))
+
+(defn solve!
+  [state]
+  (let [solution (doall (plan/plan (:recipe-names @state)
+                                   (:factories @state)))]
+    (swap! state assoc :solution solution)))
 
 (rum/defc recipe-selector < rum/reactive
   [state]
@@ -42,8 +60,15 @@
         
         [:option {:key recipe :value recipe} recipe])]
      [:button
-      {:on-click (fn [_]
-                   (swap! state update :recipe-names conj recipe))}
+      {:disabled (not (seq recipe))
+       :on-click (fn [_]
+                   (let [recipe-names (conj (:recipe-names @state) recipe)]
+                     (swap! state #(-> %
+                                       (assoc :recipe-names recipe-names)
+                                       (update :factories (fn [factories]
+                                                            (merge (default-factories recipe-names)
+                                                                   factories)))))
+                     (solve! state)))}
       "+"]]))
 
 (rum/defc canvas < rum/reactive
@@ -65,8 +90,39 @@
            recipe-name
            [:button
             {:on-click (fn [_]
-                         (swap! state update :recipe-names disj recipe-name))}
+                         (swap! state #(-> %
+                                           (update :recipe-names disj recipe-name)
+                                           (update :factories dissoc recipe-name)))
+                         (solve! state))}
             "-"]])]])))
+
+(rum/defc factories < rum/reactive
+  [state]
+  (let [factories    (rum/react (rum/cursor-in state [:factories]))
+        recipe-names (keys factories)
+        products     (filter #(main-bus/created? %)
+                             (:products (main-bus/products recipe-names)))]
+
+    (if (seq factories)
+      [:div.card
+       [:table.components.table
+        [:thead
+         [:tr
+          [:th "Recipe"]
+          [:th "Facility"]
+          [:th "Count"]]]
+        [:tbody
+         (for [ingredient (reverse products)
+               :let       [{:keys [n]} (get factories ingredient)]]
+           [:tr {:key ingredient}
+            [:td ingredient]
+            [:td (main-bus/factory-type ingredient)]
+            [:td [:input {:type "number" :value n
+                          :on-change (fn [e]
+                                       
+                                       (swap! state assoc-in [:factories ingredient :n]
+                                              (js/parseInt (.. e -target -value)))
+                                       (solve! state))}]]])]]])))
 
 (rum/defc components < rum/reactive
   [state]
@@ -135,11 +191,12 @@
                                  (let [solution (rum/react (rum/cursor-in state [:solution]))]
                                    (js/JSON.stringify (clj->js (wrap-entities solution))))}]])
 
+
+
 (rum/defc generate-button < rum/reactive
   [state]
   [:button {:on-click (fn [_]
-                        (let [solution (doall (plan/plan (:recipe-names @state)))]
-                          (swap! state assoc :solution solution)))
+                        (solve! state))
             :disabled (not (seq (rum/react (rum/cursor-in state [:recipe-names]))))}
    "Generate"])
 
@@ -151,13 +208,14 @@
      [:div
       (recipe-selector state)]
 
-     (generate-button state)
+;;     (generate-button state)
 
      [:button {:on-click (fn [_]
-                           (reset! state default-value))}
+                           (reset! state empty-value))}
       "Clear"]
 
      (recipe-name-list state)
+     (factories state)
      (blueprint-encoded state)
      (components state)
      (blueprint-decoded state)]
@@ -177,3 +235,4 @@
 (defn reload!
   []
   (init))
+

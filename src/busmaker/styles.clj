@@ -7,9 +7,9 @@
           :font-size   "16px"
           :line-height 1.5}]
   [:.entity-details-wrapper {:height "25vh"}]
-  [:.blueprint-encoded {:height "300px"
+  [:.blueprint-encoded {:height "150px"
                         :overflow "scroll"}]
-  [:.blueprint-decoded {:height "300px"
+  [:.blueprint-decoded {:height "150px"
                         :overflow "scroll"}]
   [:.cell {:display "inline-block"
            :width "16px"

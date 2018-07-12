@@ -50,9 +50,5 @@ Visit http://localhost:3000/public/index.html
 ## Release
 
 ```sh
-make
-git commit -am "RELEASE"
-git checkout gh-pages
-git merge master
-git push
+make release
 ```

@@ -2833,84 +2833,58 @@ return cljs.core.distinct.call(null,busmaker.main_bus.sorted_recipe_order.call(n
 
 busmaker.main_bus.ingredients_by_recipe.cljs$lang$maxFixedArity = 1;
 
-busmaker.main_bus.main_bus = (function busmaker$main_bus$main_bus(var_args){
-var args__4534__auto__ = [];
-var len__4531__auto___8491 = arguments.length;
-var i__4532__auto___8492 = (0);
-while(true){
-if((i__4532__auto___8492 < len__4531__auto___8491)){
-args__4534__auto__.push((arguments[i__4532__auto___8492]));
-
-var G__8493 = (i__4532__auto___8492 + (1));
-i__4532__auto___8492 = G__8493;
-continue;
-} else {
-}
-break;
-}
-
-var argseq__4535__auto__ = ((((1) < args__4534__auto__.length))?(new cljs.core.IndexedSeq(args__4534__auto__.slice((1)),(0),null)):null);
-return busmaker.main_bus.main_bus.cljs$core$IFn$_invoke$arity$variadic((arguments[(0)]),argseq__4535__auto__);
-});
-
-busmaker.main_bus.main_bus.cljs$core$IFn$_invoke$arity$variadic = (function (recipe_names,p__8481){
-var map__8482 = p__8481;
-var map__8482__$1 = ((((!((map__8482 == null)))?(((((map__8482.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8482.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8482):map__8482);
-var n_factories = cljs.core.get.call(null,map__8482__$1,new cljs.core.Keyword(null,"n-factories","n-factories",-1538607494),(2));
-var depth = cljs.core.get.call(null,map__8482__$1,new cljs.core.Keyword(null,"depth","depth",1768663640),(1000));
-var oil_QMARK_ = cljs.core.seq.call(null,cljs.core.mapcat.call(null,((function (map__8482,map__8482__$1,n_factories,depth){
-return (function (recipe_name){
-return cljs.core.filter.call(null,((function (map__8482,map__8482__$1,n_factories,depth){
-return (function (p1__8476_SHARP_){
+busmaker.main_bus.products = (function busmaker$main_bus$products(recipe_names){
+var oil_QMARK_ = cljs.core.seq.call(null,cljs.core.mapcat.call(null,(function (recipe_name){
+return cljs.core.filter.call(null,(function (p1__8476_SHARP_){
 return new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["advanced-oil-processing",null], null), null).call(null,busmaker.main_bus.recipe_type.call(null,p1__8476_SHARP_));
-});})(map__8482,map__8482__$1,n_factories,depth))
-,busmaker.main_bus.ingredients_by_recipe.call(null,recipe_name));
-});})(map__8482,map__8482__$1,n_factories,depth))
-,recipe_names));
-var products = cljs.core.reduce.call(null,((function (oil_QMARK_,map__8482,map__8482__$1,n_factories,depth){
+}),busmaker.main_bus.ingredients_by_recipe.call(null,recipe_name));
+}),recipe_names));
+var products = cljs.core.reduce.call(null,((function (oil_QMARK_){
 return (function (products,recipe_name){
-return cljs.core.apply.call(null,cljs.core.conj,products,cljs.core.remove.call(null,cljs.core.set.call(null,products),cljs.core.remove.call(null,((function (oil_QMARK_,map__8482,map__8482__$1,n_factories,depth){
+return cljs.core.apply.call(null,cljs.core.conj,products,cljs.core.remove.call(null,cljs.core.set.call(null,products),cljs.core.remove.call(null,((function (oil_QMARK_){
 return (function (p1__8477_SHARP_){
 return new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["advanced-oil-processing",null], null), null).call(null,busmaker.main_bus.recipe_type.call(null,p1__8477_SHARP_));
-});})(oil_QMARK_,map__8482,map__8482__$1,n_factories,depth))
+});})(oil_QMARK_))
 ,busmaker.main_bus.ingredients_by_recipe.call(null,recipe_name))));
-});})(oil_QMARK_,map__8482,map__8482__$1,n_factories,depth))
+});})(oil_QMARK_))
 ,((oil_QMARK_)?new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["heavy-oil"], null):cljs.core.PersistentVector.EMPTY),recipe_names);
 var others = ((oil_QMARK_)?clojure.set.difference.call(null,cljs.core.set.call(null,cljs.core.concat.call(null,cljs.core.map.call(null,new cljs.core.Keyword(null,"name","name",1843675177),cljs.core.mapcat.call(null,new cljs.core.Keyword(null,"results","results",-1134170113),cljs.core.filter.call(null,cljs.core.comp.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["advanced-oil-processing",null], null), null),new cljs.core.Keyword(null,"name","name",1843675177)),busmaker.recipes.recipes))),cljs.core.map.call(null,new cljs.core.Keyword(null,"name","name",1843675177),cljs.core.mapcat.call(null,new cljs.core.Keyword(null,"ingredients","ingredients",-1855671917),cljs.core.filter.call(null,cljs.core.comp.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["advanced-oil-processing",null], null), null),new cljs.core.Keyword(null,"name","name",1843675177)),busmaker.recipes.recipes))))),cljs.core.set.call(null,products)):null);
 var deps = cljs.core.map_indexed.call(null,cljs.core.vector,products);
 var bus_outputs = cljs.core.into.call(null,cljs.core.PersistentArrayMap.EMPTY,cljs.core.map.call(null,cljs.core.comp.call(null,cljs.core.vec,cljs.core.reverse),cljs.core.map_indexed.call(null,cljs.core.vector,cljs.core.concat.call(null,products,others))));
-return cljs.core.apply.call(null,cljs.core.concat,new cljs.core.Keyword(null,"output","output",-1105869043).cljs$core$IFn$_invoke$arity$1(cljs.core.reduce.call(null,((function (oil_QMARK_,products,others,deps,bus_outputs,map__8482,map__8482__$1,n_factories,depth){
-return (function (p__8484,p__8485){
-var map__8486 = p__8484;
-var map__8486__$1 = ((((!((map__8486 == null)))?(((((map__8486.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8486.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8486):map__8486);
-var acc = map__8486__$1;
-var y = cljs.core.get.call(null,map__8486__$1,new cljs.core.Keyword(null,"y","y",-1757859776));
-var vec__8487 = p__8485;
-var output_index = cljs.core.nth.call(null,vec__8487,(0),null);
-var ingredient = cljs.core.nth.call(null,vec__8487,(1),null);
+return new cljs.core.PersistentArrayMap(null, 5, [new cljs.core.Keyword(null,"oil?","oil?",1078295839),oil_QMARK_,new cljs.core.Keyword(null,"products","products",1876973544),products,new cljs.core.Keyword(null,"others","others",2084874583),others,new cljs.core.Keyword(null,"deps","deps",1883360319),deps,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584),bus_outputs], null);
+});
+busmaker.main_bus.created_QMARK_ = (function busmaker$main_bus$created_QMARK_(recipe_name){
+return cljs.core.not.call(null,cljs.core.re_find.call(null,/.*ore|water|coal|^stone$/,recipe_name));
+});
+busmaker.main_bus.main_bus = (function busmaker$main_bus$main_bus(recipe_names,factories){
+var map__8479 = busmaker.main_bus.products.call(null,recipe_names);
+var map__8479__$1 = ((((!((map__8479 == null)))?(((((map__8479.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8479.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8479):map__8479);
+var oil_QMARK_ = cljs.core.get.call(null,map__8479__$1,new cljs.core.Keyword(null,"oil?","oil?",1078295839));
+var products = cljs.core.get.call(null,map__8479__$1,new cljs.core.Keyword(null,"products","products",1876973544));
+var others = cljs.core.get.call(null,map__8479__$1,new cljs.core.Keyword(null,"others","others",2084874583));
+var deps = cljs.core.get.call(null,map__8479__$1,new cljs.core.Keyword(null,"deps","deps",1883360319));
+var bus_outputs = cljs.core.get.call(null,map__8479__$1,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584));
+return cljs.core.apply.call(null,cljs.core.concat,new cljs.core.Keyword(null,"output","output",-1105869043).cljs$core$IFn$_invoke$arity$1(cljs.core.reduce.call(null,((function (map__8479,map__8479__$1,oil_QMARK_,products,others,deps,bus_outputs){
+return (function (p__8481,p__8482){
+var map__8483 = p__8481;
+var map__8483__$1 = ((((!((map__8483 == null)))?(((((map__8483.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8483.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8483):map__8483);
+var acc = map__8483__$1;
+var y = cljs.core.get.call(null,map__8483__$1,new cljs.core.Keyword(null,"y","y",-1757859776));
+var vec__8484 = p__8482;
+var output_index = cljs.core.nth.call(null,vec__8484,(0),null);
+var ingredient = cljs.core.nth.call(null,vec__8484,(1),null);
 return cljs.core.update.call(null,cljs.core.update.call(null,acc,new cljs.core.Keyword(null,"output","output",-1105869043),cljs.core.conj,(function (){var input_indexes = cljs.core.map.call(null,bus_outputs,busmaker.main_bus.ingredients.call(null,ingredient));
-return busmaker.main_bus.main_bus_line.call(null,new cljs.core.Keyword(null,"buses","buses",214650120),bus_outputs,new cljs.core.Keyword(null,"y","y",-1757859776),((y - busmaker.main_bus.ingredient_height.call(null,ingredient)) - (1)),new cljs.core.Keyword(null,"n-factories","n-factories",-1538607494),n_factories,new cljs.core.Keyword(null,"output-index","output-index",-655346446),output_index,new cljs.core.Keyword(null,"ingredient","ingredient",1011156019),ingredient,new cljs.core.Keyword(null,"input-indexes","input-indexes",1572446793),input_indexes,new cljs.core.Keyword(null,"ready-indexes","ready-indexes",-491713348),cljs.core.set.call(null,cljs.core.range.call(null,output_index)));
+return busmaker.main_bus.main_bus_line.call(null,new cljs.core.Keyword(null,"buses","buses",214650120),bus_outputs,new cljs.core.Keyword(null,"y","y",-1757859776),((y - busmaker.main_bus.ingredient_height.call(null,ingredient)) - (1)),new cljs.core.Keyword(null,"n-factories","n-factories",-1538607494),cljs.core.get_in.call(null,factories,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [ingredient,new cljs.core.Keyword(null,"n","n",562130025)], null),(1)),new cljs.core.Keyword(null,"output-index","output-index",-655346446),output_index,new cljs.core.Keyword(null,"ingredient","ingredient",1011156019),ingredient,new cljs.core.Keyword(null,"input-indexes","input-indexes",1572446793),input_indexes,new cljs.core.Keyword(null,"ready-indexes","ready-indexes",-491713348),cljs.core.set.call(null,cljs.core.range.call(null,output_index)));
 })()),new cljs.core.Keyword(null,"y","y",-1757859776),cljs.core._,busmaker.main_bus.ingredient_height.call(null,ingredient));
-});})(oil_QMARK_,products,others,deps,bus_outputs,map__8482,map__8482__$1,n_factories,depth))
-,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"y","y",-1757859776),(0)], null),cljs.core.remove.call(null,((function (oil_QMARK_,products,others,deps,bus_outputs,map__8482,map__8482__$1,n_factories,depth){
+});})(map__8479,map__8479__$1,oil_QMARK_,products,others,deps,bus_outputs))
+,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"y","y",-1757859776),(0)], null),cljs.core.filter.call(null,((function (map__8479,map__8479__$1,oil_QMARK_,products,others,deps,bus_outputs){
 return (function (p1__8478_SHARP_){
-return cljs.core.re_find.call(null,/.*ore|water|coal|^stone$/,cljs.core.second.call(null,p1__8478_SHARP_));
-});})(oil_QMARK_,products,others,deps,bus_outputs,map__8482,map__8482__$1,n_factories,depth))
-,cljs.core.take.call(null,depth,deps)))));
+return busmaker.main_bus.created_QMARK_.call(null,cljs.core.second.call(null,p1__8478_SHARP_));
+});})(map__8479,map__8479__$1,oil_QMARK_,products,others,deps,bus_outputs))
+,deps))));
 });
-
-busmaker.main_bus.main_bus.cljs$lang$maxFixedArity = (1);
-
-/** @this {Function} */
-busmaker.main_bus.main_bus.cljs$lang$applyTo = (function (seq8479){
-var G__8480 = cljs.core.first.call(null,seq8479);
-var seq8479__$1 = cljs.core.next.call(null,seq8479);
-var self__4518__auto__ = this;
-return self__4518__auto__.cljs$core$IFn$_invoke$arity$variadic(G__8480,seq8479__$1);
-});
-
 busmaker.main_bus.normalize = (function busmaker$main_bus$normalize(entities){
-return cljs.core.vals.call(null,cljs.core.into.call(null,cljs.core.PersistentArrayMap.EMPTY,cljs.core.map.call(null,cljs.core.juxt.call(null,(function (p1__8494_SHARP_){
-return (new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[(Math.round(cljs.core.get_in.call(null,p1__8494_SHARP_,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["position","y"], null))) | (0)),(Math.round(cljs.core.get_in.call(null,p1__8494_SHARP_,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["position","x"], null))) | (0))],null));
+return cljs.core.vals.call(null,cljs.core.into.call(null,cljs.core.PersistentArrayMap.EMPTY,cljs.core.map.call(null,cljs.core.juxt.call(null,(function (p1__8488_SHARP_){
+return (new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[(Math.round(cljs.core.get_in.call(null,p1__8488_SHARP_,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["position","y"], null))) | (0)),(Math.round(cljs.core.get_in.call(null,p1__8488_SHARP_,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["position","x"], null))) | (0))],null));
 }),cljs.core.identity),entities)));
 });

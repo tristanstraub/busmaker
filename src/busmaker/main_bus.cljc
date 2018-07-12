@@ -622,9 +622,8 @@
   ([name]
    (distinct (sorted-recipe-order name))))
 
-(defn main-bus
-  [recipe-names & {:keys [n-factories depth] :or {n-factories 2
-                                                  depth 1000}}]
+(defn products
+  [recipe-names]
   (let [oil?        (seq (mapcat (fn [recipe-name]
                                    (filter #(#{"advanced-oil-processing"} (recipe-type %))
                                            (ingredients-by-recipe recipe-name)))
@@ -636,7 +635,7 @@
                                                                    (ingredients-by-recipe recipe-name)))))
                             (if oil? ["heavy-oil"] [])
                             recipe-names)
-        
+         
         others      (when oil?
                       (set/difference (set (concat (map :name (mapcat :results (filter (comp #{"advanced-oil-processing"} :name)
                                                                                        recipes/recipes)))
@@ -644,28 +643,41 @@
                                                                                            recipes/recipes)))))
                                       (set products)))
 
-        deps        (map-indexed vector products)
+        deps                           (map-indexed vector products)
 
-        bus-outputs (into {}
-                          (map (comp vec reverse) (map-indexed vector (concat products others))))]
+        bus-outputs                    (->> others
+                                            (concat products)
+                                            (map-indexed vector)
+                                            (map (comp vec reverse))
+                                            (into {}))]
+    
+    {:oil?        oil?
+     :products    products
+     :others      others
+     :deps        deps
+     :bus-outputs bus-outputs}))
+
+(defn created?
+  [recipe-name]
+  (not (re-find #".*ore|water|coal|^stone$" recipe-name)))
+
+(defn main-bus
+  [recipe-names factories]
+  (let [{:keys [oil? products others deps bus-outputs]} (products recipe-names)]    
     (apply concat (:output (reduce (fn [{:keys [y] :as acc} [output-index ingredient]]
                                      (-> acc
                                          (update :output conj
                                                  (let [input-indexes (map bus-outputs (ingredients ingredient))]
                                                    (main-bus-line :buses bus-outputs
                                                                   :y (- y (ingredient-height ingredient) 1)
-                                                                  :n-factories n-factories
+                                                                  :n-factories (get-in factories [ingredient :n] 1)
                                                                   :output-index output-index
                                                                   :ingredient ingredient
                                                                   :input-indexes input-indexes
                                                                   :ready-indexes (set (range output-index)))))
                                          (update :y - (ingredient-height ingredient))))
                                    {:y 0}
-                                   (->> (take depth deps)
-                                        (remove #(re-find #".*ore|water|coal|^stone$" (second %)))
-                                        ;; (drop 16)
-                                        ;; (take 4)
-                                        ))))))
+                                   (filter #(created? (second %)) deps))))))
 
 (defn normalize
   [entities]
@@ -673,6 +685,7 @@
                                      (int (Math/round (double (get-in % ["position" "x"])))))
                             identity)
                       entities))))
+
 
 
 
