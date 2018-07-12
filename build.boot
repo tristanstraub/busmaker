@@ -24,7 +24,8 @@
                           [ring-middleware-accept "2.0.3"]
 
                           [integrant "0.6.3"]
-                          [impi "0.0.10"]]
+                          [impi "0.0.10"]
+                          [cheshire "5.8.0"]]
           :source-paths #{"src"}
           :resource-paths #{"resources"})
 

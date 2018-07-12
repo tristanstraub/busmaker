@@ -133,10 +133,13 @@
                                        y 0}}]
   {"name"     facility
    "recipe"   (recipe-type recipe)
-   "position" {"x"      (cond (or (not (fluid? recipe))
-                                  (#{"lubricant" "sulfur" "sulfuric-acid" "battery"} recipe)) x
-                              :else (dec x))
-               "y"      y}
+   "position" {"x" (cond (#{"stone-furnace"} facility)                                   (+ x 0.5)
+                         (or (not (fluid? recipe))
+                             (#{"lubricant" "sulfur" "sulfuric-acid" "battery"} recipe)) x
+                         
+                         :else                                                           (dec x))
+               "y" (cond (#{"stone-furnace"} facility) (+ y 0.5)
+                         :else                         y)}
 
    "direction" (cond (#{"oil-refinery"} facility) (blueprint-direction-inserter [0 1])
                      :else (blueprint-direction-inserter [0 -1]))})
@@ -206,26 +209,26 @@
                                  :facility facility)
 
                         (inserter :x (+ x dx)
-                                       :y (+ y 1)
-                                       :direction [-1 0])
+                                  :y (+ y 1)
+                                  :direction [-1 0])
                         (inserter :x (+ x dx)
-                                       :y (+ y 2)
-                                       :direction [-1 0])
+                                  :y (+ y 2)
+                                  :direction [-1 0])
                         (inserter :x (+ x dx)
-                                       :y (+ y 3)
-                                       :direction [-1 0])]
+                                  :y (+ y 3)
+                                  :direction [-1 0])]
 
                        (apply concat
                               (for [j    (range 3)
                                     :let [y (+ 3 y (- j))]]
                                 [(underground-belt :x (+ x 1 dx)
-                                                        :y y
-                                                        :direction [-1 0]
-                                                        :type "input")
+                                                   :y y
+                                                   :direction [-1 0]
+                                                   :type "input")
                                  (underground-belt :x (+ x 2 dx)
-                                                        :y y
-                                                        :direction [-1 0]
-                                                        :type "output")])))))])
+                                                   :y y
+                                                   :direction [-1 0]
+                                                   :type "output")])))))])
 
 (def input-tap-indexes
   {"heavy-oil"            {"crude-oil" 0
@@ -402,7 +405,7 @@
 (defn ingredient-height
   [ingredient facility]
   (let [n (count (ingredients ingredient facility))]
-    (cond (#{"stone-furnace"} facility)                               11
+    (cond (#{"stone-furnace"} facility)                               8
           (#{"electric-furnace"} facility)                            9
           (#{"oil-refinery"} facility)                                16
           (#{"assembling-machine-1" "assembling-machine-2"} facility) (+ 11 (if (> n 3)
@@ -440,6 +443,7 @@
                                                                :else 0))
                                                    n  (count (ingredients ingredient facility))
                                                    dy (cond (#{"chemical-plant"} facility) 4
+                                                            (#{"stone-furnace"} facility) 1
                                                             (#{"oil-refinery"} facility) 2
                                                             (#{"electric-furnace"} facility) 1
                                                             (#{"assembling-machine-2"} facility) (+ 3 (if (> n 3)
