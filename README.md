@@ -19,10 +19,8 @@ Visit https://tristanstraub.github.io/busmaker/build/index.html
 
 - The code is pre-alpha quality.
 - Only tested in Chrome. (firefox has simple rendering issues)
-- Always includes oil processing
 - Doesn't use correct factory for rocket-silo
 - Not many recipes have been tested (many hacks in the code).
-- Number of factories not configurable (set to 5).
 
 ## Example -- building radars
 
