@@ -62,3 +62,12 @@
     (distinct (cond coal? (into ["coal"] ingredients)
                     :else ingredients))))
 
+(defn required-ingredients
+  [recipe-names]
+  (set (mapcat (fn [recipe-name]
+                 (ingredients-by-recipe-recursive recipe-name))
+               recipe-names)))
+
+(defn raw?
+  [recipe-name]
+  (re-find #".*ore|water|coal|^stone$" recipe-name))

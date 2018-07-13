@@ -1,6 +1,5 @@
 (ns busmaker.app
   (:require [rum.core :as rum]
-            [busmaker.data :as data]
             [cljs.reader]
             [busmaker.template :as template]
             [cljs.tools.reader.edn :as edn]
@@ -8,12 +7,15 @@
             ["pako" :as pako]
             [goog.crypt.base64 :as base64]
             [busmaker.recipes :as recipes]
-            [busmaker.widgets :as widgets]
             [busmaker.plan :as plan]
             [busmaker.web :as web]
             [busmaker.main-bus :as main-bus]
             [busmaker.pixi :as pixi]
-            [impi.core]))
+            [busmaker.state :as state]
+            [busmaker.bus :as bus]
+            [busmaker.recipe-data :as recipe-data]
+            [impi.core]
+            [clojure.string :as str]))
 
 (enable-console-print!)
 
@@ -32,51 +34,22 @@
   [key]
   (.removeItem (.-localStorage js/window) key))
 
-(def default-recipe-names
-  #{"iron-plate"})
-
-(def empty-value
-  {:widgets      widgets/widgets
-   :recipes      (->> recipes/recipes
-                      (map :name)
-                      (remove #(#{"advanced-oil-processing"} %)))
-   :recipe-names #{}
-   :bus-outputs  nil
-   :products     nil})
-
-(def default-value
-  (merge empty-value template/template2))
-
-#_ (def default-value
-  (let [factories                      (main-bus/default-factories default-recipe-names)
-        {:keys [bus-outputs products]} (main-bus/recipe-products default-recipe-names)]
-    (merge empty-value
-           {:recipe-names default-recipe-names
-            :factories    factories
-            :products     products
-            :bus-outputs  bus-outputs
-
-            :solution     (plan/plan default-recipe-names
-                                     factories
-                                     products
-                                     bus-outputs)})))
-
-(defonce state (atom default-value))
+(defonce state (atom (state/default-state)))
 
 (defn solve!
   [state]
-  (let [solution (doall (plan/plan (:recipe-names @state)
-                                   (:factories @state)
-                                   (:products @state)
+  (let [solution (doall (plan/plan (:factories @state)
                                    (:bus-outputs @state)))]
     (swap! state assoc :solution solution)
-;;    (set-item! "busmaker" (pr-str (dissoc @state :solution :recipes :widgets)))
+;;    (set-item! "busmaker" (pr-str (dissoc @state :solution :recipes)))
     ))
 
 (rum/defc recipe-selector < rum/reactive
   [state]
   (let [recipe (rum/react (rum/cursor-in state [:recipe]))
-        recipes (rum/react (rum/cursor-in state [:recipes]))]
+        recipes (->> recipe-data/recipes
+                     (map :name)
+                     (remove #(#{"advanced-oil-processing"} %)))]
     [:label "Recipe"
      [:select {:value recipe
                :on-change (fn [e]
@@ -84,52 +57,15 @@
                               (swap! state assoc :recipe recipe)))}
       [:option "Select recipe"]
       (for [recipe (sort recipes)]
-        
         [:option {:key recipe :value recipe} recipe])]
      [:button
       {:disabled (not (seq recipe))
        :on-click (fn [_]
-                   (let [recipe-names (conj (:recipe-names @state) recipe)]
-                     (swap! state #(-> %
-                                       (assoc :recipe-names recipe-names)
-                                       (update :factories data/add-factories (main-bus/default-factories [recipe]))
-                                       (merge (main-bus/recipe-products recipe-names))))
-                     (solve! state)))}
+                   (swap! state state/add-recipe recipe)
+                   (solve! state))}
       "+"]]))
 
-(rum/defc canvas < rum/reactive
-  [state]
-  (let [solution (rum/react (rum/cursor-in state [:solution]))
-        widgets  (rum/react (rum/cursor-in state [:widgets]))]
-    [:div.cursor
-     (web/print-entities state solution widgets)]))
 
-(defn required-ingredients
-  [recipe-names factories]
-  (set (mapcat (fn [recipe-name]
-                 (let [facility (get-in factories [recipe-name :facility])]
-                   (main-bus/ingredients-by-recipe recipe-name facility)))
-               recipe-names)))
-
-(rum/defc recipe-name-list < rum/reactive
-  [state]
-  (let [recipe-names (:recipe-names (rum/react state))]
-    (if (seq recipe-names)
-      [:div.card
-       [:h6 "Recipes"]
-       [:ul.components
-        (for [recipe-name recipe-names]
-          [:li {:key recipe-name}
-           recipe-name
-           [:button
-            {:on-click (fn [_]
-                         (swap! state #(-> %
-                                           (update :recipe-names disj recipe-name)
-                                           (update :factories (fn [factories]
-                                                                (select-keys factories (required-ingredients (disj (:recipe-names %) recipe-name)
-                                                                                                             factories))))))
-                         (solve! state))}
-            "-"]])]])))
 
 (def facilities
   ["stone-furnace"
@@ -138,13 +74,14 @@
    "oil-refinery"
    "chemical-plant"
    "assembling-machine-1"
-   "assembling-machine-2"])
+   "assembling-machine-2"
+   "lab"])
 
 (rum/defc facility-selector
-  [state ingredient facility]
+  [state {:keys [facility] :as factory}]
   [:select {:value     facility
             :on-change (fn [e]
-                         (swap! state assoc-in [:factories ingredient :facility] (.. e -target -value))
+                         (swap! state state/swap-facility factory (.. e -target -value))
                          (solve! state))}
    (for [facility facilities]
      [:option {:key facility
@@ -153,9 +90,9 @@
 
 (rum/defc bus < rum/reactive
   [state]
-  (let [factories    (rum/react (rum/cursor-in state [:factories]))
-        bus-outputs      (rum/react (rum/cursor-in state [:bus-outputs]))]
-    
+  (let [factories   (rum/react (rum/cursor-in state [:factories]))
+        bus-outputs (rum/react (rum/cursor-in state [:bus-outputs]))]
+
     (if (seq bus-outputs)
       [:div.card
        [:table.components.table
@@ -164,7 +101,7 @@
           [:th "Output"]
           [:th "Bus index"]]]
         [:tbody
-         (for [[output bus-index] (sort-by second bus-outputs)]
+         (for [[bus-index output] (map-indexed vector bus-outputs)]
            [:tr {:key bus-index}
 
             [:td output]
@@ -172,40 +109,28 @@
 
 (rum/defc factories < rum/reactive
   [state]
-  (let [factories    (rum/react (rum/cursor-in state [:factories]))
-        products     (keys factories)]
+  (let [factories    (rum/react (rum/cursor-in state [:factories]))]
 
     (if (seq factories)
       [:div.card
        [:table.components.table
         [:thead
          [:tr
-          [:th]
-          [:th "Recipe"]
+          [:th "Recipes"]
           [:th "Facility"]
           [:th "Count"]]]
         [:tbody
-         (for [ingredient (reverse products)
-               :let       [{:keys [facility n]} (get factories ingredient)]]
-           [:tr {:key ingredient}
-            [:td
-             [:button
-              "^"]
-             [:button
-              "v"]]
-            [:td ingredient]
-            [:td (facility-selector state ingredient facility)]
+         (for [[i {:keys [facility n recipes] :as factory}] (map-indexed vector factories)]
+           [:tr {:key i}
+            [:td (str/join "," recipes)]
+            [:td (facility-selector state factory)]
             [:td [:input {:type "number" :value n
                           :on-change (fn [e]
-                                       (swap! state assoc-in [:factories ingredient :n]
-                                              (js/parseInt (.. e -target -value)))
+                                       (println :change )
+                                       (swap! state state/change-facility-line-length factory (js/parseInt (.. e -target -value)))
                                        (solve! state))}]]
             [:td [:button {:on-click (fn [e]
-                                       (enable-console-print!)
-                                       (swap! state #(-> %
-                                                         (update :factories dissoc ingredient)
-                                                         (update :products (fn [ps] (vec (remove #{ingredient} ps))))))
-
+                                       (swap! state state/remove-factory factory)
                                        (solve! state))}
                   "-"]
 ]])]]])))
@@ -218,8 +143,7 @@
       [:div.card
        [:h6 "Components"]
        [:ul.components
-        (for [ingredient (sort (required-ingredients recipe-names
-                                                     factories))]
+        (for [ingredient (sort (recipes/required-ingredients recipe-names))]
           [:li {:key ingredient}
            ingredient])]])))
 
@@ -299,26 +223,24 @@
 ;;     (generate-button state)
 
      [:button {:on-click (fn [_]
-                           (reset! state empty-value))}
+                           (reset! state (state/empty-state)))}
       "Clear"]
 
-     (recipe-name-list state)
      (factories state)
      (bus state)
      (blueprint-encoded state)
      (components state)
      (blueprint-decoded state)]
-    
+
     [:div.d-flex.flex-column.flex-grow-1
      (pixi/panel state)
-     
-;;     (canvas state)
      [:div.entity-details-wrapper
-      (entity-details state)]]]])
+      (entity-details state)
+      ]]]])
 
 (defn ^:expose init
   []
-  (swap! state merge (cljs.reader/read-string (get-item "busmaker")))
+;;  (swap! state merge (cljs.reader/read-string (get-item "busmaker")))
   (solve! state)
   (rum/mount (blueprint state)
              (. js/document (getElementById "container"))))
