@@ -30,3 +30,4 @@ release:
 	git push
 	git checkout master
 	git merge gh-pages
+	git push
