@@ -43,6 +43,10 @@
   (remove-factory state
                   (bus/get-factory (:factories state) recipe-name)))
 
+(defn remove-bus
+  [state recipe-name]
+  (update state :bus-outputs #(vec (remove #{recipe-name} %))))
+
 (defn swap-facility
   [state factory facility]
   (update state :factories #(mapv (fn [f]

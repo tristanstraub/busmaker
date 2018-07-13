@@ -92,14 +92,18 @@
 
 (deftest default-state
   []
-  (is (= {:bus-outputs     ["coal" "iron-ore" "iron-plate"],
-          :factories    [{:facility "stone-furnace", :recipes ["iron-plate"], :n 1}]}
-         (dissoc (state/default-state)
-                 :solution))))
+  (is (state/default-state)))
 
 (deftest change-facility-line-length
   (is (= {:factories
           [{:facility "stone-furnace", :n 2, :recipes ["stone-brick"]}],
           :bus-outputs ["coal" "stone" "stone-brick"]}
          (-> (state/add-recipe nil "stone-brick")
-             (state/change-facility-line-length "stone-brick" 2)))))
+             (state/change-facility-line-length {:facility "stone-furnace", :n 1, :recipes ["stone-brick"]}
+                                                2)))))
+
+(deftest remove-bus
+  (is (= {:factories [{:facility "stone-furnace", :n 1, :recipes ["stone-brick"]}]
+          :bus-outputs ["coal" "stone-brick"]}
+         (state/remove-bus (state/add-recipe nil "stone-brick")
+                           "stone"))))

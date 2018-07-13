@@ -478,69 +478,70 @@
                      (cond->
                          ;; LHS - output tap (transport belt)
                          (not (fluid? ingredient))
-                       (concat (apply concat (let [x (+ x 6)
-                                                   y (+ y 6)
-                                                   output-index (buses ingredient)]
-                                               (for [i (range n-factories)
-                                                     :let [y-extension (cond (#{"stone-furnace"} facility) 1
-                                                                             :else                         0)]]
-                                                 (if (> i 0)
-                                                   (output-tap-extension :x (+ x (* -6 i))
-                                                                         :y (+ y -2 -1)
-                                                                         :output-index output-index
-                                                                         :y-extension y-extension)
-                                                   (output-tap :x (+ x (* -6 i))
-                                                               :y (+ y -2 -1)
-                                                               :output-index output-index
-                                                               :y-extension y-extension))))))
+                         (concat (apply concat (let [x (+ x 6)
+                                                     y (+ y 6)
+                                                     output-index (buses ingredient)]
+                                                 (for [i (range n-factories)
+                                                       :let [y-extension (cond (#{"stone-furnace"} facility) 1
+                                                                               :else                         0)]
+                                                       :when output-index]
+                                                   (if (> i 0)
+                                                     (output-tap-extension :x (+ x (* -6 i))
+                                                                           :y (+ y -2 -1)
+                                                                           :output-index output-index
+                                                                           :y-extension y-extension)
+                                                     (output-tap :x (+ x (* -6 i))
+                                                                 :y (+ y -2 -1)
+                                                                 :output-index output-index
+                                                                 :y-extension y-extension))))))
 
-                       ;; LHS fluid input tap
-                       (some fluid? (ingredients ingredient facility))
-                       (concat (apply concat (for [i                          (range n-factories)
-                                                   [input-recipe input-index] (input-tap-indexes ingredient)
-                                                   :let                       [dx (* i (cond (#{"oil-refinery"} facility) -8
-                                                                                             :else                                         -6))
-                                                                               x (+ x 3 dx)
-                                                                               y (+ y 6 (cond (#{"oil-refinery"} facility) 1
-                                                                                              :else 0))
-                                                                               args [:input-index input-index
-                                                                                     :input-extension
-                                                                                     (cond (#{"oil-refinery"} facility) 1
-                                                                                           :else                        0)
+                         ;; LHS fluid input tap
+                         (some fluid? (ingredients ingredient facility))
+                         (concat (apply concat (for [i                          (range n-factories)
+                                                     [input-recipe input-index] (input-tap-indexes ingredient)
+                                                     :let                       [dx (* i (cond (#{"oil-refinery"} facility) -8
+                                                                                               :else                                         -6))
+                                                                                 x (+ x 3 dx)
+                                                                                 y (+ y 6 (cond (#{"oil-refinery"} facility) 1
+                                                                                                :else 0))
+                                                                                 args [:input-index input-index
+                                                                                       :input-extension
+                                                                                       (cond (#{"oil-refinery"} facility) 1
+                                                                                             :else                        0)
 
-                                                                                     :x-extension (cond (#{"oil-refinery"} facility) 1
-                                                                                                        (#{"assembling-machine-1" "assembling-machine-2"} facility) 1
-                                                                                                        :else 0)
-                                                                                     :y-extension (+ 1 (* 2 input-index))]]]
-                                               `[~@(apply pipe-input-down-tap
-                                                          :y (+ y -2)
-                                                          :x (- x 5 (* 2 input-index)
-                                                                (cond (#{"chemical-plant"} facility) -1
-                                                                      :else 0))
-                                                          args)
-                                                 ~@(apply pipe-input-tap-lhs
-                                                          :y (+ y -1 (* 2 input-index))
-                                                          :x (+ (- x 5 (* 2 input-index) 1
-                                                                   (cond (#{"chemical-plant"} facility) -1
-                                                                         :else 0)))
-                                                          args)])))
+                                                                                       :x-extension (cond (#{"oil-refinery"} facility) 1
+                                                                                                          (#{"assembling-machine-1" "assembling-machine-2"} facility) 1
+                                                                                                          :else 0)
+                                                                                       :y-extension (+ 1 (* 2 input-index))]]]
+                                                 `[~@(apply pipe-input-down-tap
+                                                            :y (+ y -2)
+                                                            :x (- x 5 (* 2 input-index)
+                                                                  (cond (#{"chemical-plant"} facility) -1
+                                                                        :else 0))
+                                                            args)
+                                                   ~@(apply pipe-input-tap-lhs
+                                                            :y (+ y -1 (* 2 input-index))
+                                                            :x (+ (- x 5 (* 2 input-index) 1
+                                                                     (cond (#{"chemical-plant"} facility) -1
+                                                                           :else 0)))
+                                                            args)])))
 
-                       ;; LHS fluid output tap
-                       (fluid? ingredient)
-                       (concat (apply concat (let [y (+ y 6 (cond (#{"oil-refinery"} facility) -1
-                                                                  :else 0))
-                                                   x (+ x 4 (cond (#{"oil-refinery"} facility) -1
-                                                                  (#{"chemical-plant"} facility) -1
-                                                                  :else 0))]
-                                               (for [i (range n-factories)
-                                                     [output-recipe output-index] (output-tap-indexes ingredient)
-                                                     :let [dx (* i (cond (#{"oil-refinery"} facility) -8
-                                                                         :else -6))]]
-                                                 (pipe-output-tap :x (+ (- x 4 (* 2 output-index)) dx)
-                                                                  :y (+ y -7 (- (* 2 output-index)))
-                                                                  :output-index output-index
-                                                                  :y-extension (cond (#{"chemical-plant"} facility) 1
-                                                                                     :else 0))))))))
+                         ;; LHS fluid output tap
+                         (fluid? ingredient)
+                         (concat (apply concat (let [y (+ y 6 (cond (#{"oil-refinery"} facility) -1
+                                                                    :else 0))
+                                                     x (+ x 4 (cond (#{"oil-refinery"} facility) -1
+                                                                    (#{"chemical-plant"} facility) -1
+                                                                    :else 0))]
+                                                 (for [i (range n-factories)
+                                                       [output-recipe output-index] (output-tap-indexes ingredient)
+                                                       :let [dx (* i (cond (#{"oil-refinery"} facility) -8
+                                                                           :else -6))]]
+                                                   (pipe-output-tap :x (+ (- x 4 (* 2 output-index)) dx)
+                                                                    :y (+ y -7 (- (* 2 output-index)))
+                                                                    :output-index output-index
+                                                                    :y-extension (cond (#{"chemical-plant"} facility) 1
+                                                                                       :else 0))))))))
                  (iterate inc 0)))))
 
 (defn raw?
