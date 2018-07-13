@@ -64,6 +64,7 @@
            ["transport-belt" :w nil]       (g :transport-belt :rotate -90)
            ["transport-belt" :e nil]       (g :transport-belt :rotate 90)
 
+           ["small-electric-pole" _ _] (g :electrical-pole)
            ["medium-electric-pole" _ _] (g :electrical-pole)
 
            ["pipe" _ _] (g :pipe)

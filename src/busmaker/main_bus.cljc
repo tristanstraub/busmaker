@@ -71,6 +71,14 @@
    "position"      {"x" x
                     "y" y}})
 
+(defn small-electric-pole
+  [& {:keys [x y] :or {
+                       x         0
+                       y         0}}]
+  {"name"          "small-electric-pole"
+   "position"      {"x" x
+                    "y" y}})
+
 (defn medium-electric-pole
   [& {:keys [x y] :or {
                        x         0
@@ -165,9 +173,9 @@
              (for [i (range n-factories)
                    :let [dx (* i (cond (#{"oil-refinery"} facility) -8
                                        :else -6))]]
-               (concat [(medium-electric-pole :x (+ x dx)
+               (concat [(small-electric-pole :x (+ x dx)
                                               :y y)
-                        (medium-electric-pole :x (+ x dx)
+                        (small-electric-pole :x (+ x dx)
                                               :y (+ y 4))
 
                         (factory :x (+ x -2 dx)
