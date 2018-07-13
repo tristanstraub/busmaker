@@ -41,8 +41,7 @@
   (let [solution (doall (plan/plan (:factories @state)
                                    (:bus-outputs @state)))]
     (swap! state assoc :solution solution)
-;;    (set-item! "busmaker" (pr-str (dissoc @state :solution :recipes)))
-    ))
+    (set-item! "busmaker" (pr-str (dissoc @state :solution)))))
 
 (rum/defc recipe-selector < rum/reactive
   [state]
@@ -246,7 +245,7 @@
 
 (defn ^:expose init
   []
-;;  (swap! state merge (cljs.reader/read-string (get-item "busmaker")))
+  (swap! state merge (cljs.reader/read-string (get-item "busmaker")))
   (solve! state)
   (rum/mount (blueprint state)
              (. js/document (getElementById "container"))))

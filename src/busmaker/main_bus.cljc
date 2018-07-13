@@ -347,7 +347,7 @@
   (let [n (count (ingredients ingredient facility))]
     (cond (#{"lab"} facility)                                         12
           (#{"stone-furnace"} facility)                               8
-          (#{"electric-furnace"} facility)                            9
+          (#{"electric-furnace"} facility)                            12
           (#{"oil-refinery"} facility)                                16
           (#{"assembling-machine-1" "assembling-machine-2"} facility) (+ 11 (if (> n 3)
                                                                               (+ (- n 3) 1)
