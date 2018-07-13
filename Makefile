@@ -12,6 +12,7 @@ boot-prod:
 target/public/index.html: boot-prod
 target/public/js/app.js: boot-prod
 target/public/css/garden.css: boot-prod
+target/public/widgets/*.svg: boot-prod
 
 build: target/public/index.html target/public/js/app.js target/public/css/garden.css target/public/widgets/*.svg
 	mkdir -p build build/widgets build/css build/js
@@ -27,4 +28,5 @@ release:
 	$(MAKE) clean build
 	git commit -am "RELEASE"
 	git push
-
+	git checkout master
+	git merge gh-pages
