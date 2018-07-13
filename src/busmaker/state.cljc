@@ -9,8 +9,9 @@
 
 (defn empty-state
   []
-  {:factories   []
-   :bus-outputs []})
+  {:blueprint-name "blueprint-1"
+   :factories      []
+   :bus-outputs    []})
 
 (defn default-state
   []

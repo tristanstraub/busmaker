@@ -17,7 +17,7 @@
             [impi.core]
             [clojure.string :as str]))
 
-(enable-console-print!)
+(def busmaker-store-key "busmaker-0.0.4")
 
 (defn set-item!
   "Set `key' in browser's localStorage to `val`."
@@ -34,14 +34,43 @@
   [key]
   (.removeItem (.-localStorage js/window) key))
 
+(defn busmaker-store
+  []
+  (cljs.reader/read-string (get-item busmaker-store-key)))
+
+(defn serialize-to-store!
+  [state]
+  (set-item! busmaker-store-key (pr-str (:store @state))))
+
 (defonce state (atom (state/default-state)))
+
+(defn save!
+  [state]
+  (swap! state (fn [state]
+                 (assoc-in state [:store :settings (:blueprint-name state)]
+                           ;; TODO eliminate dissoc
+                           (dissoc state :store))))
+  
+  (serialize-to-store! state))
+
+(defn delete-blueprint!
+  [state blueprint-name]
+  (swap! state (fn [state]
+                 (update-in state [:store :settings] dissoc (:blueprint-name state))))
+
+  (serialize-to-store! state))
 
 (defn solve!
   [state]
   (let [solution (doall (plan/plan (:factories @state)
                                    (:bus-outputs @state)))]
-    (swap! state assoc :solution solution)
-    (set-item! "busmaker" (pr-str (dissoc @state :solution)))))
+    (swap! state assoc :solution solution)))
+
+(defn load!
+  [state]
+  (swap! state (fn [state]
+                 (merge state (get-in state [:store :settings (:blueprint-name state)]))))
+  (solve! state))
 
 (rum/defc recipe-selector < rum/reactive
   [state]
@@ -217,6 +246,32 @@
             :disabled (not (seq (rum/react (rum/cursor-in state [:recipe-names]))))}
    "Generate"])
 
+(rum/defc blueprint-load-save < rum/reactive
+  [state]
+  [:div
+   [:label "Blueprint name"
+    [:input {:value     (rum/react (rum/cursor-in state [:blueprint-name]))
+             :on-change (fn [e]
+                          (swap! state assoc :blueprint-name (.. e -target -value)))}]]
+   
+   [:button {:on-click (fn [_]
+                         (save! state))}
+    "Save"]
+   [:table
+    [:tbody
+     (for [[blueprint-name blueprint-state] (rum/react (rum/cursor-in state [:store :settings]))]
+       [:tr {:key [blueprint-name]}
+        [:td blueprint-name]
+        [:td
+         [:button {:on-click (fn [_]
+                               (swap! state assoc :blueprint-name blueprint-name)
+                               (load! state))}
+          "Load"]
+         [:button {:on-click (fn [_]
+                               (swap! state assoc :blueprint-name blueprint-name)
+                               (delete-blueprint! state blueprint-name))}
+          "Delete"]]])]]])
+
 (rum/defc blueprint < rum/reactive
   [state]
   [:div.bg-light.d-flex
@@ -228,8 +283,11 @@
 ;;     (generate-button state)
 
      [:button {:on-click (fn [_]
-                           (reset! state (state/empty-state)))}
+                           (reset! state (assoc (state/empty-state)
+                                                :store (busmaker-store))))}
       "Clear"]
+
+     (blueprint-load-save state)
 
      (factories state)
      (bus state)
@@ -245,10 +303,11 @@
 
 (defn ^:expose init
   []
-  (swap! state merge (cljs.reader/read-string (get-item "busmaker")))
+  (swap! state assoc :store (busmaker-store))
   (solve! state)
   (rum/mount (blueprint state)
-             (. js/document (getElementById "container"))))
+             (. js/document (getElementById "container")))
+  (enable-console-print!))
 
 (defn reload!
   []
