@@ -348,7 +348,7 @@ break;
 ,null,null));
 });})(factories))
 ;
-return iter__4324__auto__.call(null,cljs.core.map_indexed.call(null,cljs.core.vector,factories));
+return iter__4324__auto__.call(null,cljs.core.map_indexed.call(null,cljs.core.vector,cljs.core.reverse.call(null,factories)));
 })()))));
 } else {
 return null;
