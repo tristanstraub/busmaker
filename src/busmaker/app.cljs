@@ -126,7 +126,7 @@
           [:th "Facility"]
           [:th "Count"]]]
         [:tbody
-         (for [[i {:keys [facility n recipes] :as factory}] (map-indexed vector factories)]
+         (for [[i {:keys [facility n recipes] :as factory}] (map-indexed vector (reverse factories))]
            [:tr {:key i}
             [:td (str/join "," recipes)]
             [:td (facility-selector state factory)]
