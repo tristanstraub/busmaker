@@ -43,7 +43,9 @@ busmaker.app.state = cljs.core.atom.call(null,busmaker.state.default_state.call(
 }
 busmaker.app.solve_BANG_ = (function busmaker$app$solve_BANG_(state){
 var solution = cljs.core.doall.call(null,busmaker.plan.plan.call(null,new cljs.core.Keyword(null,"factories","factories",1443149712).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,state)),new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,state))));
-return cljs.core.swap_BANG_.call(null,state,cljs.core.assoc,new cljs.core.Keyword(null,"solution","solution",-1727231491),solution);
+cljs.core.swap_BANG_.call(null,state,cljs.core.assoc,new cljs.core.Keyword(null,"solution","solution",-1727231491),solution);
+
+return busmaker.app.set_item_BANG_.call(null,"busmaker",cljs.core.pr_str.call(null,cljs.core.dissoc.call(null,cljs.core.deref.call(null,state),new cljs.core.Keyword(null,"solution","solution",-1727231491))));
 });
 busmaker.app.recipe_selector = rum.core.build_defc.call(null,(function (state){
 var recipe = rum.core.react.call(null,rum.core.cursor_in.call(null,state,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"recipe","recipe",-17826617)], null)));
@@ -510,6 +512,8 @@ return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK
 })()));
 }),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [rum.core.reactive], null),"blueprint");
 busmaker.app.init = (function busmaker$app$init(){
+cljs.core.swap_BANG_.call(null,busmaker.app.state,cljs.core.merge,cljs.reader.read_string.call(null,busmaker.app.get_item.call(null,"busmaker")));
+
 busmaker.app.solve_BANG_.call(null,busmaker.app.state);
 
 return rum.core.mount.call(null,busmaker.app.blueprint.call(null,busmaker.app.state),document.getElementById("container"));
