@@ -1,7 +1,6 @@
 (ns busmaker.main-bus
-  (:require [clojure.set :as set]
-            [busmaker.recipes :as recipes]
-            [com.stuartsierra.dependency :as dep]))
+  (:require [busmaker.recipe-data :as recipe-data]
+            [busmaker.recipes :as recipes]))
 
 (defn fluid?
   [bus-ingredient]
@@ -16,24 +15,6 @@
 (defn recipe
   [recipes recipe-name]
   (first (filter (comp #{recipe-name} :name) recipes)))
-
-(defn ingredient
-  [i]
-  (cond (map? i)
-        (:name i)
-        (vector? i)
-        (first i)
-        :else
-        (ex-info "Unknown ingredient" {:ingredient i})))
-
-(defn recipe-ingredients
-  [recipe]
-  (cond (:ingredients recipe)
-        (map ingredient (get-in recipe [:ingredients]))
-        (:normal recipe)
-        (map ingredient (get-in recipe [:normal :ingredients]))
-        :else
-        nil))
 
 (defn blueprint-direction
   [[x y]]
@@ -115,25 +96,11 @@
    "position"      {"x" x
                     "y" y}})
 
-(defn factory-type
-  [recipe]
-  (cond (#{"_research_"} recipe)                                                               "lab"
-        (#{"iron-plate" "copper-plate" "steel-plate" "stone-brick"} recipe)                   "stone-furnace"
-        (#{"light-oil" "heavy-oil" "petroleum-gas"} recipe)                                   "oil-refinery"
-        (#{"lubricant" "sulfur" "sulfuric-acid" "battery" "plastic-bar" "explosives"} recipe) "chemical-plant"
-        (re-find #"ore" recipe)                                                               "electric-mining-drill"
-        :else                                                                                 "assembling-machine-1"))
-
-(defn recipe-type
-  [recipe]
-  (cond (#{"light-oil" "heavy-oil" "petroleum-gas"} recipe) "advanced-oil-processing"
-        :else                   recipe))
-
 (defn factory
   [& {:keys [x y facility recipe] :or {x 0
                                        y 0}}]
   {"name"     facility
-   "recipe"   (recipe-type recipe)
+   "recipe"   (recipes/recipe-type recipe)
    "position" {"x" (cond (#{"stone-furnace"} facility)                                   (+ x 0.5)
                          (or (not (fluid? recipe))
                              (#{"lubricant" "sulfur" "sulfuric-acid" "battery"} recipe)) x
@@ -369,39 +336,11 @@
   (let [recipe-name (if (#{"petroleum-gas" "heavy-oil" "light-oil"} recipe-name)
                       "advanced-oil-processing"
                       recipe-name)]
-    (-> recipes/recipes
+    (-> recipe-data/recipes
         (recipe recipe-name)
-        recipe-ingredients
+        recipes/recipe-ingredients
         (cond->
             (#{"stone-furnace"} facility) (conj "coal")))))
-
-(defn recipe-by-name
-  [recipes recipe-name]
-  (first (filter (comp #{recipe-name} :name) recipes)))
-
-(defn recipe-order
-  [g recipes recipe-name]
-  (let [r (recipe-by-name recipes recipe-name)]
-    (if-not r
-      g
-      (reduce (fn [g ingredient]
-                (let [g (dep/depend g recipe-name ingredient)]
-                  (recipe-order g recipes ingredient)))
-              g
-              (recipe-ingredients r)))))
-
-(defn sorted-recipe-order
-  [recipe-name]
-  (dep/topo-sort (recipe-order (dep/graph)
-                               recipes/recipes
-                               recipe-name)))
-
-(defn ingredients-by-recipe
-  [recipe-name facility]
-  (let [ingredients (sorted-recipe-order recipe-name)
-        coal?       (some #{"stone-furnace"} (map factory-type ingredients))]
-    (distinct (cond coal? (into ["coal"] ingredients)
-                    :else ingredients))))
 
 (defn ingredient-height
   [ingredient facility]
@@ -641,50 +580,7 @@
   [recipe-name]
   (re-find #".*ore|water|coal|^stone$" recipe-name))
 
-(defn created?
-  [recipe-name]
-  (not (re-find #".*ore|water|coal|^stone$" recipe-name)))
 
-(defn recipe-products
-  ([recipe-names]
-   (recipe-products recipe-names nil))
-  ([recipe-names factories]
-   (let [oil?        (seq (mapcat (fn [recipe-name]
-                                    (let [facility (get-in factories [recipe-name :facility] (factory-type recipe-name))]
-                                      (filter #(#{"advanced-oil-processing"} (recipe-type %))
-                                              (ingredients-by-recipe recipe-name facility))))
-                                  recipe-names))
-
-         products    (reduce (fn [products recipe-name]
-                               (let [facility (get-in factories [recipe-name :facility] (factory-type recipe-name))]
-                                 (apply conj products (remove (set products)
-                                                              (remove #(#{"advanced-oil-processing"} (recipe-type %))
-                                                                      (ingredients-by-recipe recipe-name facility))))))
-                             (if oil? ["heavy-oil"] [])
-                             recipe-names)
-
-         others      (when oil?
-                       (set/difference (set (concat (map :name (mapcat :results (filter (comp #{"advanced-oil-processing"} :name)
-                                                                                        recipes/recipes)))
-                                                    (map :name (mapcat :ingredients (filter (comp #{"advanced-oil-processing"} :name)
-                                                                                            recipes/recipes)))))
-                                       (set products)))
-
-         bus-outputs (->> (concat others products)
-                          (map-indexed vector)
-                          (map (comp vec reverse))
-                          (into {}))]
-     
-     {:oil?        oil?
-      :products    products
-      :others      others
-      :bus-outputs bus-outputs})))
-
-(defn default-factories
-  [recipe-names]
-  (into {} (map #(vector % {:n        1
-                            :facility (factory-type %)})
-                (filter created? (:products (recipe-products recipe-names))))))
 
 (defn main-bus
   [recipe-names factories products bus-outputs]

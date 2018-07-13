@@ -25,7 +25,8 @@
 
                           [integrant "0.6.3"]
                           [impi "0.0.10"]
-                          [cheshire "5.8.0"]]
+                          [cheshire "5.8.0"]
+                          [garden "1.3.5"]]
           :source-paths #{"src"}
           :resource-paths #{"resources"})
 

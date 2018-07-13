@@ -1,5 +1,6 @@
 (ns busmaker.app
   (:require [rum.core :as rum]
+            [busmaker.data :as data]
             [cljs.reader]
             [busmaker.template :as template]
             [cljs.tools.reader.edn :as edn]
@@ -32,14 +33,7 @@
   (.removeItem (.-localStorage js/window) key))
 
 (def default-recipe-names
-  #{"iron-plate"
-    #_ "science-pack-1"
-    #_ "science-pack-2"
-    #_"stone-brick" #_ "iron-plate" #_ "concrete" #_"battery" #_ "rocket-silo"}
-  #_ #{"iron-plate"
-    "copper-plate"
-    "inserter"})
-
+  #{"iron-plate"})
 
 (def empty-value
   {:widgets      widgets/widgets
@@ -76,7 +70,8 @@
                                    (:products @state)
                                    (:bus-outputs @state)))]
     (swap! state assoc :solution solution)
-    (set-item! "busmaker" (pr-str (dissoc @state :solution :recipes :widgets)))))
+;;    (set-item! "busmaker" (pr-str (dissoc @state :solution :recipes :widgets)))
+    ))
 
 (rum/defc recipe-selector < rum/reactive
   [state]
@@ -97,9 +92,7 @@
                    (let [recipe-names (conj (:recipe-names @state) recipe)]
                      (swap! state #(-> %
                                        (assoc :recipe-names recipe-names)
-                                       (update :factories (fn [factories]
-                                                            (merge (main-bus/default-factories recipe-names)
-                                                                   factories)))
+                                       (update :factories data/add-factories (main-bus/default-factories [recipe]))
                                        (merge (main-bus/recipe-products recipe-names))))
                      (solve! state)))}
       "+"]]))
@@ -161,9 +154,9 @@
 (rum/defc bus < rum/reactive
   [state]
   (let [factories    (rum/react (rum/cursor-in state [:factories]))
-        outputs      (rum/react (rum/cursor-in state [:bus-outputs]))]
+        bus-outputs      (rum/react (rum/cursor-in state [:bus-outputs]))]
     
-    (if (seq outputs)
+    (if (seq bus-outputs)
       [:div.card
        [:table.components.table
         [:thead
@@ -171,7 +164,7 @@
           [:th "Output"]
           [:th "Bus index"]]]
         [:tbody
-         (for [[output bus-index] (sort-by second outputs)]
+         (for [[output bus-index] (sort-by second bus-outputs)]
            [:tr {:key bus-index}
 
             [:td output]
@@ -180,17 +173,14 @@
 (rum/defc factories < rum/reactive
   [state]
   (let [factories    (rum/react (rum/cursor-in state [:factories]))
-        recipe-names (keys factories)
-        ;; products     (filter #(main-bus/created? %)
-        ;;                      (:products (main-bus/recipe-products recipe-names)))
-        products     (keys factories)
-        ]
+        products     (keys factories)]
 
     (if (seq factories)
       [:div.card
        [:table.components.table
         [:thead
          [:tr
+          [:th]
           [:th "Recipe"]
           [:th "Facility"]
           [:th "Count"]]]
@@ -198,6 +188,11 @@
          (for [ingredient (reverse products)
                :let       [{:keys [facility n]} (get factories ingredient)]]
            [:tr {:key ingredient}
+            [:td
+             [:button
+              "^"]
+             [:button
+              "v"]]
             [:td ingredient]
             [:td (facility-selector state ingredient facility)]
             [:td [:input {:type "number" :value n
@@ -212,7 +207,8 @@
                                                          (update :products (fn [ps] (vec (remove #{ingredient} ps))))))
 
                                        (solve! state))}
-                  "-"]]])]]])))
+                  "-"]
+]])]]])))
 
 (rum/defc components < rum/reactive
   [state]
