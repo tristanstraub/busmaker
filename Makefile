@@ -24,6 +24,7 @@ build: target/public/index.html target/public/js/app.js target/public/css/garden
 
 release:
 	git checkout gh-pages
+	git pull
 	git merge master
 	$(MAKE) clean build
 	git commit -am "RELEASE"
