@@ -570,7 +570,7 @@
                                                                   :recipes recipes
                                                                   :x x
                                                                   :y (+ y (cond (#{"stone-furnace"} facility) 4
-                                                                                (#{"chemical-plant" "assembling-machine-1"} facility) 1
+                                                                                (#{"chemical-plant" "assembling-machine-1" "assembling-machine-2"} facility) 1
                                                                                 :else 0))
                                                                   :n-factories n
                                                                   :facility facility

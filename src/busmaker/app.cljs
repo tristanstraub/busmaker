@@ -130,16 +130,17 @@
           [:th "Bus index"]
           [:th]]]
         [:tbody
-         (for [[bus-index output] (map-indexed vector bus-outputs)]
+         (for [[bus-index output] (reverse (map-indexed vector bus-outputs))]
            [:tr {:key bus-index}
 
             [:td output]
             [:td bus-index]
-            [:td [:button
-                  {:on-click (fn [_]
-                               (swap! state state/remove-bus output)
-                                (solve! state))}
-                  "-"]]])]]])))
+            [:td
+             [:button
+              {:on-click (fn [_]
+                           (swap! state state/remove-bus output)
+                           (solve! state))}
+              "-"]]])]]])))
 
 (rum/defc factories < rum/reactive
   [state]
