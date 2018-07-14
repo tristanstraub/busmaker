@@ -271,7 +271,7 @@ break;
 ,null,null));
 });})(factories,bus_outputs))
 ;
-return iter__4324__auto__.call(null,cljs.core.map_indexed.call(null,cljs.core.vector,bus_outputs));
+return iter__4324__auto__.call(null,cljs.core.reverse.call(null,cljs.core.map_indexed.call(null,cljs.core.vector,bus_outputs)));
 })()))));
 } else {
 return null;
