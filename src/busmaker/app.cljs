@@ -42,6 +42,32 @@
   [state]
   (set-item! busmaker-store-key (pr-str (:store @state))))
 
+
+(defn wrap-entities
+  [entities]
+  {"blueprint" {"entities" (vec entities)
+                "icons"    [{"index" 1
+                             "signal" {"name" "assembling-machine-2"
+                                       "type" "item"}}]
+                "item"     "blueprint"
+                "version"  68721836034}})
+
+(defn encode-blueprint
+  [blueprint]
+  (str "0"
+       (->> blueprint
+            clj->js
+            js/JSON.stringify
+            pako/deflate
+            base64/encodeByteArray)))
+
+(defn decode-blueprint
+  [blueprint]
+  (-> (subs blueprint 1)
+      base64/decodeStringToByteArray
+      (pako/inflate #js {:to "string"})
+      (js/JSON.parse)))
+
 (defonce state (atom (state/default-state)))
 
 (defn save!
@@ -59,6 +85,12 @@
                  (update-in state [:store :settings] dissoc (:blueprint-name state))))
 
   (serialize-to-store! state))
+
+(defn solve-part!
+  [state factory-index]
+  (let [part (doall (plan/plan (take 1 (drop factory-index (:factories @state)))
+                               (:bus-outputs @state)))]
+    (swap! state assoc :part part)))
 
 (defn solve!
   [state]
@@ -153,9 +185,10 @@
          [:tr
           [:th "Recipes"]
           [:th "Facility"]
-          [:th "Count"]]]
+          [:th "Count"]
+          [:th]]]
         [:tbody
-         (for [[i {:keys [facility n recipes] :as factory}] (map-indexed vector (reverse factories))]
+         (for [[i {:keys [facility n recipes] :as factory}] (reverse (map-indexed vector factories))]
            [:tr {:key i}
             [:td (str/join "," recipes)]
             [:td (facility-selector state factory)]
@@ -167,8 +200,10 @@
             [:td [:button {:on-click (fn [e]
                                        (swap! state state/remove-factory factory)
                                        (solve! state))}
-                  "-"]
-]])]]])))
+                  "-"]]
+            [:td [:button {:on-click (fn [e]
+                                       (solve-part! state i))}
+                  "Blueprint"]]])]]])))
 
 (rum/defc components < rum/reactive
   [state]
@@ -192,41 +227,23 @@
             [:th (name key)]
             [:td (pr-str value)]])]]))
 
-(defn wrap-entities
-  [entities]
-  {"blueprint" {"entities" (vec entities)
-                "icons"    [{"index" 1
-                             "signal" {"name" "assembling-machine-2"
-                                       "type" "item"}}]
-                "item"     "blueprint"
-                "version"  68721836034}})
-
-(defn encode-blueprint
-  [blueprint]
-  (str "0"
-       (->> blueprint
-            clj->js
-            js/JSON.stringify
-            pako/deflate
-            base64/encodeByteArray)))
-
-(defn decode-blueprint
-  [blueprint]
-  (-> (subs blueprint 1)
-      base64/decodeStringToByteArray
-      (pako/inflate #js {:to "string"})
-      (js/JSON.parse)))
-
-(rum/defc blueprint-encoded < rum/reactive
-  [state]
+(rum/defc solution-encoded < rum/reactive
+  [solution]
   [:div.card
    [:textarea.blueprint-encoded
     {:value
-     (let [solution (rum/react (rum/cursor-in state [:solution]))]
-       (encode-blueprint (wrap-entities solution)))
+     (encode-blueprint (wrap-entities solution))
      :on-click (fn [e]
                  (.select (.. e -target))
                  (js/document.execCommand "copy"))}]])
+
+(rum/defc blueprint-encoded < rum/reactive
+  [state]
+  (solution-encoded (rum/react (rum/cursor-in state [:solution]))))
+
+(rum/defc blueprint-part-encoded < rum/reactive
+  [state]
+  (solution-encoded (rum/react (rum/cursor-in state [:part]))))
 
 (rum/defc blueprint-decoded < rum/reactive
   [state]
@@ -293,6 +310,7 @@
      (factories state)
      (bus state)
      (blueprint-encoded state)
+     (blueprint-part-encoded state)
      (components state)
      (blueprint-decoded state)]
 
