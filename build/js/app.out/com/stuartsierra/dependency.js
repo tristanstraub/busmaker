@@ -264,10 +264,10 @@ throw cljs.core.missing_protocol.call(null,"DependencyGraphUpdate.remove-node",g
 });
 
 com.stuartsierra.dependency.remove_from_map = (function com$stuartsierra$dependency$remove_from_map(amap,x){
-return cljs.core.reduce.call(null,(function (m,p__4618){
-var vec__4619 = p__4618;
-var k = cljs.core.nth.call(null,vec__4619,(0),null);
-var vs = cljs.core.nth.call(null,vec__4619,(1),null);
+return cljs.core.reduce.call(null,(function (m,p__4616){
+var vec__4617 = p__4616;
+var k = cljs.core.nth.call(null,vec__4617,(0),null);
+var vs = cljs.core.nth.call(null,vec__4617,(1),null);
 return cljs.core.assoc.call(null,m,k,cljs.core.disj.call(null,vs,x));
 }),cljs.core.PersistentArrayMap.EMPTY,cljs.core.dissoc.call(null,amap,x));
 });
@@ -281,23 +281,23 @@ var expanded = cljs.core.PersistentHashSet.EMPTY;
 while(true){
 var temp__5455__auto__ = cljs.core.seq.call(null,unexpanded);
 if(temp__5455__auto__){
-var vec__4622 = temp__5455__auto__;
-var seq__4623 = cljs.core.seq.call(null,vec__4622);
-var first__4624 = cljs.core.first.call(null,seq__4623);
-var seq__4623__$1 = cljs.core.next.call(null,seq__4623);
-var node = first__4624;
-var more = seq__4623__$1;
+var vec__4620 = temp__5455__auto__;
+var seq__4621 = cljs.core.seq.call(null,vec__4620);
+var first__4622 = cljs.core.first.call(null,seq__4621);
+var seq__4621__$1 = cljs.core.next.call(null,seq__4621);
+var node = first__4622;
+var more = seq__4621__$1;
 if(cljs.core.contains_QMARK_.call(null,expanded,node)){
-var G__4625 = more;
-var G__4626 = expanded;
-unexpanded = G__4625;
-expanded = G__4626;
+var G__4623 = more;
+var G__4624 = expanded;
+unexpanded = G__4623;
+expanded = G__4624;
 continue;
 } else {
-var G__4627 = cljs.core.concat.call(null,more,neighbors.call(null,node));
-var G__4628 = cljs.core.conj.call(null,expanded,node);
-unexpanded = G__4627;
-expanded = G__4628;
+var G__4625 = cljs.core.concat.call(null,more,neighbors.call(null,node));
+var G__4626 = cljs.core.conj.call(null,expanded,node);
+unexpanded = G__4625;
+expanded = G__4626;
 continue;
 }
 } else {
@@ -342,12 +342,12 @@ var this__4203__auto____$1 = this;
 return this__4203__auto____$1.cljs$core$ILookup$_lookup$arity$3(null,k__4204__auto__,null);
 });
 
-com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__4205__auto__,k4630,else__4206__auto__){
+com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$ILookup$_lookup$arity$3 = (function (this__4205__auto__,k4628,else__4206__auto__){
 var self__ = this;
 var this__4205__auto____$1 = this;
-var G__4634 = k4630;
-var G__4634__$1 = (((G__4634 instanceof cljs.core.Keyword))?G__4634.fqn:null);
-switch (G__4634__$1) {
+var G__4632 = k4628;
+var G__4632__$1 = (((G__4632 instanceof cljs.core.Keyword))?G__4632.fqn:null);
+switch (G__4632__$1) {
 case "dependencies":
 return self__.dependencies;
 
@@ -357,7 +357,7 @@ return self__.dependents;
 
 break;
 default:
-return cljs.core.get.call(null,self__.__extmap,k4630,else__4206__auto__);
+return cljs.core.get.call(null,self__.__extmap,k4628,else__4206__auto__);
 
 }
 });
@@ -373,10 +373,10 @@ return cljs.core.pr_sequential_writer.call(null,writer__4218__auto__,cljs.core.p
 return cljs.core.pr_sequential_writer.call(null,writer__4218__auto__,pr_pair__4220__auto__,"#com.stuartsierra.dependency.MapDependencyGraph{",", ","}",opts__4219__auto__,cljs.core.concat.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"dependencies","dependencies",1108064605),self__.dependencies],null)),(new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[new cljs.core.Keyword(null,"dependents","dependents",136812837),self__.dependents],null))], null),self__.__extmap));
 });
 
-com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$IIterable$_iterator$arity$1 = (function (G__4629){
+com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$IIterable$_iterator$arity$1 = (function (G__4627){
 var self__ = this;
-var G__4629__$1 = this;
-return (new cljs.core.RecordIter((0),G__4629__$1,2,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"dependencies","dependencies",1108064605),new cljs.core.Keyword(null,"dependents","dependents",136812837)], null),(cljs.core.truth_(self__.__extmap)?cljs.core._iterator.call(null,self__.__extmap):cljs.core.nil_iter.call(null))));
+var G__4627__$1 = this;
+return (new cljs.core.RecordIter((0),G__4627__$1,2,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"dependencies","dependencies",1108064605),new cljs.core.Keyword(null,"dependents","dependents",136812837)], null),(cljs.core.truth_(self__.__extmap)?cljs.core._iterator.call(null,self__.__extmap):cljs.core.nil_iter.call(null))));
 });
 
 com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$IMeta$_meta$arity$1 = (function (this__4201__auto__){
@@ -415,10 +415,10 @@ return h__4061__auto____$1;
 }
 });
 
-com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$IEquiv$_equiv$arity$2 = (function (this4631,other4632){
+com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$IEquiv$_equiv$arity$2 = (function (this4629,other4630){
 var self__ = this;
-var this4631__$1 = this;
-return ((!((other4632 == null))) && ((this4631__$1.constructor === other4632.constructor)) && (cljs.core._EQ_.call(null,this4631__$1.dependencies,other4632.dependencies)) && (cljs.core._EQ_.call(null,this4631__$1.dependents,other4632.dependents)) && (cljs.core._EQ_.call(null,this4631__$1.__extmap,other4632.__extmap)));
+var this4629__$1 = this;
+return ((!((other4630 == null))) && ((this4629__$1.constructor === other4630.constructor)) && (cljs.core._EQ_.call(null,this4629__$1.dependencies,other4630.dependencies)) && (cljs.core._EQ_.call(null,this4629__$1.dependents,other4630.dependents)) && (cljs.core._EQ_.call(null,this4629__$1.__extmap,other4630.__extmap)));
 });
 
 com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$IMap$_dissoc$arity$2 = (function (this__4212__auto__,k__4213__auto__){
@@ -431,18 +431,18 @@ return (new com.stuartsierra.dependency.MapDependencyGraph(self__.dependencies,s
 }
 });
 
-com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__4210__auto__,k__4211__auto__,G__4629){
+com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$IAssociative$_assoc$arity$3 = (function (this__4210__auto__,k__4211__auto__,G__4627){
 var self__ = this;
 var this__4210__auto____$1 = this;
-var pred__4635 = cljs.core.keyword_identical_QMARK_;
-var expr__4636 = k__4211__auto__;
-if(cljs.core.truth_(pred__4635.call(null,new cljs.core.Keyword(null,"dependencies","dependencies",1108064605),expr__4636))){
-return (new com.stuartsierra.dependency.MapDependencyGraph(G__4629,self__.dependents,self__.__meta,self__.__extmap,null));
+var pred__4633 = cljs.core.keyword_identical_QMARK_;
+var expr__4634 = k__4211__auto__;
+if(cljs.core.truth_(pred__4633.call(null,new cljs.core.Keyword(null,"dependencies","dependencies",1108064605),expr__4634))){
+return (new com.stuartsierra.dependency.MapDependencyGraph(G__4627,self__.dependents,self__.__meta,self__.__extmap,null));
 } else {
-if(cljs.core.truth_(pred__4635.call(null,new cljs.core.Keyword(null,"dependents","dependents",136812837),expr__4636))){
-return (new com.stuartsierra.dependency.MapDependencyGraph(self__.dependencies,G__4629,self__.__meta,self__.__extmap,null));
+if(cljs.core.truth_(pred__4633.call(null,new cljs.core.Keyword(null,"dependents","dependents",136812837),expr__4634))){
+return (new com.stuartsierra.dependency.MapDependencyGraph(self__.dependencies,G__4627,self__.__meta,self__.__extmap,null));
 } else {
-return (new com.stuartsierra.dependency.MapDependencyGraph(self__.dependencies,self__.dependents,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__4211__auto__,G__4629),null));
+return (new com.stuartsierra.dependency.MapDependencyGraph(self__.dependencies,self__.dependents,self__.__meta,cljs.core.assoc.call(null,self__.__extmap,k__4211__auto__,G__4627),null));
 }
 }
 });
@@ -497,10 +497,10 @@ var graph__$1 = this;
 return clojure.set.union.call(null,cljs.core.set.call(null,cljs.core.keys.call(null,self__.dependencies)),cljs.core.set.call(null,cljs.core.keys.call(null,self__.dependents)));
 });
 
-com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__4202__auto__,G__4629){
+com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = (function (this__4202__auto__,G__4627){
 var self__ = this;
 var this__4202__auto____$1 = this;
-return (new com.stuartsierra.dependency.MapDependencyGraph(self__.dependencies,self__.dependents,G__4629,self__.__extmap,self__.__hash));
+return (new com.stuartsierra.dependency.MapDependencyGraph(self__.dependencies,self__.dependents,G__4627,self__.__extmap,self__.__hash));
 });
 
 com.stuartsierra.dependency.MapDependencyGraph.prototype.cljs$core$ICollection$_conj$arity$2 = (function (this__4208__auto__,entry__4209__auto__){
@@ -574,15 +574,15 @@ return (new com.stuartsierra.dependency.MapDependencyGraph(dependencies,dependen
 /**
  * Factory function for com.stuartsierra.dependency/MapDependencyGraph, taking a map of keywords to field values.
  */
-com.stuartsierra.dependency.map__GT_MapDependencyGraph = (function com$stuartsierra$dependency$map__GT_MapDependencyGraph(G__4633){
-var extmap__4236__auto__ = (function (){var G__4638 = cljs.core.dissoc.call(null,G__4633,new cljs.core.Keyword(null,"dependencies","dependencies",1108064605),new cljs.core.Keyword(null,"dependents","dependents",136812837));
-if(cljs.core.record_QMARK_.call(null,G__4633)){
-return cljs.core.into.call(null,cljs.core.PersistentArrayMap.EMPTY,G__4638);
+com.stuartsierra.dependency.map__GT_MapDependencyGraph = (function com$stuartsierra$dependency$map__GT_MapDependencyGraph(G__4631){
+var extmap__4236__auto__ = (function (){var G__4636 = cljs.core.dissoc.call(null,G__4631,new cljs.core.Keyword(null,"dependencies","dependencies",1108064605),new cljs.core.Keyword(null,"dependents","dependents",136812837));
+if(cljs.core.record_QMARK_.call(null,G__4631)){
+return cljs.core.into.call(null,cljs.core.PersistentArrayMap.EMPTY,G__4636);
 } else {
-return G__4638;
+return G__4636;
 }
 })();
-return (new com.stuartsierra.dependency.MapDependencyGraph(new cljs.core.Keyword(null,"dependencies","dependencies",1108064605).cljs$core$IFn$_invoke$arity$1(G__4633),new cljs.core.Keyword(null,"dependents","dependents",136812837).cljs$core$IFn$_invoke$arity$1(G__4633),null,cljs.core.not_empty.call(null,extmap__4236__auto__),null));
+return (new com.stuartsierra.dependency.MapDependencyGraph(new cljs.core.Keyword(null,"dependencies","dependencies",1108064605).cljs$core$IFn$_invoke$arity$1(G__4631),new cljs.core.Keyword(null,"dependents","dependents",136812837).cljs$core$IFn$_invoke$arity$1(G__4631),null,cljs.core.not_empty.call(null,extmap__4236__auto__),null));
 });
 
 /**
@@ -610,22 +610,22 @@ com.stuartsierra.dependency.topo_sort = (function com$stuartsierra$dependency$to
 var sorted = cljs.core.List.EMPTY;
 var g = graph;
 var todo = cljs.core.set.call(null,cljs.core.filter.call(null,((function (sorted,g){
-return (function (p1__4640_SHARP_){
-return cljs.core.empty_QMARK_.call(null,com.stuartsierra.dependency.immediate_dependents.call(null,graph,p1__4640_SHARP_));
+return (function (p1__4638_SHARP_){
+return cljs.core.empty_QMARK_.call(null,com.stuartsierra.dependency.immediate_dependents.call(null,graph,p1__4638_SHARP_));
 });})(sorted,g))
 ,com.stuartsierra.dependency.nodes.call(null,graph)));
 while(true){
 if(cljs.core.empty_QMARK_.call(null,todo)){
 return sorted;
 } else {
-var vec__4641 = cljs.core.seq.call(null,todo);
-var seq__4642 = cljs.core.seq.call(null,vec__4641);
-var first__4643 = cljs.core.first.call(null,seq__4642);
-var seq__4642__$1 = cljs.core.next.call(null,seq__4642);
-var node = first__4643;
-var more = seq__4642__$1;
+var vec__4639 = cljs.core.seq.call(null,todo);
+var seq__4640 = cljs.core.seq.call(null,vec__4639);
+var first__4641 = cljs.core.first.call(null,seq__4640);
+var seq__4640__$1 = cljs.core.next.call(null,seq__4640);
+var node = first__4641;
+var more = seq__4640__$1;
 var deps = com.stuartsierra.dependency.immediate_dependencies.call(null,g,node);
-var vec__4644 = (function (){var deps__$1 = deps;
+var vec__4642 = (function (){var deps__$1 = deps;
 var g__$1 = g;
 var add = cljs.core.PersistentHashSet.EMPTY;
 while(true){
@@ -633,20 +633,20 @@ if(cljs.core.seq.call(null,deps__$1)){
 var d = cljs.core.first.call(null,deps__$1);
 var g_SINGLEQUOTE_ = com.stuartsierra.dependency.remove_edge.call(null,g__$1,node,d);
 if(cljs.core.empty_QMARK_.call(null,com.stuartsierra.dependency.immediate_dependents.call(null,g_SINGLEQUOTE_,d))){
-var G__4647 = cljs.core.rest.call(null,deps__$1);
-var G__4648 = g_SINGLEQUOTE_;
-var G__4649 = cljs.core.conj.call(null,add,d);
-deps__$1 = G__4647;
-g__$1 = G__4648;
-add = G__4649;
+var G__4645 = cljs.core.rest.call(null,deps__$1);
+var G__4646 = g_SINGLEQUOTE_;
+var G__4647 = cljs.core.conj.call(null,add,d);
+deps__$1 = G__4645;
+g__$1 = G__4646;
+add = G__4647;
 continue;
 } else {
-var G__4650 = cljs.core.rest.call(null,deps__$1);
-var G__4651 = g_SINGLEQUOTE_;
-var G__4652 = add;
-deps__$1 = G__4650;
-g__$1 = G__4651;
-add = G__4652;
+var G__4648 = cljs.core.rest.call(null,deps__$1);
+var G__4649 = g_SINGLEQUOTE_;
+var G__4650 = add;
+deps__$1 = G__4648;
+g__$1 = G__4649;
+add = G__4650;
 continue;
 }
 } else {
@@ -655,14 +655,14 @@ return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMP
 break;
 }
 })();
-var add = cljs.core.nth.call(null,vec__4644,(0),null);
-var g_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__4644,(1),null);
-var G__4653 = cljs.core.cons.call(null,node,sorted);
-var G__4654 = com.stuartsierra.dependency.remove_node.call(null,g_SINGLEQUOTE_,node);
-var G__4655 = clojure.set.union.call(null,cljs.core.set.call(null,more),cljs.core.set.call(null,add));
-sorted = G__4653;
-g = G__4654;
-todo = G__4655;
+var add = cljs.core.nth.call(null,vec__4642,(0),null);
+var g_SINGLEQUOTE_ = cljs.core.nth.call(null,vec__4642,(1),null);
+var G__4651 = cljs.core.cons.call(null,node,sorted);
+var G__4652 = com.stuartsierra.dependency.remove_node.call(null,g_SINGLEQUOTE_,node);
+var G__4653 = clojure.set.union.call(null,cljs.core.set.call(null,more),cljs.core.set.call(null,add));
+sorted = G__4651;
+g = G__4652;
+todo = G__4653;
 continue;
 }
 break;

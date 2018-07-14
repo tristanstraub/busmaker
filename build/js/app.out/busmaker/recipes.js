@@ -36,7 +36,11 @@ return recipe;
 }
 });
 busmaker.recipes.recipe_by_name = (function busmaker$recipes$recipe_by_name(recipes,recipe_name){
+if(cljs.core.truth_(new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 3, ["petroleum-gas",null,"light-oil",null,"heavy-oil",null], null), null).call(null,recipe_name))){
+return busmaker.recipes.recipe_by_name.call(null,recipes,"advanced-oil-processing");
+} else {
 return cljs.core.first.call(null,cljs.core.filter.call(null,cljs.core.comp.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),new cljs.core.Keyword(null,"name","name",1843675177)),recipes));
+}
 });
 busmaker.recipes.ingredient = (function busmaker$recipes$ingredient(i){
 if(cljs.core.map_QMARK_.call(null,i)){
@@ -79,10 +83,17 @@ busmaker.recipes.sorted_recipe_order = (function busmaker$recipes$sorted_recipe_
 return com.stuartsierra.dependency.topo_sort.call(null,busmaker.recipes.recipe_order.call(null,com.stuartsierra.dependency.graph.call(null),busmaker.recipe_data.recipes,recipe_name));
 });
 busmaker.recipes.ingredients_by_recipe_recursive = (function busmaker$recipes$ingredients_by_recipe_recursive(recipe_name){
-var ingredients = busmaker.recipes.sorted_recipe_order.call(null,recipe_name);
-var coal_QMARK_ = cljs.core.some.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["stone-furnace",null], null), null),cljs.core.map.call(null,busmaker.recipes.factory_type,ingredients));
-return cljs.core.distinct.call(null,(cljs.core.truth_(coal_QMARK_)?cljs.core.into.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["coal"], null),ingredients):ingredients
-));
+var ingredients = cljs.core.remove.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),busmaker.recipes.sorted_recipe_order.call(null,recipe_name));
+var coal_QMARK_ = cljs.core.some.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["stone-furnace",null], null), null),cljs.core.map.call(null,busmaker.recipes.factory_type,cljs.core.conj.call(null,ingredients,recipe_name)));
+var oil_QMARK_ = cljs.core.some.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["oil-refinery",null], null), null),cljs.core.map.call(null,busmaker.recipes.factory_type,cljs.core.conj.call(null,ingredients,recipe_name)));
+return cljs.core.distinct.call(null,(function (){var G__4656 = ingredients;
+var G__4656__$1 = (cljs.core.truth_(coal_QMARK_)?cljs.core.into.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["coal"], null),G__4656):G__4656);
+if(cljs.core.truth_(oil_QMARK_)){
+return cljs.core.into.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["water","crude-oil"], null),G__4656__$1);
+} else {
+return G__4656__$1;
+}
+})());
 });
 busmaker.recipes.required_ingredients = (function busmaker$recipes$required_ingredients(recipe_names){
 return cljs.core.set.call(null,cljs.core.mapcat.call(null,(function (recipe_name){
@@ -90,5 +101,5 @@ return busmaker.recipes.ingredients_by_recipe_recursive.call(null,recipe_name);
 }),recipe_names));
 });
 busmaker.recipes.raw_QMARK_ = (function busmaker$recipes$raw_QMARK_(recipe_name){
-return cljs.core.re_find.call(null,/.*ore|water|coal|^stone$/,recipe_name);
+return cljs.core.re_find.call(null,/.*ore|water|coal|^stone$|crude-oil/,recipe_name);
 });

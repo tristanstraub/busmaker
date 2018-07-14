@@ -7,7 +7,7 @@ goog.require('busmaker.recipes');
 goog.require('busmaker.plan');
 busmaker.state.default_recipe_names = new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["_research_",null], null), null);
 busmaker.state.empty_state = (function busmaker$state$empty_state(){
-return new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"factories","factories",1443149712),cljs.core.PersistentVector.EMPTY,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584),cljs.core.PersistentVector.EMPTY], null);
+return new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"blueprint-name","blueprint-name",64242177),"blueprint-1",new cljs.core.Keyword(null,"factories","factories",1443149712),cljs.core.PersistentVector.EMPTY,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584),cljs.core.PersistentVector.EMPTY], null);
 });
 busmaker.state.default_state = (function busmaker$state$default_state(){
 var factories = busmaker.bus.default_factories.call(null,busmaker.state.default_recipe_names);
@@ -30,29 +30,29 @@ busmaker.state.remove_recipe = (function busmaker$state$remove_recipe(state,reci
 return busmaker.state.remove_factory.call(null,state,busmaker.bus.get_factory.call(null,new cljs.core.Keyword(null,"factories","factories",1443149712).cljs$core$IFn$_invoke$arity$1(state),recipe_name));
 });
 busmaker.state.remove_bus = (function busmaker$state$remove_bus(state,recipe_name){
-return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584),(function (p1__8506_SHARP_){
-return cljs.core.vec.call(null,cljs.core.remove.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),p1__8506_SHARP_));
+return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584),(function (p1__8519_SHARP_){
+return cljs.core.vec.call(null,cljs.core.remove.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),p1__8519_SHARP_));
 }));
 });
 busmaker.state.swap_facility = (function busmaker$state$swap_facility(state,factory,facility){
-return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8507_SHARP_){
+return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8520_SHARP_){
 return cljs.core.mapv.call(null,(function (f){
 if(cljs.core._EQ_.call(null,factory,f)){
 return cljs.core.assoc.call(null,f,new cljs.core.Keyword(null,"facility","facility",-2118099900),facility);
 } else {
 return f;
 }
-}),p1__8507_SHARP_);
+}),p1__8520_SHARP_);
 }));
 });
 busmaker.state.change_facility_line_length = (function busmaker$state$change_facility_line_length(state,factory,n){
-return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8508_SHARP_){
+return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8521_SHARP_){
 return cljs.core.mapv.call(null,(function (f){
 if(cljs.core._EQ_.call(null,factory,f)){
 return cljs.core.assoc.call(null,f,new cljs.core.Keyword(null,"n","n",562130025),n);
 } else {
 return f;
 }
-}),p1__8508_SHARP_);
+}),p1__8521_SHARP_);
 }));
 });

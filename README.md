@@ -49,6 +49,4 @@ Visit http://localhost:3000/public/index.html
 
 ```sh
 make release
-git checkout master
-git merge gh-pages
 ```
