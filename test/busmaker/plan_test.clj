@@ -9,4 +9,9 @@
                       (state/remove-recipe "accumulator"))]
 
         (plan/plan (:factories state)
+                   (:bus-outputs state))))
+  (is (let [state (-> nil
+                      (state/add-recipe "accumulator")
+                      (state/remove-recipe "battery"))]
+        (plan/plan (:factories state)
                    (:bus-outputs state)))))

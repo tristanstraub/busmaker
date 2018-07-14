@@ -18,7 +18,9 @@
 
 (defn recipe-by-name
   [recipes recipe-name]
-  (first (filter (comp #{recipe-name} :name) recipes)))
+  (if (#{"heavy-oil" "light-oil" "petroleum-gas"} recipe-name)
+    (recipe-by-name recipes "advanced-oil-processing")
+    (first (filter (comp #{recipe-name} :name) recipes))))
 
 (defn ingredient
   [i]
@@ -57,10 +59,13 @@
 
 (defn ingredients-by-recipe-recursive
   [recipe-name]
-  (let [ingredients (sorted-recipe-order recipe-name)
-        coal?       (some #{"stone-furnace"} (map factory-type ingredients))]
-    (distinct (cond coal? (into ["coal"] ingredients)
-                    :else ingredients))))
+  (let [ingredients (remove #{recipe-name} (sorted-recipe-order recipe-name))
+        coal?       (some #{"stone-furnace"} (map factory-type (conj ingredients recipe-name)))
+        ;; TODO replace oil-refinery with other output/input mechanism
+        oil?        (some #{"oil-refinery"} (map factory-type (conj ingredients recipe-name)))]
+    (distinct (cond->> ingredients
+                coal? (into ["coal"])
+                oil? (into ["water" "crude-oil"])))))
 
 (defn required-ingredients
   [recipe-names]
@@ -70,4 +75,4 @@
 
 (defn raw?
   [recipe-name]
-  (re-find #".*ore|water|coal|^stone$" recipe-name))
+  (re-find #".*ore|water|coal|^stone$|crude-oil" recipe-name))

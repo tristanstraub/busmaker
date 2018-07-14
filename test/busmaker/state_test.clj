@@ -68,9 +68,10 @@
                          (state/add-recipe "accumulator")
                          (state/remove-recipe "battery")))))
 
-  (is (= ["coal"
+  (is (= ["water"
+          "crude-oil"
+          "coal"
           "petroleum-gas"
-          "water"
           "iron-ore"
           "iron-plate"
           "sulfur"
@@ -78,17 +79,20 @@
           "copper-ore"
           "copper-plate"
           "battery"
-          "accumulator"]
+          "accumulator"
+          "heavy-oil"
+          "light-oil"]
          (-> nil
              (state/add-recipe "accumulator")
              (state/remove-recipe "battery")
              :bus-outputs)))
 
-  (is (let [state (-> nil
-                      (state/add-recipe "accumulator")
-                      (state/remove-recipe "battery"))]
-        (plan/plan (:factories state)
-                   (:bus-outputs state)))))
+  (is (= ["water"
+          "crude-oil"
+          "heavy-oil"
+          "light-oil"
+          "petroleum-gas"]
+       (:bus-outputs (state/add-recipe nil "heavy-oil")))))
 
 (deftest default-state
   []
@@ -107,3 +111,4 @@
           :bus-outputs ["coal" "stone-brick"]}
          (state/remove-bus (state/add-recipe nil "stone-brick")
                            "stone"))))
+
