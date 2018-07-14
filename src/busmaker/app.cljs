@@ -202,7 +202,9 @@
                                        (solve! state))}
                   "-"]]
             [:td [:button {:on-click (fn [e]
-                                       (solve-part! state i))}
+                                       (solve-part! state i))
+                           :data-toggle "modal"
+                           :data-target "#blueprint-part"}
                   "Blueprint"]]])]]])))
 
 (rum/defc components < rum/reactive
@@ -239,11 +241,17 @@
 
 (rum/defc blueprint-encoded < rum/reactive
   [state]
-  (solution-encoded (rum/react (rum/cursor-in state [:solution]))))
+  [:div.modal.fade#blueprint-part
+   [:div.modal-dialog
+    [:div.modal-content
+     (solution-encoded (rum/react (rum/cursor-in state [:solution])))]]])
 
 (rum/defc blueprint-part-encoded < rum/reactive
   [state]
-  (solution-encoded (rum/react (rum/cursor-in state [:part]))))
+  [:div.modal.fade#blueprint-part
+   [:div.modal-dialog
+    [:div.modal-content
+     (solution-encoded (rum/react (rum/cursor-in state [:part])))]]])
 
 (rum/defc blueprint-decoded < rum/reactive
   [state]
@@ -275,6 +283,9 @@
    [:button {:on-click (fn [_]
                          (save! state))}
     "Save"]
+   [:button {:data-toggle "modal"
+             :data-target "#blueprint-part"}
+    "Blueprint"]
    [:table
     [:tbody
      (for [[blueprint-name blueprint-state] (rum/react (rum/cursor-in state [:store :settings]))]
