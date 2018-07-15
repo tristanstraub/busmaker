@@ -3,7 +3,7 @@
             [busmaker.recipes :as recipes]))
 
 (deftest sorted-recipe-order
-  (is (= '("water" "crude-oil" "heavy-oil")
+  (is (= '(#_ "water" "crude-oil" "heavy-oil")
          (recipes/sorted-recipe-order "heavy-oil"))))
 
 (deftest ingredients-by-recipe-recursive

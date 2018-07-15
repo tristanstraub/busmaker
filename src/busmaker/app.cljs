@@ -17,7 +17,21 @@
             [impi.core]
             [clojure.string :as str]))
 
-(def busmaker-store-key "busmaker-0.0.4")
+(def busmaker-store-key "busmaker-0.0.5")
+
+(defn encode-store
+  [blueprint]
+  (->> blueprint
+       pr-str
+       pako/deflate
+       base64/encodeByteArray))
+
+(defn decode-store
+  [blueprint]
+  (-> blueprint
+      base64/decodeStringToByteArray
+      (pako/inflate #js {:to "string"})
+      cljs.reader/read-string))
 
 (defn set-item!
   "Set `key' in browser's localStorage to `val`."
@@ -36,12 +50,16 @@
 
 (defn busmaker-store
   []
-  (cljs.reader/read-string (get-item busmaker-store-key)))
+  (decode-store (get-item busmaker-store-key)))
 
 (defn serialize-to-store!
   [state]
-  (set-item! busmaker-store-key (pr-str (:store @state))))
-
+  (let [new-value (encode-store (:store @state))]
+    (set-item! busmaker-store-key new-value)
+    (assert (= (:store @state)
+               (busmaker-store))
+            "Save was unsuccessful")
+    (println "Saved!")))
 
 (defn wrap-entities
   [entities]
@@ -109,7 +127,7 @@
   (let [recipe (rum/react (rum/cursor-in state [:recipe]))
         recipes (->> recipe-data/recipes
                      (map :name)
-                     (remove #(#{"advanced-oil-processing"} %)))]
+                     (remove #(#{"basic-oil-processing" "advanced-oil-processing"} %)))]
     [:label "Recipe"
      [:select {:value recipe
                :on-change (fn [e]
@@ -241,7 +259,7 @@
 
 (rum/defc blueprint-encoded < rum/reactive
   [state]
-  [:div.modal.fade#blueprint-part
+  [:div.modal.fade#blueprint
    [:div.modal-dialog
     [:div.modal-content
      (solution-encoded (rum/react (rum/cursor-in state [:solution])))]]])
@@ -284,7 +302,7 @@
                          (save! state))}
     "Save"]
    [:button {:data-toggle "modal"
-             :data-target "#blueprint-part"}
+             :data-target "#blueprint"}
     "Blueprint"]
    [:table
     [:tbody
@@ -297,8 +315,8 @@
                                (load! state))}
           "Load"]
          [:button {:on-click (fn [_]
-                               (swap! state assoc :blueprint-name blueprint-name)
-                               (delete-blueprint! state blueprint-name))}
+                               (when (js/confirm "Are you sure?")
+                                 (delete-blueprint! state blueprint-name)))}
           "Delete"]]])]]])
 
 (rum/defc blueprint < rum/reactive

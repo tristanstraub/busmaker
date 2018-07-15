@@ -3,7 +3,19 @@
 (def science
   '({:name "_research_"
      :ingredients [["science-pack-1"]
-                   ["science-pack-2"]]}))
+                   ["science-pack-2"]]}
+    {:name "_research_military_"
+     :ingredients [["science-pack-1"]
+                   ["science-pack-2"]
+                   ["science-pack-3"]
+                   ["military-science-pack"]]}    
+    {:name "_research_full_"
+     :ingredients [["science-pack-1"]
+                   ["science-pack-2"]
+                   ["science-pack-3"]
+                   ["military-science-pack"]
+                   ["production-science-pack"]
+                   ["high-tech-science-pack"]]}))
 
 (def recipes
   (into science

@@ -110,12 +110,12 @@
                                        y 0}}]
   {"name"     facility
    "recipe"   (recipes/recipe-type recipe)
-   "position" {"x" (cond (#{"stone-furnace"} facility)                                   (+ x 0.5)
+   "position" {"x" (cond (#{"steel-furnace" "stone-furnace"} facility)                                   (+ x 0.5)
                          (or (not (fluid? recipe))
                              (#{"lubricant" "sulfur" "sulfuric-acid" "battery"} recipe)) x
 
                          :else                                                           (dec x))
-               "y" (cond (#{"stone-furnace"} facility) (+ y 0.5)
+               "y" (cond (#{"steel-furnace" "stone-furnace"} facility) (+ y 0.5)
                          :else                         y)}
 
    "direction" (cond (#{"oil-refinery"} facility) (blueprint-direction-inserter [0 1])
@@ -341,20 +341,20 @@
 (defn ingredients
   [recipe-name facility]
   (let [recipe-name (if (#{"petroleum-gas" "heavy-oil" "light-oil"} recipe-name)
-                      "advanced-oil-processing"
+                      "basic-oil-processing" #_"advanced-oil-processing"
                       recipe-name)]
     (-> recipe-data/recipes
         (recipe recipe-name)
         recipes/recipe-ingredients
         (cond->
-            (#{"stone-furnace"} facility) (conj "coal")))))
+            (#{"steel-furnace" "stone-furnace"} facility) (conj "coal")))))
 
 (defn ingredient-height
   [ingredient facility]
   {:pre [(seq facility)]}
   (let [n (count (ingredients ingredient facility))]
     (cond (#{"lab"} facility)                                         12
-          (#{"stone-furnace"} facility)                               8
+          (#{"steel-furnace" "stone-furnace"} facility)                               8
           (#{"electric-furnace"} facility)                            12
           (#{"oil-refinery"} facility)                                16
           (#{"assembling-machine-1" "assembling-machine-2"} facility) (+ 11 (if (> n 3)
@@ -373,7 +373,7 @@
   (let [n (count (ingredients ingredient facility))]
     (cond (#{"chemical-plant"} facility)                              4
           (#{"lab"} facility)                                         5
-          (#{"stone-furnace"} facility)                               1
+          (#{"steel-furnace" "stone-furnace"} facility)                               1
           (#{"oil-refinery"} facility)                                5
           (#{"electric-furnace"} facility)                            1
           (#{"assembling-machine-1" "assembling-machine-2"} facility) (+ 4 (if (> n 3)
@@ -490,7 +490,7 @@
                                                      y (+ y 6)
                                                      output-index (buses ingredient)]
                                                  (for [i (range n-factories)
-                                                       :let [y-extension (cond (#{"stone-furnace"} facility) 1
+                                                       :let [y-extension (cond (#{"steel-furnace" "stone-furnace"} facility) 1
                                                                                :else                         0)]
                                                        :when output-index]
                                                    (if (> i 0)
@@ -569,7 +569,7 @@
                                                    (main-bus-line :buses bus-index
                                                                   :recipes recipes
                                                                   :x x
-                                                                  :y (+ y (cond (#{"stone-furnace"} facility) 4
+                                                                  :y (+ y (cond (#{"steel-furnace" "stone-furnace"} facility) 4
                                                                                 (#{"chemical-plant" "assembling-machine-1" "assembling-machine-2"} facility) 1
                                                                                 :else 0))
                                                                   :n-factories n

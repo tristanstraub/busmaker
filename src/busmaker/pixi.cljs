@@ -92,6 +92,7 @@
            ["lab" _ _] (g :lab)
            ["electric-furnace" _ _] (g :furnace)
            ["stone-furnace" _ _] (g :stone-furnace :translate [8 8])
+           ["steel-furnace" _ _] (g :stone-furnace :translate [8 8])
            ["splitter" _ _] (g :splitter :translate [8 0]))))
 
 (def margin-x 2)

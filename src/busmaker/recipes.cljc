@@ -4,7 +4,7 @@
 
 (defn factory-type
   [recipe]
-  (cond (#{"_research_"} recipe)                                                               "lab"
+  (cond (#{"_research_" "_research_full_" "_research_military_"} recipe) "lab"
         (#{"iron-plate" "copper-plate" "steel-plate" "stone-brick"} recipe)                   "stone-furnace"
         (#{"light-oil" "heavy-oil" "petroleum-gas"} recipe)                                   "oil-refinery"
         (#{"lubricant" "sulfur" "sulfuric-acid" "battery" "plastic-bar" "explosives"} recipe) "chemical-plant"
@@ -13,13 +13,13 @@
 
 (defn recipe-type
   [recipe]
-  (cond (#{"light-oil" "heavy-oil" "petroleum-gas"} recipe) "advanced-oil-processing"
+  (cond (#{"light-oil" "heavy-oil" "petroleum-gas"} recipe) "basic-oil-processing" #_ "advanced-oil-processing"
         :else                   recipe))
 
 (defn recipe-by-name
   [recipes recipe-name]
   (if (#{"heavy-oil" "light-oil" "petroleum-gas"} recipe-name)
-    (recipe-by-name recipes "advanced-oil-processing")
+    (recipe-by-name recipes "basic-oil-processing" #_"advanced-oil-processing")
     (first (filter (comp #{recipe-name} :name) recipes))))
 
 (defn ingredient
