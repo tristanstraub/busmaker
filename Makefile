@@ -27,6 +27,7 @@ release:
 	git pull
 	git merge master
 	$(MAKE) clean build
+	git add build
 	git commit -am "RELEASE"
 	git push
 	git checkout master
