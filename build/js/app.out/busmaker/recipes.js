@@ -4,7 +4,7 @@ goog.require('cljs.core');
 goog.require('com.stuartsierra.dependency');
 goog.require('busmaker.recipe_data');
 busmaker.recipes.factory_type = (function busmaker$recipes$factory_type(recipe){
-if(cljs.core.truth_(new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["_research_",null], null), null).call(null,recipe))){
+if(cljs.core.truth_(new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 3, ["_research_military_",null,"_research_full_",null,"_research_",null], null), null).call(null,recipe))){
 return "lab";
 } else {
 if(cljs.core.truth_(new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 4, ["copper-plate",null,"iron-plate",null,"stone-brick",null,"steel-plate",null], null), null).call(null,recipe))){
@@ -29,7 +29,7 @@ return "assembling-machine-1";
 });
 busmaker.recipes.recipe_type = (function busmaker$recipes$recipe_type(recipe){
 if(cljs.core.truth_(new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 3, ["petroleum-gas",null,"light-oil",null,"heavy-oil",null], null), null).call(null,recipe))){
-return "advanced-oil-processing";
+return "basic-oil-processing";
 } else {
 return recipe;
 
@@ -37,7 +37,7 @@ return recipe;
 });
 busmaker.recipes.recipe_by_name = (function busmaker$recipes$recipe_by_name(recipes,recipe_name){
 if(cljs.core.truth_(new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 3, ["petroleum-gas",null,"light-oil",null,"heavy-oil",null], null), null).call(null,recipe_name))){
-return busmaker.recipes.recipe_by_name.call(null,recipes,"advanced-oil-processing");
+return busmaker.recipes.recipe_by_name.call(null,recipes,"basic-oil-processing");
 } else {
 return cljs.core.first.call(null,cljs.core.filter.call(null,cljs.core.comp.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),new cljs.core.Keyword(null,"name","name",1843675177)),recipes));
 }
