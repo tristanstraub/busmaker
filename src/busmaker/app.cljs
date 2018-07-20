@@ -50,7 +50,7 @@
 
 (defn busmaker-store
   []
-  (decode-store (get-item busmaker-store-key)))
+  (some-> (get-item busmaker-store-key) decode-store))
 
 (defn serialize-to-store!
   [state]
