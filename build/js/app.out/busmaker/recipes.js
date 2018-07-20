@@ -65,12 +65,12 @@ busmaker.recipes.ingredients_by_recipe_recursive = (function busmaker$recipes$in
 var ingredients = cljs.core.remove.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),busmaker.recipes.sorted_recipe_order.call(null,recipe_name));
 var coal_QMARK_ = cljs.core.some.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["stone-furnace",null], null), null),cljs.core.map.call(null,busmaker.recipes.factory_type,cljs.core.conj.call(null,ingredients,recipe_name)));
 var oil_QMARK_ = cljs.core.some.call(null,new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 1, ["oil-refinery",null], null), null),cljs.core.map.call(null,busmaker.recipes.factory_type,cljs.core.conj.call(null,ingredients,recipe_name)));
-return cljs.core.distinct.call(null,(function (){var G__7560 = ingredients;
-var G__7560__$1 = (cljs.core.truth_(coal_QMARK_)?cljs.core.into.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["coal"], null),G__7560):G__7560);
+return cljs.core.distinct.call(null,(function (){var G__4656 = ingredients;
+var G__4656__$1 = (cljs.core.truth_(coal_QMARK_)?cljs.core.into.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["coal"], null),G__4656):G__4656);
 if(cljs.core.truth_(oil_QMARK_)){
-return cljs.core.into.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["water","crude-oil"], null),G__7560__$1);
+return cljs.core.into.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["water","crude-oil"], null),G__4656__$1);
 } else {
-return G__7560__$1;
+return G__4656__$1;
 }
 })());
 });

@@ -20,13 +20,13 @@ var ingredients = cljs.core.mapcat.call(null,busmaker.recipes.ingredients_by_rec
 return cljs.core.distinct.call(null,cljs.core.concat.call(null,ingredients,cljs.core.mapcat.call(null,busmaker.bus.outputs_by_recipe,cljs.core.concat.call(null,recipe_names,ingredients))));
 });
 busmaker.bus.default_factories = (function busmaker$bus$default_factories(recipe_names){
-return cljs.core.mapv.call(null,(function (p1__7564_SHARP_){
-return cljs.core.PersistentHashMap.fromArrays([new cljs.core.Keyword(null,"n","n",562130025),new cljs.core.Keyword(null,"recipes","recipes",-325236209),new cljs.core.Keyword(null,"facility","facility",-2118099900)],[(1),busmaker.bus.factory_outputs.call(null,busmaker.recipes.factory_type.call(null,p1__7564_SHARP_),p1__7564_SHARP_),busmaker.recipes.factory_type.call(null,p1__7564_SHARP_)]);
-}),cljs.core.remove.call(null,busmaker.recipes.raw_QMARK_,cljs.core.first.call(null,cljs.core.reduce.call(null,(function (p__7565,recipe_name){
-var vec__7566 = p__7565;
-var recipe_names__$1 = cljs.core.nth.call(null,vec__7566,(0),null);
-var outputs = cljs.core.nth.call(null,vec__7566,(1),null);
-var state = vec__7566;
+return cljs.core.mapv.call(null,(function (p1__4660_SHARP_){
+return cljs.core.PersistentHashMap.fromArrays([new cljs.core.Keyword(null,"n","n",562130025),new cljs.core.Keyword(null,"recipes","recipes",-325236209),new cljs.core.Keyword(null,"facility","facility",-2118099900)],[(1),busmaker.bus.factory_outputs.call(null,busmaker.recipes.factory_type.call(null,p1__4660_SHARP_),p1__4660_SHARP_),busmaker.recipes.factory_type.call(null,p1__4660_SHARP_)]);
+}),cljs.core.remove.call(null,busmaker.recipes.raw_QMARK_,cljs.core.first.call(null,cljs.core.reduce.call(null,(function (p__4661,recipe_name){
+var vec__4662 = p__4661;
+var recipe_names__$1 = cljs.core.nth.call(null,vec__4662,(0),null);
+var outputs = cljs.core.nth.call(null,vec__4662,(1),null);
+var state = vec__4662;
 if(cljs.core.truth_(cljs.core.some.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),outputs))){
 return state;
 } else {
@@ -37,8 +37,8 @@ return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMP
 busmaker.bus.add_factories = (function busmaker$bus$add_factories(factories,new_factories){
 var existing_recipes = cljs.core.set.call(null,cljs.core.mapcat.call(null,new cljs.core.Keyword(null,"recipes","recipes",-325236209),factories));
 return cljs.core.into.call(null,cljs.core.vec.call(null,factories),cljs.core.remove.call(null,((function (existing_recipes){
-return (function (p1__7569_SHARP_){
-return cljs.core.every_QMARK_.call(null,existing_recipes,new cljs.core.Keyword(null,"recipes","recipes",-325236209).cljs$core$IFn$_invoke$arity$1(p1__7569_SHARP_));
+return (function (p1__4665_SHARP_){
+return cljs.core.every_QMARK_.call(null,existing_recipes,new cljs.core.Keyword(null,"recipes","recipes",-325236209).cljs$core$IFn$_invoke$arity$1(p1__4665_SHARP_));
 });})(existing_recipes))
 ,new_factories));
 });
@@ -50,8 +50,8 @@ busmaker.bus.remove_factory = (function busmaker$bus$remove_factory(factories,fa
 return cljs.core.vec.call(null,cljs.core.remove.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([factory]),factories));
 });
 busmaker.bus.get_factory = (function busmaker$bus$get_factory(factories,recipe_name){
-var _PERCENT_ = cljs.core.first.call(null,cljs.core.filter.call(null,(function (p1__7570_SHARP_){
-return cljs.core.some.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),new cljs.core.Keyword(null,"recipes","recipes",-325236209).cljs$core$IFn$_invoke$arity$1(p1__7570_SHARP_));
+var _PERCENT_ = cljs.core.first.call(null,cljs.core.filter.call(null,(function (p1__4666_SHARP_){
+return cljs.core.some.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),new cljs.core.Keyword(null,"recipes","recipes",-325236209).cljs$core$IFn$_invoke$arity$1(p1__4666_SHARP_));
 }),factories));
 if(cljs.core.truth_(_PERCENT_)){
 } else {
