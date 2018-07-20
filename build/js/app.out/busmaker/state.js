@@ -30,29 +30,29 @@ busmaker.state.remove_recipe = (function busmaker$state$remove_recipe(state,reci
 return busmaker.state.remove_factory.call(null,state,busmaker.bus.get_factory.call(null,new cljs.core.Keyword(null,"factories","factories",1443149712).cljs$core$IFn$_invoke$arity$1(state),recipe_name));
 });
 busmaker.state.remove_bus = (function busmaker$state$remove_bus(state,recipe_name){
-return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584),(function (p1__8522_SHARP_){
-return cljs.core.vec.call(null,cljs.core.remove.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),p1__8522_SHARP_));
+return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584),(function (p1__8648_SHARP_){
+return cljs.core.vec.call(null,cljs.core.remove.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),p1__8648_SHARP_));
 }));
 });
 busmaker.state.swap_facility = (function busmaker$state$swap_facility(state,factory,facility){
-return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8523_SHARP_){
+return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8649_SHARP_){
 return cljs.core.mapv.call(null,(function (f){
 if(cljs.core._EQ_.call(null,factory,f)){
 return cljs.core.assoc.call(null,f,new cljs.core.Keyword(null,"facility","facility",-2118099900),facility);
 } else {
 return f;
 }
-}),p1__8523_SHARP_);
+}),p1__8649_SHARP_);
 }));
 });
 busmaker.state.change_facility_line_length = (function busmaker$state$change_facility_line_length(state,factory,n){
-return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8524_SHARP_){
+return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8650_SHARP_){
 return cljs.core.mapv.call(null,(function (f){
 if(cljs.core._EQ_.call(null,factory,f)){
 return cljs.core.assoc.call(null,f,new cljs.core.Keyword(null,"n","n",562130025),n);
 } else {
 return f;
 }
-}),p1__8524_SHARP_);
+}),p1__8650_SHARP_);
 }));
 });

@@ -102,8 +102,8 @@ return busmaker.app.solve_BANG_.call(null,state);
 busmaker.app.recipe_selector = rum.core.build_defc.call(null,(function (state){
 var recipe = rum.core.react.call(null,rum.core.cursor_in.call(null,state,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"recipe","recipe",-17826617)], null)));
 var recipes = cljs.core.remove.call(null,((function (recipe){
-return (function (p1__8764_SHARP_){
-return new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 2, ["basic-oil-processing",null,"advanced-oil-processing",null], null), null).call(null,p1__8764_SHARP_);
+return (function (p1__8765_SHARP_){
+return new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 2, ["basic-oil-processing",null,"advanced-oil-processing",null], null), null).call(null,p1__8765_SHARP_);
 });})(recipe))
 ,cljs.core.map.call(null,new cljs.core.Keyword(null,"name","name",1843675177),busmaker.recipe_data.recipes));
 return React.createElement("label",null,"Recipe",sablono.interpreter.create_element.call(null,"select",({"value": recipe, "onChange": ((function (recipe,recipes){
@@ -112,26 +112,26 @@ var recipe__$1 = e.target.value;
 return cljs.core.swap_BANG_.call(null,state,cljs.core.assoc,new cljs.core.Keyword(null,"recipe","recipe",-17826617),recipe__$1);
 });})(recipe,recipes))
 }),React.createElement("option",null,"Select recipe"),cljs.core.into_array.call(null,(function (){var iter__4324__auto__ = ((function (recipe,recipes){
-return (function busmaker$app$iter__8767(s__8768){
+return (function busmaker$app$iter__8768(s__8769){
 return (new cljs.core.LazySeq(null,((function (recipe,recipes){
 return (function (){
-var s__8768__$1 = s__8768;
+var s__8769__$1 = s__8769;
 while(true){
-var temp__5457__auto__ = cljs.core.seq.call(null,s__8768__$1);
+var temp__5457__auto__ = cljs.core.seq.call(null,s__8769__$1);
 if(temp__5457__auto__){
-var s__8768__$2 = temp__5457__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__8768__$2)){
-var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8768__$2);
+var s__8769__$2 = temp__5457__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__8769__$2)){
+var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8769__$2);
 var size__4323__auto__ = cljs.core.count.call(null,c__4322__auto__);
-var b__8770 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
-if((function (){var i__8769 = (0);
+var b__8771 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
+if((function (){var i__8770 = (0);
 while(true){
-if((i__8769 < size__4323__auto__)){
-var recipe__$1 = cljs.core._nth.call(null,c__4322__auto__,i__8769);
-cljs.core.chunk_append.call(null,b__8770,React.createElement("option",({"key": recipe__$1, "value": recipe__$1}),sablono.interpreter.interpret.call(null,recipe__$1)));
+if((i__8770 < size__4323__auto__)){
+var recipe__$1 = cljs.core._nth.call(null,c__4322__auto__,i__8770);
+cljs.core.chunk_append.call(null,b__8771,React.createElement("option",({"key": recipe__$1, "value": recipe__$1}),sablono.interpreter.interpret.call(null,recipe__$1)));
 
-var G__8771 = (i__8769 + (1));
-i__8769 = G__8771;
+var G__8772 = (i__8770 + (1));
+i__8770 = G__8772;
 continue;
 } else {
 return true;
@@ -139,13 +139,13 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8770),busmaker$app$iter__8767.call(null,cljs.core.chunk_rest.call(null,s__8768__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8771),busmaker$app$iter__8768.call(null,cljs.core.chunk_rest.call(null,s__8769__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8770),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8771),null);
 }
 } else {
-var recipe__$1 = cljs.core.first.call(null,s__8768__$2);
-return cljs.core.cons.call(null,React.createElement("option",({"key": recipe__$1, "value": recipe__$1}),sablono.interpreter.interpret.call(null,recipe__$1)),busmaker$app$iter__8767.call(null,cljs.core.rest.call(null,s__8768__$2)));
+var recipe__$1 = cljs.core.first.call(null,s__8769__$2);
+return cljs.core.cons.call(null,React.createElement("option",({"key": recipe__$1, "value": recipe__$1}),sablono.interpreter.interpret.call(null,recipe__$1)),busmaker$app$iter__8768.call(null,cljs.core.rest.call(null,s__8769__$2)));
 }
 } else {
 return null;
@@ -166,38 +166,38 @@ return busmaker.app.solve_BANG_.call(null,state);
 }),"+"));
 }),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [rum.core.reactive], null),"recipe-selector");
 busmaker.app.facilities = new cljs.core.PersistentVector(null, 8, 5, cljs.core.PersistentVector.EMPTY_NODE, ["stone-furnace","electric-furnace","steel-furnace","oil-refinery","chemical-plant","assembling-machine-1","assembling-machine-2","lab"], null);
-busmaker.app.facility_selector = rum.core.build_defc.call(null,(function (state,p__8772){
-var map__8773 = p__8772;
-var map__8773__$1 = ((((!((map__8773 == null)))?(((((map__8773.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8773.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8773):map__8773);
-var factory = map__8773__$1;
-var facility = cljs.core.get.call(null,map__8773__$1,new cljs.core.Keyword(null,"facility","facility",-2118099900));
-return sablono.interpreter.create_element.call(null,"select",({"value": facility, "onChange": ((function (map__8773,map__8773__$1,factory,facility){
+busmaker.app.facility_selector = rum.core.build_defc.call(null,(function (state,p__8773){
+var map__8774 = p__8773;
+var map__8774__$1 = ((((!((map__8774 == null)))?(((((map__8774.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8774.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8774):map__8774);
+var factory = map__8774__$1;
+var facility = cljs.core.get.call(null,map__8774__$1,new cljs.core.Keyword(null,"facility","facility",-2118099900));
+return sablono.interpreter.create_element.call(null,"select",({"value": facility, "onChange": ((function (map__8774,map__8774__$1,factory,facility){
 return (function (e){
 cljs.core.swap_BANG_.call(null,state,busmaker.state.swap_facility,factory,e.target.value);
 
 return busmaker.app.solve_BANG_.call(null,state);
-});})(map__8773,map__8773__$1,factory,facility))
-}),cljs.core.into_array.call(null,(function (){var iter__4324__auto__ = ((function (map__8773,map__8773__$1,factory,facility){
-return (function busmaker$app$iter__8775(s__8776){
-return (new cljs.core.LazySeq(null,((function (map__8773,map__8773__$1,factory,facility){
+});})(map__8774,map__8774__$1,factory,facility))
+}),cljs.core.into_array.call(null,(function (){var iter__4324__auto__ = ((function (map__8774,map__8774__$1,factory,facility){
+return (function busmaker$app$iter__8776(s__8777){
+return (new cljs.core.LazySeq(null,((function (map__8774,map__8774__$1,factory,facility){
 return (function (){
-var s__8776__$1 = s__8776;
+var s__8777__$1 = s__8777;
 while(true){
-var temp__5457__auto__ = cljs.core.seq.call(null,s__8776__$1);
+var temp__5457__auto__ = cljs.core.seq.call(null,s__8777__$1);
 if(temp__5457__auto__){
-var s__8776__$2 = temp__5457__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__8776__$2)){
-var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8776__$2);
+var s__8777__$2 = temp__5457__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__8777__$2)){
+var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8777__$2);
 var size__4323__auto__ = cljs.core.count.call(null,c__4322__auto__);
-var b__8778 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
-if((function (){var i__8777 = (0);
+var b__8779 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
+if((function (){var i__8778 = (0);
 while(true){
-if((i__8777 < size__4323__auto__)){
-var facility__$1 = cljs.core._nth.call(null,c__4322__auto__,i__8777);
-cljs.core.chunk_append.call(null,b__8778,React.createElement("option",({"key": facility__$1, "value": facility__$1}),sablono.interpreter.interpret.call(null,facility__$1)));
+if((i__8778 < size__4323__auto__)){
+var facility__$1 = cljs.core._nth.call(null,c__4322__auto__,i__8778);
+cljs.core.chunk_append.call(null,b__8779,React.createElement("option",({"key": facility__$1, "value": facility__$1}),sablono.interpreter.interpret.call(null,facility__$1)));
 
-var G__8779 = (i__8777 + (1));
-i__8777 = G__8779;
+var G__8780 = (i__8778 + (1));
+i__8778 = G__8780;
 continue;
 } else {
 return true;
@@ -205,22 +205,22 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8778),busmaker$app$iter__8775.call(null,cljs.core.chunk_rest.call(null,s__8776__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8779),busmaker$app$iter__8776.call(null,cljs.core.chunk_rest.call(null,s__8777__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8778),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8779),null);
 }
 } else {
-var facility__$1 = cljs.core.first.call(null,s__8776__$2);
-return cljs.core.cons.call(null,React.createElement("option",({"key": facility__$1, "value": facility__$1}),sablono.interpreter.interpret.call(null,facility__$1)),busmaker$app$iter__8775.call(null,cljs.core.rest.call(null,s__8776__$2)));
+var facility__$1 = cljs.core.first.call(null,s__8777__$2);
+return cljs.core.cons.call(null,React.createElement("option",({"key": facility__$1, "value": facility__$1}),sablono.interpreter.interpret.call(null,facility__$1)),busmaker$app$iter__8776.call(null,cljs.core.rest.call(null,s__8777__$2)));
 }
 } else {
 return null;
 }
 break;
 }
-});})(map__8773,map__8773__$1,factory,facility))
+});})(map__8774,map__8774__$1,factory,facility))
 ,null,null));
-});})(map__8773,map__8773__$1,factory,facility))
+});})(map__8774,map__8774__$1,factory,facility))
 ;
 return iter__4324__auto__.call(null,busmaker.app.facilities);
 })()));
@@ -230,38 +230,38 @@ var factories = rum.core.react.call(null,rum.core.cursor_in.call(null,state,new 
 var bus_outputs = rum.core.react.call(null,rum.core.cursor_in.call(null,state,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584)], null)));
 if(cljs.core.seq.call(null,bus_outputs)){
 return React.createElement("div",({"className": "card"}),React.createElement("table",({"className": "components table"}),React.createElement("thead",null,React.createElement("tr",null,React.createElement("th",null,"Output"),React.createElement("th",null,"Bus index"),React.createElement("th",null))),React.createElement("tbody",null,cljs.core.into_array.call(null,(function (){var iter__4324__auto__ = ((function (factories,bus_outputs){
-return (function busmaker$app$iter__8782(s__8783){
+return (function busmaker$app$iter__8783(s__8784){
 return (new cljs.core.LazySeq(null,((function (factories,bus_outputs){
 return (function (){
-var s__8783__$1 = s__8783;
+var s__8784__$1 = s__8784;
 while(true){
-var temp__5457__auto__ = cljs.core.seq.call(null,s__8783__$1);
+var temp__5457__auto__ = cljs.core.seq.call(null,s__8784__$1);
 if(temp__5457__auto__){
-var s__8783__$2 = temp__5457__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__8783__$2)){
-var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8783__$2);
+var s__8784__$2 = temp__5457__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__8784__$2)){
+var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8784__$2);
 var size__4323__auto__ = cljs.core.count.call(null,c__4322__auto__);
-var b__8785 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
-if((function (){var i__8784 = (0);
+var b__8786 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
+if((function (){var i__8785 = (0);
 while(true){
-if((i__8784 < size__4323__auto__)){
-var vec__8786 = cljs.core._nth.call(null,c__4322__auto__,i__8784);
-var bus_index = cljs.core.nth.call(null,vec__8786,(0),null);
-var output = cljs.core.nth.call(null,vec__8786,(1),null);
-cljs.core.chunk_append.call(null,b__8785,React.createElement("tr",({"key": bus_index}),(function (){var attrs8789 = output;
-return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8789))?sablono.interpreter.attributes.call(null,attrs8789):null),((cljs.core.map_QMARK_.call(null,attrs8789))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8789)], null)));
-})(),(function (){var attrs8790 = bus_index;
+if((i__8785 < size__4323__auto__)){
+var vec__8787 = cljs.core._nth.call(null,c__4322__auto__,i__8785);
+var bus_index = cljs.core.nth.call(null,vec__8787,(0),null);
+var output = cljs.core.nth.call(null,vec__8787,(1),null);
+cljs.core.chunk_append.call(null,b__8786,React.createElement("tr",({"key": bus_index}),(function (){var attrs8790 = output;
 return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8790))?sablono.interpreter.attributes.call(null,attrs8790):null),((cljs.core.map_QMARK_.call(null,attrs8790))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8790)], null)));
-})(),React.createElement("td",null,React.createElement("button",({"onClick": ((function (i__8784,vec__8786,bus_index,output,c__4322__auto__,size__4323__auto__,b__8785,s__8783__$2,temp__5457__auto__,factories,bus_outputs){
+})(),(function (){var attrs8791 = bus_index;
+return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8791))?sablono.interpreter.attributes.call(null,attrs8791):null),((cljs.core.map_QMARK_.call(null,attrs8791))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8791)], null)));
+})(),React.createElement("td",null,React.createElement("button",({"onClick": ((function (i__8785,vec__8787,bus_index,output,c__4322__auto__,size__4323__auto__,b__8786,s__8784__$2,temp__5457__auto__,factories,bus_outputs){
 return (function (_){
 cljs.core.swap_BANG_.call(null,state,busmaker.state.remove_bus,output);
 
 return busmaker.app.solve_BANG_.call(null,state);
-});})(i__8784,vec__8786,bus_index,output,c__4322__auto__,size__4323__auto__,b__8785,s__8783__$2,temp__5457__auto__,factories,bus_outputs))
+});})(i__8785,vec__8787,bus_index,output,c__4322__auto__,size__4323__auto__,b__8786,s__8784__$2,temp__5457__auto__,factories,bus_outputs))
 }),"-"))));
 
-var G__8794 = (i__8784 + (1));
-i__8784 = G__8794;
+var G__8795 = (i__8785 + (1));
+i__8785 = G__8795;
 continue;
 } else {
 return true;
@@ -269,25 +269,25 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8785),busmaker$app$iter__8782.call(null,cljs.core.chunk_rest.call(null,s__8783__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8786),busmaker$app$iter__8783.call(null,cljs.core.chunk_rest.call(null,s__8784__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8785),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8786),null);
 }
 } else {
-var vec__8791 = cljs.core.first.call(null,s__8783__$2);
-var bus_index = cljs.core.nth.call(null,vec__8791,(0),null);
-var output = cljs.core.nth.call(null,vec__8791,(1),null);
-return cljs.core.cons.call(null,React.createElement("tr",({"key": bus_index}),(function (){var attrs8789 = output;
-return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8789))?sablono.interpreter.attributes.call(null,attrs8789):null),((cljs.core.map_QMARK_.call(null,attrs8789))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8789)], null)));
-})(),(function (){var attrs8790 = bus_index;
+var vec__8792 = cljs.core.first.call(null,s__8784__$2);
+var bus_index = cljs.core.nth.call(null,vec__8792,(0),null);
+var output = cljs.core.nth.call(null,vec__8792,(1),null);
+return cljs.core.cons.call(null,React.createElement("tr",({"key": bus_index}),(function (){var attrs8790 = output;
 return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8790))?sablono.interpreter.attributes.call(null,attrs8790):null),((cljs.core.map_QMARK_.call(null,attrs8790))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8790)], null)));
-})(),React.createElement("td",null,React.createElement("button",({"onClick": ((function (vec__8791,bus_index,output,s__8783__$2,temp__5457__auto__,factories,bus_outputs){
+})(),(function (){var attrs8791 = bus_index;
+return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8791))?sablono.interpreter.attributes.call(null,attrs8791):null),((cljs.core.map_QMARK_.call(null,attrs8791))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8791)], null)));
+})(),React.createElement("td",null,React.createElement("button",({"onClick": ((function (vec__8792,bus_index,output,s__8784__$2,temp__5457__auto__,factories,bus_outputs){
 return (function (_){
 cljs.core.swap_BANG_.call(null,state,busmaker.state.remove_bus,output);
 
 return busmaker.app.solve_BANG_.call(null,state);
-});})(vec__8791,bus_index,output,s__8783__$2,temp__5457__auto__,factories,bus_outputs))
-}),"-"))),busmaker$app$iter__8782.call(null,cljs.core.rest.call(null,s__8783__$2)));
+});})(vec__8792,bus_index,output,s__8784__$2,temp__5457__auto__,factories,bus_outputs))
+}),"-"))),busmaker$app$iter__8783.call(null,cljs.core.rest.call(null,s__8784__$2)));
 }
 } else {
 return null;
@@ -308,55 +308,55 @@ busmaker.app.factories = rum.core.build_defc.call(null,(function (state){
 var factories = rum.core.react.call(null,rum.core.cursor_in.call(null,state,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"factories","factories",1443149712)], null)));
 if(cljs.core.seq.call(null,factories)){
 return React.createElement("div",({"className": "card"}),React.createElement("table",({"className": "components table"}),React.createElement("thead",null,React.createElement("tr",null,React.createElement("th",null,"Recipes"),React.createElement("th",null,"Facility"),React.createElement("th",null,"Count"),React.createElement("th",null))),React.createElement("tbody",null,cljs.core.into_array.call(null,(function (){var iter__4324__auto__ = ((function (factories){
-return (function busmaker$app$iter__8797(s__8798){
+return (function busmaker$app$iter__8798(s__8799){
 return (new cljs.core.LazySeq(null,((function (factories){
 return (function (){
-var s__8798__$1 = s__8798;
+var s__8799__$1 = s__8799;
 while(true){
-var temp__5457__auto__ = cljs.core.seq.call(null,s__8798__$1);
+var temp__5457__auto__ = cljs.core.seq.call(null,s__8799__$1);
 if(temp__5457__auto__){
-var s__8798__$2 = temp__5457__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__8798__$2)){
-var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8798__$2);
+var s__8799__$2 = temp__5457__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__8799__$2)){
+var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8799__$2);
 var size__4323__auto__ = cljs.core.count.call(null,c__4322__auto__);
-var b__8800 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
-if((function (){var i__8799 = (0);
+var b__8801 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
+if((function (){var i__8800 = (0);
 while(true){
-if((i__8799 < size__4323__auto__)){
-var vec__8801 = cljs.core._nth.call(null,c__4322__auto__,i__8799);
-var i = cljs.core.nth.call(null,vec__8801,(0),null);
-var map__8804 = cljs.core.nth.call(null,vec__8801,(1),null);
-var map__8804__$1 = ((((!((map__8804 == null)))?(((((map__8804.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8804.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8804):map__8804);
-var factory = map__8804__$1;
-var facility = cljs.core.get.call(null,map__8804__$1,new cljs.core.Keyword(null,"facility","facility",-2118099900));
-var n = cljs.core.get.call(null,map__8804__$1,new cljs.core.Keyword(null,"n","n",562130025));
-var recipes = cljs.core.get.call(null,map__8804__$1,new cljs.core.Keyword(null,"recipes","recipes",-325236209));
-cljs.core.chunk_append.call(null,b__8800,React.createElement("tr",({"key": i}),(function (){var attrs8806 = clojure.string.join.call(null,",",recipes);
-return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8806))?sablono.interpreter.attributes.call(null,attrs8806):null),((cljs.core.map_QMARK_.call(null,attrs8806))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8806)], null)));
-})(),(function (){var attrs8807 = busmaker.app.facility_selector.call(null,state,factory);
+if((i__8800 < size__4323__auto__)){
+var vec__8802 = cljs.core._nth.call(null,c__4322__auto__,i__8800);
+var i = cljs.core.nth.call(null,vec__8802,(0),null);
+var map__8805 = cljs.core.nth.call(null,vec__8802,(1),null);
+var map__8805__$1 = ((((!((map__8805 == null)))?(((((map__8805.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8805.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8805):map__8805);
+var factory = map__8805__$1;
+var facility = cljs.core.get.call(null,map__8805__$1,new cljs.core.Keyword(null,"facility","facility",-2118099900));
+var n = cljs.core.get.call(null,map__8805__$1,new cljs.core.Keyword(null,"n","n",562130025));
+var recipes = cljs.core.get.call(null,map__8805__$1,new cljs.core.Keyword(null,"recipes","recipes",-325236209));
+cljs.core.chunk_append.call(null,b__8801,React.createElement("tr",({"key": i}),(function (){var attrs8807 = clojure.string.join.call(null,",",recipes);
 return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8807))?sablono.interpreter.attributes.call(null,attrs8807):null),((cljs.core.map_QMARK_.call(null,attrs8807))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8807)], null)));
-})(),React.createElement("td",null,sablono.interpreter.create_element.call(null,"input",({"type": "number", "value": n, "onChange": ((function (i__8799,vec__8801,i,map__8804,map__8804__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8800,s__8798__$2,temp__5457__auto__,factories){
+})(),(function (){var attrs8808 = busmaker.app.facility_selector.call(null,state,factory);
+return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8808))?sablono.interpreter.attributes.call(null,attrs8808):null),((cljs.core.map_QMARK_.call(null,attrs8808))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8808)], null)));
+})(),React.createElement("td",null,sablono.interpreter.create_element.call(null,"input",({"type": "number", "value": n, "onChange": ((function (i__8800,vec__8802,i,map__8805,map__8805__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8801,s__8799__$2,temp__5457__auto__,factories){
 return (function (e){
 cljs.core.println.call(null,new cljs.core.Keyword(null,"change","change",-1163046502));
 
 cljs.core.swap_BANG_.call(null,state,busmaker.state.change_facility_line_length,factory,parseInt(e.target.value));
 
 return busmaker.app.solve_BANG_.call(null,state);
-});})(i__8799,vec__8801,i,map__8804,map__8804__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8800,s__8798__$2,temp__5457__auto__,factories))
-}))),React.createElement("td",null,React.createElement("button",({"onClick": ((function (i__8799,vec__8801,i,map__8804,map__8804__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8800,s__8798__$2,temp__5457__auto__,factories){
+});})(i__8800,vec__8802,i,map__8805,map__8805__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8801,s__8799__$2,temp__5457__auto__,factories))
+}))),React.createElement("td",null,React.createElement("button",({"onClick": ((function (i__8800,vec__8802,i,map__8805,map__8805__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8801,s__8799__$2,temp__5457__auto__,factories){
 return (function (e){
 cljs.core.swap_BANG_.call(null,state,busmaker.state.remove_factory,factory);
 
 return busmaker.app.solve_BANG_.call(null,state);
-});})(i__8799,vec__8801,i,map__8804,map__8804__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8800,s__8798__$2,temp__5457__auto__,factories))
-}),"-")),React.createElement("td",null,React.createElement("button",({"onClick": ((function (i__8799,vec__8801,i,map__8804,map__8804__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8800,s__8798__$2,temp__5457__auto__,factories){
+});})(i__8800,vec__8802,i,map__8805,map__8805__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8801,s__8799__$2,temp__5457__auto__,factories))
+}),"-")),React.createElement("td",null,React.createElement("button",({"onClick": ((function (i__8800,vec__8802,i,map__8805,map__8805__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8801,s__8799__$2,temp__5457__auto__,factories){
 return (function (e){
 return busmaker.app.solve_part_BANG_.call(null,state,i);
-});})(i__8799,vec__8801,i,map__8804,map__8804__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8800,s__8798__$2,temp__5457__auto__,factories))
+});})(i__8800,vec__8802,i,map__8805,map__8805__$1,factory,facility,n,recipes,c__4322__auto__,size__4323__auto__,b__8801,s__8799__$2,temp__5457__auto__,factories))
 , "data-toggle": "modal", "data-target": "#blueprint-part"}),"Blueprint"))));
 
-var G__8813 = (i__8799 + (1));
-i__8799 = G__8813;
+var G__8814 = (i__8800 + (1));
+i__8800 = G__8814;
 continue;
 } else {
 return true;
@@ -364,42 +364,42 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8800),busmaker$app$iter__8797.call(null,cljs.core.chunk_rest.call(null,s__8798__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8801),busmaker$app$iter__8798.call(null,cljs.core.chunk_rest.call(null,s__8799__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8800),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8801),null);
 }
 } else {
-var vec__8808 = cljs.core.first.call(null,s__8798__$2);
-var i = cljs.core.nth.call(null,vec__8808,(0),null);
-var map__8811 = cljs.core.nth.call(null,vec__8808,(1),null);
-var map__8811__$1 = ((((!((map__8811 == null)))?(((((map__8811.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8811.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8811):map__8811);
-var factory = map__8811__$1;
-var facility = cljs.core.get.call(null,map__8811__$1,new cljs.core.Keyword(null,"facility","facility",-2118099900));
-var n = cljs.core.get.call(null,map__8811__$1,new cljs.core.Keyword(null,"n","n",562130025));
-var recipes = cljs.core.get.call(null,map__8811__$1,new cljs.core.Keyword(null,"recipes","recipes",-325236209));
-return cljs.core.cons.call(null,React.createElement("tr",({"key": i}),(function (){var attrs8806 = clojure.string.join.call(null,",",recipes);
-return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8806))?sablono.interpreter.attributes.call(null,attrs8806):null),((cljs.core.map_QMARK_.call(null,attrs8806))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8806)], null)));
-})(),(function (){var attrs8807 = busmaker.app.facility_selector.call(null,state,factory);
+var vec__8809 = cljs.core.first.call(null,s__8799__$2);
+var i = cljs.core.nth.call(null,vec__8809,(0),null);
+var map__8812 = cljs.core.nth.call(null,vec__8809,(1),null);
+var map__8812__$1 = ((((!((map__8812 == null)))?(((((map__8812.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8812.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8812):map__8812);
+var factory = map__8812__$1;
+var facility = cljs.core.get.call(null,map__8812__$1,new cljs.core.Keyword(null,"facility","facility",-2118099900));
+var n = cljs.core.get.call(null,map__8812__$1,new cljs.core.Keyword(null,"n","n",562130025));
+var recipes = cljs.core.get.call(null,map__8812__$1,new cljs.core.Keyword(null,"recipes","recipes",-325236209));
+return cljs.core.cons.call(null,React.createElement("tr",({"key": i}),(function (){var attrs8807 = clojure.string.join.call(null,",",recipes);
 return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8807))?sablono.interpreter.attributes.call(null,attrs8807):null),((cljs.core.map_QMARK_.call(null,attrs8807))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8807)], null)));
-})(),React.createElement("td",null,sablono.interpreter.create_element.call(null,"input",({"type": "number", "value": n, "onChange": ((function (vec__8808,i,map__8811,map__8811__$1,factory,facility,n,recipes,s__8798__$2,temp__5457__auto__,factories){
+})(),(function (){var attrs8808 = busmaker.app.facility_selector.call(null,state,factory);
+return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8808))?sablono.interpreter.attributes.call(null,attrs8808):null),((cljs.core.map_QMARK_.call(null,attrs8808))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8808)], null)));
+})(),React.createElement("td",null,sablono.interpreter.create_element.call(null,"input",({"type": "number", "value": n, "onChange": ((function (vec__8809,i,map__8812,map__8812__$1,factory,facility,n,recipes,s__8799__$2,temp__5457__auto__,factories){
 return (function (e){
 cljs.core.println.call(null,new cljs.core.Keyword(null,"change","change",-1163046502));
 
 cljs.core.swap_BANG_.call(null,state,busmaker.state.change_facility_line_length,factory,parseInt(e.target.value));
 
 return busmaker.app.solve_BANG_.call(null,state);
-});})(vec__8808,i,map__8811,map__8811__$1,factory,facility,n,recipes,s__8798__$2,temp__5457__auto__,factories))
-}))),React.createElement("td",null,React.createElement("button",({"onClick": ((function (vec__8808,i,map__8811,map__8811__$1,factory,facility,n,recipes,s__8798__$2,temp__5457__auto__,factories){
+});})(vec__8809,i,map__8812,map__8812__$1,factory,facility,n,recipes,s__8799__$2,temp__5457__auto__,factories))
+}))),React.createElement("td",null,React.createElement("button",({"onClick": ((function (vec__8809,i,map__8812,map__8812__$1,factory,facility,n,recipes,s__8799__$2,temp__5457__auto__,factories){
 return (function (e){
 cljs.core.swap_BANG_.call(null,state,busmaker.state.remove_factory,factory);
 
 return busmaker.app.solve_BANG_.call(null,state);
-});})(vec__8808,i,map__8811,map__8811__$1,factory,facility,n,recipes,s__8798__$2,temp__5457__auto__,factories))
-}),"-")),React.createElement("td",null,React.createElement("button",({"onClick": ((function (vec__8808,i,map__8811,map__8811__$1,factory,facility,n,recipes,s__8798__$2,temp__5457__auto__,factories){
+});})(vec__8809,i,map__8812,map__8812__$1,factory,facility,n,recipes,s__8799__$2,temp__5457__auto__,factories))
+}),"-")),React.createElement("td",null,React.createElement("button",({"onClick": ((function (vec__8809,i,map__8812,map__8812__$1,factory,facility,n,recipes,s__8799__$2,temp__5457__auto__,factories){
 return (function (e){
 return busmaker.app.solve_part_BANG_.call(null,state,i);
-});})(vec__8808,i,map__8811,map__8811__$1,factory,facility,n,recipes,s__8798__$2,temp__5457__auto__,factories))
-, "data-toggle": "modal", "data-target": "#blueprint-part"}),"Blueprint"))),busmaker$app$iter__8797.call(null,cljs.core.rest.call(null,s__8798__$2)));
+});})(vec__8809,i,map__8812,map__8812__$1,factory,facility,n,recipes,s__8799__$2,temp__5457__auto__,factories))
+, "data-toggle": "modal", "data-target": "#blueprint-part"}),"Blueprint"))),busmaker$app$iter__8798.call(null,cljs.core.rest.call(null,s__8799__$2)));
 }
 } else {
 return null;
@@ -421,26 +421,26 @@ var recipe_names = rum.core.react.call(null,rum.core.cursor_in.call(null,state,n
 var factories = rum.core.react.call(null,rum.core.cursor_in.call(null,state,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"factories","factories",1443149712)], null)));
 if(cljs.core.seq.call(null,recipe_names)){
 return React.createElement("div",({"className": "card"}),React.createElement("h6",null,"Components"),React.createElement("ul",({"className": "components"}),cljs.core.into_array.call(null,(function (){var iter__4324__auto__ = ((function (recipe_names,factories){
-return (function busmaker$app$iter__8816(s__8817){
+return (function busmaker$app$iter__8817(s__8818){
 return (new cljs.core.LazySeq(null,((function (recipe_names,factories){
 return (function (){
-var s__8817__$1 = s__8817;
+var s__8818__$1 = s__8818;
 while(true){
-var temp__5457__auto__ = cljs.core.seq.call(null,s__8817__$1);
+var temp__5457__auto__ = cljs.core.seq.call(null,s__8818__$1);
 if(temp__5457__auto__){
-var s__8817__$2 = temp__5457__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__8817__$2)){
-var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8817__$2);
+var s__8818__$2 = temp__5457__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__8818__$2)){
+var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8818__$2);
 var size__4323__auto__ = cljs.core.count.call(null,c__4322__auto__);
-var b__8819 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
-if((function (){var i__8818 = (0);
+var b__8820 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
+if((function (){var i__8819 = (0);
 while(true){
-if((i__8818 < size__4323__auto__)){
-var ingredient = cljs.core._nth.call(null,c__4322__auto__,i__8818);
-cljs.core.chunk_append.call(null,b__8819,React.createElement("li",({"key": ingredient}),sablono.interpreter.interpret.call(null,ingredient)));
+if((i__8819 < size__4323__auto__)){
+var ingredient = cljs.core._nth.call(null,c__4322__auto__,i__8819);
+cljs.core.chunk_append.call(null,b__8820,React.createElement("li",({"key": ingredient}),sablono.interpreter.interpret.call(null,ingredient)));
 
-var G__8820 = (i__8818 + (1));
-i__8818 = G__8820;
+var G__8821 = (i__8819 + (1));
+i__8819 = G__8821;
 continue;
 } else {
 return true;
@@ -448,13 +448,13 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8819),busmaker$app$iter__8816.call(null,cljs.core.chunk_rest.call(null,s__8817__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8820),busmaker$app$iter__8817.call(null,cljs.core.chunk_rest.call(null,s__8818__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8819),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8820),null);
 }
 } else {
-var ingredient = cljs.core.first.call(null,s__8817__$2);
-return cljs.core.cons.call(null,React.createElement("li",({"key": ingredient}),sablono.interpreter.interpret.call(null,ingredient)),busmaker$app$iter__8816.call(null,cljs.core.rest.call(null,s__8817__$2)));
+var ingredient = cljs.core.first.call(null,s__8818__$2);
+return cljs.core.cons.call(null,React.createElement("li",({"key": ingredient}),sablono.interpreter.interpret.call(null,ingredient)),busmaker$app$iter__8817.call(null,cljs.core.rest.call(null,s__8818__$2)));
 }
 } else {
 return null;
@@ -473,29 +473,29 @@ return null;
 }),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [rum.core.reactive], null),"components");
 busmaker.app.entity_details = rum.core.build_defc.call(null,(function (state){
 var entity = clojure.walk.keywordize_keys.call(null,rum.core.react.call(null,rum.core.cursor_in.call(null,state,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"entity","entity",-450970276)], null))));
-var attrs8821 = cljs.core.vec.call(null,cljs.core.sequence.call(null,cljs.core.seq.call(null,cljs.core.concat.call(null,(new cljs.core.List(null,new cljs.core.Keyword(null,"tbody","tbody",-80678300),null,(1),null)),(function (){var iter__4324__auto__ = ((function (entity){
-return (function busmaker$app$iter__8822(s__8823){
+var attrs8822 = cljs.core.vec.call(null,cljs.core.sequence.call(null,cljs.core.seq.call(null,cljs.core.concat.call(null,(new cljs.core.List(null,new cljs.core.Keyword(null,"tbody","tbody",-80678300),null,(1),null)),(function (){var iter__4324__auto__ = ((function (entity){
+return (function busmaker$app$iter__8823(s__8824){
 return (new cljs.core.LazySeq(null,((function (entity){
 return (function (){
-var s__8823__$1 = s__8823;
+var s__8824__$1 = s__8824;
 while(true){
-var temp__5457__auto__ = cljs.core.seq.call(null,s__8823__$1);
+var temp__5457__auto__ = cljs.core.seq.call(null,s__8824__$1);
 if(temp__5457__auto__){
-var s__8823__$2 = temp__5457__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__8823__$2)){
-var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8823__$2);
+var s__8824__$2 = temp__5457__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__8824__$2)){
+var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8824__$2);
 var size__4323__auto__ = cljs.core.count.call(null,c__4322__auto__);
-var b__8825 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
-if((function (){var i__8824 = (0);
+var b__8826 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
+if((function (){var i__8825 = (0);
 while(true){
-if((i__8824 < size__4323__auto__)){
-var vec__8826 = cljs.core._nth.call(null,c__4322__auto__,i__8824);
-var key = cljs.core.nth.call(null,vec__8826,(0),null);
-var value = cljs.core.nth.call(null,vec__8826,(1),null);
-cljs.core.chunk_append.call(null,b__8825,new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"tr","tr",-1424774646),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"th","th",-545608566),cljs.core.name.call(null,key)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td","td",1479933353),cljs.core.pr_str.call(null,value)], null)], null));
+if((i__8825 < size__4323__auto__)){
+var vec__8827 = cljs.core._nth.call(null,c__4322__auto__,i__8825);
+var key = cljs.core.nth.call(null,vec__8827,(0),null);
+var value = cljs.core.nth.call(null,vec__8827,(1),null);
+cljs.core.chunk_append.call(null,b__8826,new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"tr","tr",-1424774646),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"th","th",-545608566),cljs.core.name.call(null,key)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td","td",1479933353),cljs.core.pr_str.call(null,value)], null)], null));
 
-var G__8832 = (i__8824 + (1));
-i__8824 = G__8832;
+var G__8833 = (i__8825 + (1));
+i__8825 = G__8833;
 continue;
 } else {
 return true;
@@ -503,15 +503,15 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8825),busmaker$app$iter__8822.call(null,cljs.core.chunk_rest.call(null,s__8823__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8826),busmaker$app$iter__8823.call(null,cljs.core.chunk_rest.call(null,s__8824__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8825),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8826),null);
 }
 } else {
-var vec__8829 = cljs.core.first.call(null,s__8823__$2);
-var key = cljs.core.nth.call(null,vec__8829,(0),null);
-var value = cljs.core.nth.call(null,vec__8829,(1),null);
-return cljs.core.cons.call(null,new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"tr","tr",-1424774646),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"th","th",-545608566),cljs.core.name.call(null,key)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td","td",1479933353),cljs.core.pr_str.call(null,value)], null)], null),busmaker$app$iter__8822.call(null,cljs.core.rest.call(null,s__8823__$2)));
+var vec__8830 = cljs.core.first.call(null,s__8824__$2);
+var key = cljs.core.nth.call(null,vec__8830,(0),null);
+var value = cljs.core.nth.call(null,vec__8830,(1),null);
+return cljs.core.cons.call(null,new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"tr","tr",-1424774646),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"th","th",-545608566),cljs.core.name.call(null,key)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"td","td",1479933353),cljs.core.pr_str.call(null,value)], null)], null),busmaker$app$iter__8823.call(null,cljs.core.rest.call(null,s__8824__$2)));
 }
 } else {
 return null;
@@ -524,7 +524,7 @@ break;
 ;
 return iter__4324__auto__.call(null,cljs.core.sort_by.call(null,cljs.core.first,entity));
 })()))));
-return cljs.core.apply.call(null,React.createElement,"table",((cljs.core.map_QMARK_.call(null,attrs8821))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, ["table","table-dark","table-striped","entity-details"], null)], null),attrs8821)):({"className": "table table-dark table-striped entity-details"})),((cljs.core.map_QMARK_.call(null,attrs8821))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8821)], null)));
+return cljs.core.apply.call(null,React.createElement,"table",((cljs.core.map_QMARK_.call(null,attrs8822))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, ["table","table-dark","table-striped","entity-details"], null)], null),attrs8822)):({"className": "table table-dark table-striped entity-details"})),((cljs.core.map_QMARK_.call(null,attrs8822))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8822)], null)));
 }),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [rum.core.reactive], null),"entity-details");
 busmaker.app.solution_encoded = rum.core.build_defc.call(null,(function (solution){
 return React.createElement("div",({"className": "card"}),sablono.interpreter.create_element.call(null,"textarea",({"value": busmaker.app.encode_blueprint.call(null,busmaker.app.wrap_entities.call(null,solution)), "onClick": (function (e){
@@ -534,13 +534,13 @@ return document.execCommand("copy");
 }), "className": "blueprint-encoded"})));
 }),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [rum.core.reactive], null),"solution-encoded");
 busmaker.app.blueprint_encoded = rum.core.build_defc.call(null,(function (state){
-return React.createElement("div",({"id": "blueprint", "className": "modal fade"}),React.createElement("div",({"className": "modal-dialog"}),(function (){var attrs8833 = busmaker.app.solution_encoded.call(null,rum.core.react.call(null,rum.core.cursor_in.call(null,state,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"solution","solution",-1727231491)], null))));
-return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8833))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["modal-content"], null)], null),attrs8833)):({"className": "modal-content"})),((cljs.core.map_QMARK_.call(null,attrs8833))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8833)], null)));
+return React.createElement("div",({"id": "blueprint", "className": "modal fade"}),React.createElement("div",({"className": "modal-dialog"}),(function (){var attrs8834 = busmaker.app.solution_encoded.call(null,rum.core.react.call(null,rum.core.cursor_in.call(null,state,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"solution","solution",-1727231491)], null))));
+return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8834))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["modal-content"], null)], null),attrs8834)):({"className": "modal-content"})),((cljs.core.map_QMARK_.call(null,attrs8834))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8834)], null)));
 })()));
 }),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [rum.core.reactive], null),"blueprint-encoded");
 busmaker.app.blueprint_part_encoded = rum.core.build_defc.call(null,(function (state){
-return React.createElement("div",({"id": "blueprint-part", "className": "modal fade"}),React.createElement("div",({"className": "modal-dialog"}),(function (){var attrs8834 = busmaker.app.solution_encoded.call(null,rum.core.react.call(null,rum.core.cursor_in.call(null,state,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"part","part",77757738)], null))));
-return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8834))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["modal-content"], null)], null),attrs8834)):({"className": "modal-content"})),((cljs.core.map_QMARK_.call(null,attrs8834))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8834)], null)));
+return React.createElement("div",({"id": "blueprint-part", "className": "modal fade"}),React.createElement("div",({"className": "modal-dialog"}),(function (){var attrs8835 = busmaker.app.solution_encoded.call(null,rum.core.react.call(null,rum.core.cursor_in.call(null,state,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"part","part",77757738)], null))));
+return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8835))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["modal-content"], null)], null),attrs8835)):({"className": "modal-content"})),((cljs.core.map_QMARK_.call(null,attrs8835))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8835)], null)));
 })()));
 }),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [rum.core.reactive], null),"blueprint-part-encoded");
 busmaker.app.blueprint_decoded = rum.core.build_defc.call(null,(function (state){
@@ -562,43 +562,43 @@ return React.createElement("div",null,React.createElement("label",null,"Blueprin
 return cljs.core.swap_BANG_.call(null,state,cljs.core.assoc,new cljs.core.Keyword(null,"blueprint-name","blueprint-name",64242177),e.target.value);
 })}))),React.createElement("button",({"onClick": (function (_){
 return busmaker.app.save_BANG_.call(null,state);
-})}),"Save"),React.createElement("button",({"data-toggle": "modal", "data-target": "#blueprint"}),"Blueprint"),React.createElement("table",null,React.createElement("tbody",null,cljs.core.into_array.call(null,(function (){var iter__4324__auto__ = (function busmaker$app$iter__8837(s__8838){
+})}),"Save"),React.createElement("button",({"data-toggle": "modal", "data-target": "#blueprint"}),"Blueprint"),React.createElement("table",null,React.createElement("tbody",null,cljs.core.into_array.call(null,(function (){var iter__4324__auto__ = (function busmaker$app$iter__8838(s__8839){
 return (new cljs.core.LazySeq(null,(function (){
-var s__8838__$1 = s__8838;
+var s__8839__$1 = s__8839;
 while(true){
-var temp__5457__auto__ = cljs.core.seq.call(null,s__8838__$1);
+var temp__5457__auto__ = cljs.core.seq.call(null,s__8839__$1);
 if(temp__5457__auto__){
-var s__8838__$2 = temp__5457__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__8838__$2)){
-var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8838__$2);
+var s__8839__$2 = temp__5457__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__8839__$2)){
+var c__4322__auto__ = cljs.core.chunk_first.call(null,s__8839__$2);
 var size__4323__auto__ = cljs.core.count.call(null,c__4322__auto__);
-var b__8840 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
-if((function (){var i__8839 = (0);
+var b__8841 = cljs.core.chunk_buffer.call(null,size__4323__auto__);
+if((function (){var i__8840 = (0);
 while(true){
-if((i__8839 < size__4323__auto__)){
-var vec__8841 = cljs.core._nth.call(null,c__4322__auto__,i__8839);
-var blueprint_name = cljs.core.nth.call(null,vec__8841,(0),null);
-var blueprint_state = cljs.core.nth.call(null,vec__8841,(1),null);
-cljs.core.chunk_append.call(null,b__8840,React.createElement("tr",({"key": [blueprint_name]}),(function (){var attrs8844 = blueprint_name;
-return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8844))?sablono.interpreter.attributes.call(null,attrs8844):null),((cljs.core.map_QMARK_.call(null,attrs8844))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8844)], null)));
-})(),React.createElement("td",null,React.createElement("button",({"onClick": ((function (i__8839,vec__8841,blueprint_name,blueprint_state,c__4322__auto__,size__4323__auto__,b__8840,s__8838__$2,temp__5457__auto__){
+if((i__8840 < size__4323__auto__)){
+var vec__8842 = cljs.core._nth.call(null,c__4322__auto__,i__8840);
+var blueprint_name = cljs.core.nth.call(null,vec__8842,(0),null);
+var blueprint_state = cljs.core.nth.call(null,vec__8842,(1),null);
+cljs.core.chunk_append.call(null,b__8841,React.createElement("tr",({"key": [blueprint_name]}),(function (){var attrs8845 = blueprint_name;
+return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8845))?sablono.interpreter.attributes.call(null,attrs8845):null),((cljs.core.map_QMARK_.call(null,attrs8845))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8845)], null)));
+})(),React.createElement("td",null,React.createElement("button",({"onClick": ((function (i__8840,vec__8842,blueprint_name,blueprint_state,c__4322__auto__,size__4323__auto__,b__8841,s__8839__$2,temp__5457__auto__){
 return (function (_){
 cljs.core.swap_BANG_.call(null,state,cljs.core.assoc,new cljs.core.Keyword(null,"blueprint-name","blueprint-name",64242177),blueprint_name);
 
 return busmaker.app.load_BANG_.call(null,state);
-});})(i__8839,vec__8841,blueprint_name,blueprint_state,c__4322__auto__,size__4323__auto__,b__8840,s__8838__$2,temp__5457__auto__))
-}),"Load"),React.createElement("button",({"onClick": ((function (i__8839,vec__8841,blueprint_name,blueprint_state,c__4322__auto__,size__4323__auto__,b__8840,s__8838__$2,temp__5457__auto__){
+});})(i__8840,vec__8842,blueprint_name,blueprint_state,c__4322__auto__,size__4323__auto__,b__8841,s__8839__$2,temp__5457__auto__))
+}),"Load"),React.createElement("button",({"onClick": ((function (i__8840,vec__8842,blueprint_name,blueprint_state,c__4322__auto__,size__4323__auto__,b__8841,s__8839__$2,temp__5457__auto__){
 return (function (_){
 if(cljs.core.truth_(confirm("Are you sure?"))){
 return busmaker.app.delete_blueprint_BANG_.call(null,state,blueprint_name);
 } else {
 return null;
 }
-});})(i__8839,vec__8841,blueprint_name,blueprint_state,c__4322__auto__,size__4323__auto__,b__8840,s__8838__$2,temp__5457__auto__))
+});})(i__8840,vec__8842,blueprint_name,blueprint_state,c__4322__auto__,size__4323__auto__,b__8841,s__8839__$2,temp__5457__auto__))
 }),"Delete"))));
 
-var G__8848 = (i__8839 + (1));
-i__8839 = G__8848;
+var G__8849 = (i__8840 + (1));
+i__8840 = G__8849;
 continue;
 } else {
 return true;
@@ -606,31 +606,31 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8840),busmaker$app$iter__8837.call(null,cljs.core.chunk_rest.call(null,s__8838__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8841),busmaker$app$iter__8838.call(null,cljs.core.chunk_rest.call(null,s__8839__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8840),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__8841),null);
 }
 } else {
-var vec__8845 = cljs.core.first.call(null,s__8838__$2);
-var blueprint_name = cljs.core.nth.call(null,vec__8845,(0),null);
-var blueprint_state = cljs.core.nth.call(null,vec__8845,(1),null);
-return cljs.core.cons.call(null,React.createElement("tr",({"key": [blueprint_name]}),(function (){var attrs8844 = blueprint_name;
-return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8844))?sablono.interpreter.attributes.call(null,attrs8844):null),((cljs.core.map_QMARK_.call(null,attrs8844))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8844)], null)));
-})(),React.createElement("td",null,React.createElement("button",({"onClick": ((function (vec__8845,blueprint_name,blueprint_state,s__8838__$2,temp__5457__auto__){
+var vec__8846 = cljs.core.first.call(null,s__8839__$2);
+var blueprint_name = cljs.core.nth.call(null,vec__8846,(0),null);
+var blueprint_state = cljs.core.nth.call(null,vec__8846,(1),null);
+return cljs.core.cons.call(null,React.createElement("tr",({"key": [blueprint_name]}),(function (){var attrs8845 = blueprint_name;
+return cljs.core.apply.call(null,React.createElement,"td",((cljs.core.map_QMARK_.call(null,attrs8845))?sablono.interpreter.attributes.call(null,attrs8845):null),((cljs.core.map_QMARK_.call(null,attrs8845))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8845)], null)));
+})(),React.createElement("td",null,React.createElement("button",({"onClick": ((function (vec__8846,blueprint_name,blueprint_state,s__8839__$2,temp__5457__auto__){
 return (function (_){
 cljs.core.swap_BANG_.call(null,state,cljs.core.assoc,new cljs.core.Keyword(null,"blueprint-name","blueprint-name",64242177),blueprint_name);
 
 return busmaker.app.load_BANG_.call(null,state);
-});})(vec__8845,blueprint_name,blueprint_state,s__8838__$2,temp__5457__auto__))
-}),"Load"),React.createElement("button",({"onClick": ((function (vec__8845,blueprint_name,blueprint_state,s__8838__$2,temp__5457__auto__){
+});})(vec__8846,blueprint_name,blueprint_state,s__8839__$2,temp__5457__auto__))
+}),"Load"),React.createElement("button",({"onClick": ((function (vec__8846,blueprint_name,blueprint_state,s__8839__$2,temp__5457__auto__){
 return (function (_){
 if(cljs.core.truth_(confirm("Are you sure?"))){
 return busmaker.app.delete_blueprint_BANG_.call(null,state,blueprint_name);
 } else {
 return null;
 }
-});})(vec__8845,blueprint_name,blueprint_state,s__8838__$2,temp__5457__auto__))
-}),"Delete"))),busmaker$app$iter__8837.call(null,cljs.core.rest.call(null,s__8838__$2)));
+});})(vec__8846,blueprint_name,blueprint_state,s__8839__$2,temp__5457__auto__))
+}),"Delete"))),busmaker$app$iter__8838.call(null,cljs.core.rest.call(null,s__8839__$2)));
 }
 } else {
 return null;
@@ -643,18 +643,18 @@ return iter__4324__auto__.call(null,rum.core.react.call(null,rum.core.cursor_in.
 })()))));
 }),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [rum.core.reactive], null),"blueprint-load-save");
 busmaker.app.blueprint = rum.core.build_defc.call(null,(function (state){
-return React.createElement("div",({"className": "bg-light d-flex"}),React.createElement("div",({"className": "d-flex flex-row"}),React.createElement("div",({"className": "d-flex flex-column"}),(function (){var attrs8852 = busmaker.app.recipe_selector.call(null,state);
-return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8852))?sablono.interpreter.attributes.call(null,attrs8852):null),((cljs.core.map_QMARK_.call(null,attrs8852))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8852)], null)));
+return React.createElement("div",({"className": "bg-light d-flex"}),React.createElement("div",({"className": "d-flex flex-row"}),React.createElement("div",({"className": "d-flex flex-column"}),(function (){var attrs8853 = busmaker.app.recipe_selector.call(null,state);
+return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8853))?sablono.interpreter.attributes.call(null,attrs8853):null),((cljs.core.map_QMARK_.call(null,attrs8853))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8853)], null)));
 })(),React.createElement("button",({"onClick": (function (_){
 return cljs.core.reset_BANG_.call(null,state,cljs.core.assoc.call(null,busmaker.state.empty_state.call(null),new cljs.core.Keyword(null,"store","store",1512230022),busmaker.app.busmaker_store.call(null)));
-})}),"Clear"),sablono.interpreter.interpret.call(null,busmaker.app.blueprint_load_save.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.factories.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.bus.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.blueprint_encoded.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.blueprint_part_encoded.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.components.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.blueprint_decoded.call(null,state))),(function (){var attrs8849 = busmaker.pixi.panel.call(null,state);
-return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8849))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, ["d-flex","flex-column","flex-grow-1"], null)], null),attrs8849)):({"className": "d-flex flex-column flex-grow-1"})),((cljs.core.map_QMARK_.call(null,attrs8849))?new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [(function (){var attrs8850 = busmaker.app.entity_details.call(null,state);
-return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8850))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["entity-details-wrapper"], null)], null),attrs8850)):({"className": "entity-details-wrapper"})),((cljs.core.map_QMARK_.call(null,attrs8850))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8850)], null)));
-})()], null):new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8849),(function (){var attrs8851 = busmaker.app.entity_details.call(null,state);
+})}),"Clear"),sablono.interpreter.interpret.call(null,busmaker.app.blueprint_load_save.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.factories.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.bus.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.blueprint_encoded.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.blueprint_part_encoded.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.components.call(null,state)),sablono.interpreter.interpret.call(null,busmaker.app.blueprint_decoded.call(null,state))),(function (){var attrs8850 = busmaker.pixi.panel.call(null,state);
+return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8850))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, ["d-flex","flex-column","flex-grow-1"], null)], null),attrs8850)):({"className": "d-flex flex-column flex-grow-1"})),((cljs.core.map_QMARK_.call(null,attrs8850))?new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [(function (){var attrs8851 = busmaker.app.entity_details.call(null,state);
 return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8851))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["entity-details-wrapper"], null)], null),attrs8851)):({"className": "entity-details-wrapper"})),((cljs.core.map_QMARK_.call(null,attrs8851))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8851)], null)));
+})()], null):new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8850),(function (){var attrs8852 = busmaker.app.entity_details.call(null,state);
+return cljs.core.apply.call(null,React.createElement,"div",((cljs.core.map_QMARK_.call(null,attrs8852))?sablono.interpreter.attributes.call(null,sablono.normalize.merge_with_class.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["entity-details-wrapper"], null)], null),attrs8852)):({"className": "entity-details-wrapper"})),((cljs.core.map_QMARK_.call(null,attrs8852))?null:new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [sablono.interpreter.interpret.call(null,attrs8852)], null)));
 })()], null)));
 })()));
-}),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [rum.core.reactive], null),"blueprint");
+}),null,"blueprint");
 busmaker.app.init = (function busmaker$app$init(){
 cljs.core.swap_BANG_.call(null,busmaker.app.state,cljs.core.assoc,new cljs.core.Keyword(null,"store","store",1512230022),busmaker.app.busmaker_store.call(null));
 
