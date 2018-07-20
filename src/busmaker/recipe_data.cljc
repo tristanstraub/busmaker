@@ -1,5 +1,14 @@
 (ns busmaker.recipe-data)
 
+(defn factory-type
+  [recipe]
+  (cond (#{"_research_" "_research_full_" "_research_military_" "_research_production_"} recipe) "lab"
+        (#{"iron-plate" "copper-plate" "steel-plate" "stone-brick"} recipe)                   "stone-furnace"
+        (#{"light-oil" "heavy-oil" "petroleum-gas"} recipe)                                   "oil-refinery"
+        (#{"lubricant" "sulfur" "sulfuric-acid" "battery" "plastic-bar" "explosives"} recipe) "chemical-plant"
+        (re-find #"ore" recipe)                                                               "electric-mining-drill"
+        :else                                                                                 "assembling-machine-1"))
+
 (def science
   '({:name "_research_"
      :ingredients [["science-pack-1"]
@@ -8,7 +17,13 @@
      :ingredients [["science-pack-1"]
                    ["science-pack-2"]
                    ["science-pack-3"]
-                   ["military-science-pack"]]}    
+                   ["military-science-pack"]]}
+    {:name "_research_production_"
+     :ingredients [["science-pack-1"]
+                   ["science-pack-2"]
+                   ["science-pack-3"]
+                   ["military-science-pack"]
+                   ["production-science-pack"]]}
     {:name "_research_full_"
      :ingredients [["science-pack-1"]
                    ["science-pack-2"]

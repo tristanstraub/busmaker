@@ -4,12 +4,7 @@
 
 (defn factory-type
   [recipe]
-  (cond (#{"_research_" "_research_full_" "_research_military_"} recipe) "lab"
-        (#{"iron-plate" "copper-plate" "steel-plate" "stone-brick"} recipe)                   "stone-furnace"
-        (#{"light-oil" "heavy-oil" "petroleum-gas"} recipe)                                   "oil-refinery"
-        (#{"lubricant" "sulfur" "sulfuric-acid" "battery" "plastic-bar" "explosives"} recipe) "chemical-plant"
-        (re-find #"ore" recipe)                                                               "electric-mining-drill"
-        :else                                                                                 "assembling-machine-1"))
+  (recipe-data/factory-type recipe))
 
 (defn recipe-type
   [recipe]
@@ -75,4 +70,6 @@
 
 (defn raw?
   [recipe-name]
-  (re-find #".*ore|water|coal|^stone$|crude-oil" recipe-name))
+  (re-find #".*ore|water|coal|^stone$|crude-oil|raw-wood" recipe-name))
+
+#_ (take-while seq (iterate #(distinct (mapcat ri %)) ["transport-belt"]))

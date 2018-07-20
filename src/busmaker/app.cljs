@@ -319,7 +319,7 @@
                                  (delete-blueprint! state blueprint-name)))}
           "Delete"]]])]]])
 
-(rum/defc blueprint < rum/reactive
+(rum/defc blueprint
   [state]
   [:div.bg-light.d-flex
    [:div.d-flex.flex-row
