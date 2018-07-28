@@ -6,10 +6,10 @@
              :refer [blueprint-direction
                      blueprint-direction-inserter
                      underground-belt
-                     small-electric-pole
                      inserter
                      factory
                      factory-line
+                     transport-belt
                      template]]))
 
 (defn recipe
@@ -32,15 +32,6 @@
   {"direction"     (blueprint-direction direction)
    "name"          "splitter"
    "position"      {"x" (+ 0.5 x)
-                    "y" y}})
-
-(defn transport-belt
-  [& {:keys [x y direction] :or {direction [0 -1]
-                                 x         0
-                                 y         0}}]
-  {"direction"     (blueprint-direction direction)
-   "name"          "transport-belt"
-   "position"      {"x" x
                     "y" y}})
 
 (defn medium-electric-pole
@@ -66,15 +57,16 @@
                               length 1}}]
   `[~(splitter :x (dec x) :y (dec y))
 
-    ~@(for [i (range length)
-            :when (not= 2 (mod i 3))]
-        (if (<= i 1)
-          (case (mod i 3)
-            1 (underground-belt :x (- x i 1) :y (+ y -2) :direction [-1 0] :type "input")
-            0 (transport-belt :x (- x i 1) :y (+ y -2) :direction [-1 0]))
-          (case (mod i 3)
-            0 (underground-belt :x (- x i 1) :y (+ y -2) :direction [-1 0] :type "output")
-            1 (underground-belt :x (- x i 1) :y (+ y -2) :direction [-1 0] :type "input"))))])
+    ~@(apply concat
+             (for [i (range length)
+                   :when (not= 2 (mod i 3))]
+               (if (<= i 1)
+                 (case (mod i 3)
+                   1 (underground-belt :x (- x i 1) :y (+ y -2) :direction [-1 0] :type "input")
+                   0 (transport-belt :x (- x i 1) :y (+ y -2) :direction [-1 0]))
+                 (case (mod i 3)
+                   0 (underground-belt :x (- x i 1) :y (+ y -2) :direction [-1 0] :type "output")
+                   1 (underground-belt :x (- x i 1) :y (+ y -2) :direction [-1 0] :type "input")))))])
 
 (defn pipe
   [& {:keys [x y direction] :or {direction [0 -1]
@@ -95,9 +87,10 @@
   [& {:keys [x y height] :or {x 0
                               y 0
                               height 1}}]
-  (for [i (range height)]
-    (transport-belt :x x
-                         :y (+ y i))))
+  (apply concat
+         (for [i (range height)]
+           (transport-belt :x x
+                           :y (+ y i)))))
 
 (defn ingredient-taps
   [xs & {:keys [x y] :or {x 0
@@ -185,13 +178,14 @@
            bus-index   0}}]
   (when bus-index
     (let [n (* 3 bus-index)]
-      `[~(underground-belt :x (+ x n -5) :y (- y 5) :direction [-1 0] :type "input")
-        ~(transport-belt :x (+ x n -4) :y (- y 5) :direction [-1 0])
-        ~@(for [i (range n)
-                :when (not= 2 (mod i 3))]
-            (case (mod i 3)
-              0 (underground-belt :x (+ x i -5) :y (- y 5) :direction [-1 0] :type "input")
-              1 (underground-belt :x (+ x i -5) :y (- y 5) :direction [-1 0] :type "output")))
+      `[~@(underground-belt :x (+ x n -5) :y (- y 5) :direction [-1 0] :type "input")
+        ~@(transport-belt :x (+ x n -4) :y (- y 5) :direction [-1 0])
+        ~@(apply concat
+                 (for [i (range n)
+                       :when (not= 2 (mod i 3))]
+                   (case (mod i 3)
+                     0 (underground-belt :x (+ x i -5) :y (- y 5) :direction [-1 0] :type "input")
+                     1 (underground-belt :x (+ x i -5) :y (- y 5) :direction [-1 0] :type "output"))))
         ~(splitter :x (+ x
                          (* 3 bus-index)
                          -4)
@@ -201,36 +195,38 @@
   [& {:keys [x y output-index y-extension] :or {x 0
                                                 y 0
                                                 output-index 0}}]
-  `[~(inserter  :x (- x 8) :y (- y 3 (- y-extension)) :direction [0 -1])
-    ~@(for [i (range (inc y-extension))]
-        (transport-belt :x (- x 8) :y (+ (- y 4)
-                                              i) :direction [0 -1]))
+  `[~@(inserter  :x (- x 8) :y (- y 3 (- y-extension)) :direction [0 -1])
+    ~@(apply concat
+             (for [i (range (inc y-extension))]
+               (transport-belt :x (- x 8) :y (+ (- y 4)
+                                                i) :direction [0 -1])))
 
-    ~(transport-belt :x (- x 8) :y (- y 5) :direction [1 0])
-    ~(transport-belt :x (- x 7) :y (- y 5) :direction [1 0])
-    ~(transport-belt :x (- x 6) :y (- y 5) :direction [1 0])
-    ~(transport-belt :x (- x 5) :y (- y 5) :direction [1 0])
-    ~(transport-belt :x (- x 4) :y (- y 5) :direction [1 0])
-    ~(transport-belt :x (- x 3) :y (- y 5) :direction [1 0])])
+    ~@(transport-belt :x (- x 8) :y (- y 5) :direction [1 0])
+    ~@(transport-belt :x (- x 7) :y (- y 5) :direction [1 0])
+    ~@(transport-belt :x (- x 6) :y (- y 5) :direction [1 0])
+    ~@(transport-belt :x (- x 5) :y (- y 5) :direction [1 0])
+    ~@(transport-belt :x (- x 4) :y (- y 5) :direction [1 0])
+    ~@(transport-belt :x (- x 3) :y (- y 5) :direction [1 0])])
 
 (defn output-tap
   [& {:keys [x y output-index y-extension] :or {x 0
-                                    y 0
-                                    output-index 0}}]
+                                                y 0
+                                                output-index 0}}]
   (let [n (* 3 output-index)]
     `[~@(output-tap-common :x x :y y :output-index output-index :y-extension y-extension)
 
-      ~(transport-belt :x (- x 2) :y (- y 5) :direction [1 0])
+      ~@(transport-belt :x (- x 2) :y (- y 5) :direction [1 0])
 
-      ~@(for [i (range 1 (+ 3 n))
-              :when (not= 2 (mod i 3))]
-          (if (>= i n)
-            (case (mod i 3)
-              0 (underground-belt :x (+ x i -2) :y (- y 5) :direction [1 0] :type "output")
-              1 (transport-belt :x (+ x i -2) :y (- y 5) :direction [1 0]))
-            (case (mod i 3)
-              0 (underground-belt :x (+ x i -2) :y (- y 5) :direction [1 0] :type "output")
-              1 (underground-belt :x (+ x i -2) :y (- y 5) :direction [1 0] :type "input"))))]))
+      ~@(apply concat
+               (for [i (range 1 (+ 3 n))
+                     :when (not= 2 (mod i 3))]
+                 (if (>= i n)
+                   (case (mod i 3)
+                     0 (underground-belt :x (+ x i -2) :y (- y 5) :direction [1 0] :type "output")
+                     1 (transport-belt :x (+ x i -2) :y (- y 5) :direction [1 0]))
+                   (case (mod i 3)
+                     0 (underground-belt :x (+ x i -2) :y (- y 5) :direction [1 0] :type "output")
+                     1 (underground-belt :x (+ x i -2) :y (- y 5) :direction [1 0] :type "input")))))]))
 
 (defn output-tap-extension
   [& {:keys [x y output-index y-extension] :or {x 0
@@ -316,12 +312,12 @@
                                                              :let [x (+ x -4 2 -5)
                                                                    y  (+ -5 y 3 -2 4)
                                                                    dx (* -6 i)]]
-                                                         [(long-handed-inserter :x (+ x dx)
-                                                                                :y (- y 2)
-                                                                                :direction [0 -1])
-                                                          (inserter :x (+ x dx -1)
-                                                                    :y (- y 2)
-                                                                    :direction [0 -1])])))
+                                                         `[~(long-handed-inserter :x (+ x dx)
+                                                                                  :y (- y 2)
+                                                                                  :direction [0 -1])
+                                                           ~@(inserter :x (+ x dx -1)
+                                                                       :y (- y 2)
+                                                                       :direction [0 -1])])))
                                        (apply concat
                                               (for [[input-index bus-index] non-fluid-ingredients]
                                                 (if (>= input-index 3)
@@ -332,14 +328,14 @@
                                                                          y  (+ -5 y 3 (- input-index) -2)]
                                                                      (for [i    (range n-factories)
                                                                            :let [dx (* -6 i)]]
-                                                                       [(underground-belt :x (+ x dx)
-                                                                                          :y y
-                                                                                          :direction [-1 0]
-                                                                                          :type "output")
-                                                                        (underground-belt :x (+ x dx -1)
-                                                                                          :y y
-                                                                                          :direction [-1 0]
-                                                                                          :type "input")])))))
+                                                                       (concat (underground-belt :x (+ x dx)
+                                                                                                 :y y
+                                                                                                 :direction [-1 0]
+                                                                                                 :type "output")
+                                                                               (underground-belt :x (+ x dx -1)
+                                                                                                 :y y
+                                                                                                 :direction [-1 0]
+                                                                                                 :type "input")))))))
                                                   (input-tap :x (+ x 3) :y (+ y 3 (- input-index) -1) :input-index input-index :bus-index bus-index)))))))
 
 
