@@ -1,48 +1,20 @@
 (ns busmaker.main-bus
   (:require [busmaker.bus :as bus]
             [busmaker.recipe-data :as recipe-data]
-            [busmaker.recipes :as recipes]))
-
-(defn fluid?
-  [bus-ingredient]
-  (#{"water"
-     "lubricant"
-     "heavy-oil"
-     "light-oil"
-     "petroleum-gas"
-     "sulfuric-acid"
-     "crude-oil"} bus-ingredient))
+            [busmaker.recipes :as recipes :refer [fluid?]]
+            [busmaker.templates :as templates
+             :refer [blueprint-direction
+                     blueprint-direction-inserter
+                     underground-belt
+                     small-electric-pole
+                     inserter
+                     factory
+                     factory-line
+                     template]]))
 
 (defn recipe
   [recipes recipe-name]
   (first (filter (comp #{recipe-name} :name) recipes)))
-
-(defn blueprint-direction
-  [[x y]]
-  (case [x y]
-    [1 0]  2 ;; 3
-    [0 1]  4
-    [0 -1] 0
-    [-1 0] 6))
-
-(defn blueprint-direction-inserter
-  [[x y]]
-  (case [x y]
-    [1 0]  6 ;; 3
-    [0 1]  0
-    [0 -1] 4
-    [-1 0] 2))
-
-(defn underground-belt
-  [& {:keys [x y direction type] :or {direction [0 -1]
-                                      type      "input"
-                                      x         0
-                                      y         0}}]
-  {"direction"     (blueprint-direction direction)
-   "name"          "underground-belt"
-   "type"          type
-   "position"      {"x" x
-                    "y" y}})
 
 (defn pipe-to-ground
   [& {:keys [x y direction type] :or {direction [0 -1]
@@ -71,28 +43,11 @@
    "position"      {"x" x
                     "y" y}})
 
-(defn small-electric-pole
-  [& {:keys [x y] :or {
-                       x         0
-                       y         0}}]
-  {"name"          "small-electric-pole"
-   "position"      {"x" x
-                    "y" y}})
-
 (defn medium-electric-pole
   [& {:keys [x y] :or {
                        x         0
                        y         0}}]
   {"name"          "medium-electric-pole"
-   "position"      {"x" x
-                    "y" y}})
-
-(defn inserter
-  [& {:keys [x y direction] :or {direction [0 -1]
-                                 x         0
-                                 y         0}}]
-  {"direction"     (blueprint-direction-inserter direction)
-   "name"          "inserter"
    "position"      {"x" x
                     "y" y}})
 
@@ -104,22 +59,6 @@
    "name"          "long-handed-inserter"
    "position"      {"x" x
                     "y" y}})
-
-(defn factory
-  [& {:keys [x y facility recipe] :or {x 0
-                                       y 0}}]
-  {"name"     facility
-   "recipe"   (recipes/recipe-type recipe)
-   "position" {"x" (cond (#{"steel-furnace" "stone-furnace"} facility)                                   (+ x 0.5)
-                         (or (not (fluid? recipe))
-                             (#{"lubricant" "sulfur" "sulfuric-acid" "battery"} recipe)) x
-
-                         :else                                                           (dec x))
-               "y" (cond (#{"steel-furnace" "stone-furnace"} facility) (+ y 0.5)
-                         :else                         y)}
-
-   "direction" (cond (#{"oil-refinery"} facility) (blueprint-direction-inserter [0 1])
-                     :else (blueprint-direction-inserter [0 -1]))})
 
 (defn tap
   [& {:keys [x y length] :or {x 0
@@ -166,44 +105,6 @@
   (apply concat
          (for [[i xi] (map-indexed vector (sort xs))]
            (tap :x xi :y (- y i 1) :length (inc (- xi x))))))
-
-(defn factory-line
-  [& {:keys [x y recipes n-factories facility]}]
-  `[~@(apply concat
-             (for [i (range n-factories)
-                   :let [dx (* i (cond (#{"oil-refinery"} facility) -8
-                                       :else -6))]]
-               (concat [(small-electric-pole :x (+ x dx)
-                                              :y y)
-                        (small-electric-pole :x (+ x dx)
-                                              :y (+ y 4))
-
-                        (factory :x (+ x -2 dx)
-                                 :y (+ y 2)
-                                 :recipe (first recipes)
-                                 :facility facility)
-
-                        (inserter :x (+ x dx)
-                                  :y (+ y 1)
-                                  :direction [-1 0])
-                        (inserter :x (+ x dx)
-                                  :y (+ y 2)
-                                  :direction [-1 0])
-                        (inserter :x (+ x dx)
-                                  :y (+ y 3)
-                                  :direction [-1 0])]
-
-                       (apply concat
-                              (for [j    (range 3)
-                                    :let [y (+ 3 y (- j))]]
-                                [(underground-belt :x (+ x 1 dx)
-                                                   :y y
-                                                   :direction [-1 0]
-                                                   :type "input")
-                                 (underground-belt :x (+ x 2 dx)
-                                                   :y y
-                                                   :direction [-1 0]
-                                                   :type "output")])))))])
 
 (def input-tap-indexes
   {"heavy-oil"            {"crude-oil" 0
@@ -387,7 +288,8 @@
     (filter identity
             (map #(assoc %1 "entity_number" (inc %2))
                  (-> []
-                     (concat (factory-line :n-factories n-factories :x x :y y :recipes recipes :facility facility))
+                     (concat (templates/template :factory-line
+                                                 :n-factories n-factories :x x :y y :recipes recipes :facility facility))
 
                      (concat (apply concat (for [[bus-ingredient i] buses]
                                              (let [x  (+ x 6)

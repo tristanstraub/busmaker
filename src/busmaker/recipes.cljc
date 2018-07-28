@@ -73,3 +73,15 @@
   (re-find #".*ore|water|coal|^stone$|crude-oil|raw-wood" recipe-name))
 
 #_ (take-while seq (iterate #(distinct (mapcat ri %)) ["transport-belt"]))
+
+
+
+(defn fluid?
+  [bus-ingredient]
+  (#{"water"
+     "lubricant"
+     "heavy-oil"
+     "light-oil"
+     "petroleum-gas"
+     "sulfuric-acid"
+     "crude-oil"} bus-ingredient))
