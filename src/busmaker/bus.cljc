@@ -46,6 +46,10 @@
     (->> (remove existing-bus-outputs new-bus-outputs)
          (into (vec bus-outputs)))))
 
+(defn add-bus-outputs-multi
+  [bus-outputs new-bus-outputs]
+  (into (vec bus-outputs) new-bus-outputs))
+
 (defn remove-factory
   [factories factory]
   (vec (remove #{factory} factories)))

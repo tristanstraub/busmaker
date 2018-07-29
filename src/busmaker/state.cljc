@@ -40,9 +40,13 @@
 
 (defn add-bus-output
   [state recipe-name]
-  (cond (not (seq recipe-name))
+  (cond (not (or recipe-name
+                 (seq recipe-name)))
         state
 
+        ((set (map :name recipe-data/extra-buses)) recipe-name)
+        (update state :bus-outputs bus/add-bus-outputs-multi [recipe-name])
+        
         (some #{recipe-name} (mapcat :recipes (:factories state)))
         state
 
@@ -62,21 +66,6 @@
   [state recipe-name]
   (update state :bus-outputs #(vec (remove #{recipe-name} %))))
 
-(defn move-bus-output-up
-  [state recipe-name]
-  (let [{:keys [bus-outputs]} state
-        [left middle right]   (partition-by #{recipe-name} bus-outputs)]
-    (assoc state :bus-outputs (vec
-                               (cond (= left (list recipe-name))
-                                     (concat (take 1 middle) left (drop 1 middle) right)
-                                     (= right (list recipe-name))
-                                     bus-outputs
-                                     :else
-                                     (concat left
-                                             (take 1 right)
-                                             middle
-                                             (drop 1 right)))))))
-
 (defn set-bus-output-recipe
   [state bus-index recipe]
   (update state :bus-outputs
@@ -87,23 +76,27 @@
                                   output))
                               bus-outputs)))))
 
-(defn move-bus-output-down
-  [state recipe-name]
+(defn move-bus-output-up
+  [state bus-index]
   (let [{:keys [bus-outputs]} state
-        [left middle right]   (partition-by #{recipe-name} bus-outputs)]
-    (assoc state :bus-outputs (vec
-                               (cond (= left (list recipe-name))
-                                     bus-outputs
-                                     (= right (list recipe-name))
-                                     (concat left
-                                             (butlast middle)
-                                             right
-                                             [(last middle)])
-                                     :else
-                                     (concat (butlast left)
-                                             middle
-                                             [(last left)]
-                                             right))))))
+        [left middle right]   [(subvec bus-outputs 0 bus-index)
+                               (subvec bus-outputs bus-index (inc bus-index))
+                               (subvec bus-outputs (inc bus-index))]]
+    (assoc state :bus-outputs (vec (concat left
+                                           (take 1 right)
+                                           middle
+                                           (drop 1 right))))))
+
+(defn move-bus-output-down
+  [state bus-index]
+  (let [{:keys [bus-outputs]} state
+        [left middle right] [(subvec bus-outputs 0 bus-index)
+                             (subvec bus-outputs bus-index (inc bus-index))
+                             (subvec bus-outputs (inc bus-index))]]
+    (assoc state :bus-outputs (vec (concat (butlast left)
+                                           middle
+                                           (take-last 1 left)
+                                           right)))))
 
 (defn swap-facility
   [state factory facility]

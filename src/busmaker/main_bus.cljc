@@ -275,30 +275,36 @@
              :else                                                       0))))
 
 (defn main-bus-line
-  [& {:keys [x y n-factories facility recipes buses input-indexes bus-width]}]
-  (let [ingredient (first recipes)]
+  [& {:keys [x y n-factories facility recipes bus-outputs input-indexes bus-width]}]
+  (let [ingredient (first recipes)
+        buses      (into {} (map-indexed (comp vec reverse vector) bus-outputs))]
+    (println :buses bus-outputs)
     (filter identity
             (map #(assoc %1 "entity_number" (inc %2))
                  (-> []
                      (concat (templates/template :factory-line
                                                  :n-factories n-factories :x x :y y :recipes recipes :facility facility))
 
-                     (concat (apply concat (for [[bus-ingredient i] buses]
+                     (concat (apply concat (for [[i bus-ingredient] (map-indexed vector bus-outputs)]
                                              (let [x  (+ x 6)
                                                    y  (+ y 4 (- (ingredient-height ingredient facility bus-width))
                                                          (cond (#{"oil-refinery"} facility) 0
                                                                :else 0))
                                                    dy (facility-dy ingredient facility bus-width)]
-                                               (apply concat
-                                                (for [j (range bus-width)]
-                                                  (if (fluid? bus-ingredient)
-                                                    (pipe-bus :x (+ x (* i (+ bus-width 2)) j)
-                                                              :y (+ y dy)
-                                                              :height (ingredient-height ingredient facility bus-width))
+                                               (cond (fluid? bus-ingredient)
+                                                     (pipe-bus :x (+ x (* i (+ bus-width 2)))
+                                                               :y (+ y dy)
+                                                               :height (ingredient-height ingredient facility bus-width))
 
-                                                    (bus :x (+ x (* i (+ bus-width 2)) j)
-                                                         :y (+ y dy)
-                                                         :height (ingredient-height ingredient facility bus-width)))))))))
+                                                     (some #{bus-ingredient} (map :name recipe-data/extra-buses))
+                                                     nil
+                                                     
+                                                     :else
+                                                     (apply concat
+                                                            (for [j (range bus-width)]
+                                                              (bus :x (+ x (* i (+ bus-width 2)) j)
+                                                                   :y (+ y dy)
+                                                                   :height (ingredient-height ingredient facility bus-width)))))))))
 
                      ;; RHS -- input tap (transport belt)
                      (concat (let [x                     (+ x 6)
@@ -343,16 +349,16 @@
                      (concat (apply concat (for [[output-recipe output-index] (input-tap-indexes ingredient)
                                                  :when                        (and (fluid? output-recipe)
                                                                                    (get buses output-recipe))]
-                                             (let [tap-x (+ 4 (* 3 (get buses output-recipe)))
-                                                   x     (+ x 2)
+                                             (let [tap-x (+ 1 (* (+ bus-width 2) (get buses output-recipe)))
+                                                   x     (+ x 5)
                                                    y     (+ y 6 (cond (#{"oil-refinery"} facility) 1
                                                                       :else                        0))]
                                                (conj (for [i (range tap-x)
-                                                           :when (not= 2 (mod i 3))]
+                                                           :when (#{0 1} (mod i (+ bus-width 2)))]
 
                                                        (pipe-to-ground :x (+ -1 (+ x i))
                                                                        :y (+ 2 -3 y (* 2 output-index))
-                                                                       :direction (case (mod i 3)
+                                                                       :direction (case (mod i (+ bus-width 2))
                                                                                     0 [1 0]
                                                                                     1 [-1 0])))
                                                      (pipe :x (+ -1 x tap-x)
@@ -366,16 +372,16 @@
                                                  ;; TODO output-tap-indexes should be based on facility + "advanced-oil-processing", not recipes ["heavy-oil","light-oil","petroleum-gas"]
                                                  :when                        (and (fluid? output-recipe)
                                                                                    (get buses output-recipe))]
-                                             (let [tap-x (+ 4 (* 3 (get buses output-recipe)))
-                                                   x (+ x 2)
-                                                   y (+ y (cond (#{"oil-refinery"} facility) -2
-                                                                :else -1))]
-                                               (conj (for [i (range tap-x)
-                                                           :when (not= 2 (mod i 3))]
+                                             (let [tap-x (+ 1 (* (+ 2 bus-width) (get buses output-recipe)))
+                                                   x     (+ x 5)
+                                                   y     (+ y (cond (#{"oil-refinery"} facility) -2
+                                                                    :else -1))]
+                                               (conj (for [i     (range tap-x)
+                                                           :when (#{0 1} (mod i (+ 2 bus-width)))]
 
                                                        (pipe-to-ground :x (+ -1 (+ x i))
                                                                        :y (+ y (- (* 2 output-index)))
-                                                                       :direction (case (mod i 3)
+                                                                       :direction (case (mod i (+ 2 bus-width))
                                                                                     0 [1 0]
                                                                                     1 [-1 0])))
                                                      (pipe :x (+ -1 x tap-x)
@@ -462,7 +468,7 @@
                                            input-indexes      (map bus-index (ingredients (first recipes) facility))]
                                        (-> acc
                                            (update :output conj
-                                                   (main-bus-line :buses bus-index
+                                                   (main-bus-line :bus-outputs bus-outputs
                                                                   :bus-width bus-width
                                                                   :recipes recipes
                                                                   :x x

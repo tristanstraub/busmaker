@@ -15,7 +15,8 @@
             [busmaker.bus :as bus]
             [busmaker.recipe-data :as recipe-data]
             [impi.core]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [cljs.tools.reader.edn :as edn]))
 
 (def busmaker-store-key "busmaker-0.0.5")
 
@@ -128,28 +129,30 @@
   ([state]
    (recipe-selector state
                     (rum/react (rum/cursor-in state [:recipe]))
-                    (fn [e]
-                      (let [recipe (.. e -target -value)]
-                        (swap! state assoc :recipe recipe)))
-                    (fn [e]
-                      (let [recipe (.. e -target -value)]
-                        (swap! state state/add-recipe recipe)
-                        (solve! state)))))
+                    (fn [recipe]
+                      (swap! state assoc :recipe recipe))
+                    (fn [_]
+                      (swap! state state/add-recipe (:recipe @state))
+                      (solve! state))
+                    recipe-data/recipes))
   ([state recipe on-change]
-   (recipe-selector state recipe on-change nil))
-  ([state recipe on-change on-add]
-   (let [recipes (->> recipe-data/recipes
+   (recipe-selector state recipe on-change nil recipe-data/recipes))
+  ([state recipe on-change on-add recipes]
+   (let [recipes (->> recipes
                       (map :name)
                       (remove #(#{"basic-oil-processing" "advanced-oil-processing"} %)))]
      [:label "Recipe"
-      [:select {:value recipe
-                :on-change on-change}
+      [:select {:value (pr-str recipe)
+                :on-change (when on-change
+                             (fn [e]
+                               (on-change (edn/read-string (.. e -target -value)))))}
        [:option "Select recipe"]
-       (for [recipe (sort recipes)]
-         [:option {:key recipe :value recipe} recipe])]
+       (for [recipe (sort-by str recipes)]
+         [:option {:key (str recipe) :value (pr-str recipe)}
+          (str recipe)])]
       (when on-add
         [:button
-         {:disabled (not (seq recipe))
+         {:disabled (not (or recipe (seq recipe)))
           :on-click on-add}
          "+"])])))
 
@@ -194,21 +197,22 @@
         [:tbody
          [:tr
           [:td (recipe-selector state new-bus-output
-                                (fn [e]
-                                  (let [recipe (.. e -target -value)]
-                                    (swap! state assoc :new-bus-output recipe)))
-                                (fn [e]
-                                  (println :recipe new-bus-output)
+                                (fn [recipe]
+                                  (swap! state assoc :new-bus-output recipe))
+                                (fn [_]
+                                  (println :add-bus-output)
                                   (swap! state state/add-bus-output new-bus-output)
-                                  (solve! state)))]]
+                                  (solve! state))
+                                recipe-data/buses)]]
          (for [[bus-index output] (reverse (map-indexed vector bus-outputs))]
            [:tr {:key bus-index}
 
             [:td (recipe-selector state output
-                                  (fn [e]
-                                    (let [recipe (.. e -target -value)]
-                                      (swap! state state/set-bus-output-recipe bus-index recipe)
-                                      (solve! state))))]
+                                  (fn [recipe]
+                                    (swap! state state/set-bus-output-recipe bus-index recipe)
+                                    (solve! state))
+                                  nil
+                                  recipe-data/buses)]
             [:td bus-index]
             [:td
              [:button
@@ -219,13 +223,13 @@
             [:td
              [:button
               {:on-click (fn [_]
-                           (swap! state state/move-bus-output-up output)
+                           (swap! state state/move-bus-output-up bus-index)
                            (solve! state))}
               "up"]]
             [:td
              [:button
               {:on-click (fn [_]
-                           (swap! state state/move-bus-output-down output)
+                           (swap! state state/move-bus-output-down bus-index)
                            (solve! state))}
               "down"]]])]]])))
 

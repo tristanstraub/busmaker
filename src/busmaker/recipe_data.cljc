@@ -39,8 +39,13 @@
     {:name "copper-ore"}
     {:name "coal"}))
 
+(def fluid
+  '({:name "heavy-oil"}
+    {:name "light-oil"}
+    {:name "petroleum-gas"}))
+
 (def recipes
-  (into (concat science raw)
+  (into (concat science raw fluid)
         '({:ingredients [["raw-wood" 1]]
            :name "wood"
            :result_count 2
@@ -1752,3 +1757,11 @@
            :result "stone-brick"
            :category "smelting"
            :enabled true})))
+
+(def extra-buses
+  '({:name :bus/roboport}))
+
+(def buses
+  (concat extra-buses recipes))
+
+
