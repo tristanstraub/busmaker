@@ -125,25 +125,33 @@
   (solve! state))
 
 (rum/defc recipe-selector < rum/reactive
-  [state]
-  (let [recipe (rum/react (rum/cursor-in state [:recipe]))
-        recipes (->> recipe-data/recipes
-                     (map :name)
-                     (remove #(#{"basic-oil-processing" "advanced-oil-processing"} %)))]
-    [:label "Recipe"
-     [:select {:value recipe
-               :on-change (fn [e]
-                            (let [recipe (.. e -target -value)]
-                              (swap! state assoc :recipe recipe)))}
-      [:option "Select recipe"]
-      (for [recipe (sort recipes)]
-        [:option {:key recipe :value recipe} recipe])]
-     [:button
-      {:disabled (not (seq recipe))
-       :on-click (fn [_]
-                   (swap! state state/add-recipe recipe)
-                   (solve! state))}
-      "+"]]))
+  ([state]
+   (recipe-selector state
+                    (rum/react (rum/cursor-in state [:recipe]))
+                    (fn [e]
+                      (let [recipe (.. e -target -value)]
+                        (swap! state assoc :recipe recipe)))
+                    (fn [e]
+                      (let [recipe (.. e -target -value)]
+                        (swap! state state/add-recipe recipe)
+                        (solve! state)))))
+  ([state recipe on-change]
+   (recipe-selector state recipe on-change nil))
+  ([state recipe on-change on-add]
+   (let [recipes (->> recipe-data/recipes
+                      (map :name)
+                      (remove #(#{"basic-oil-processing" "advanced-oil-processing"} %)))]
+     [:label "Recipe"
+      [:select {:value recipe
+                :on-change on-change}
+       [:option "Select recipe"]
+       (for [recipe (sort recipes)]
+         [:option {:key recipe :value recipe} recipe])]
+      (when on-add
+        [:button
+         {:disabled (not (seq recipe))
+          :on-click on-add}
+         "+"])])))
 
 
 
@@ -171,8 +179,8 @@
 (rum/defc bus < rum/reactive
   [state]
   (let [factories   (rum/react (rum/cursor-in state [:factories]))
-        bus-outputs (rum/react (rum/cursor-in state [:bus-outputs]))]
-
+        bus-outputs (rum/react (rum/cursor-in state [:bus-outputs]))
+        new-bus-output (rum/react (rum/cursor-in state [:new-bus-output]))]
     (if (seq bus-outputs)
       [:div.card
        [:table.components.table
@@ -184,10 +192,23 @@
           [:th]
           [:th]]]
         [:tbody
+         [:tr
+          [:td (recipe-selector state new-bus-output
+                                (fn [e]
+                                  (let [recipe (.. e -target -value)]
+                                    (swap! state assoc :new-bus-output recipe)))
+                                (fn [e]
+                                  (println :recipe new-bus-output)
+                                  (swap! state state/add-bus-output new-bus-output)
+                                  (solve! state)))]]
          (for [[bus-index output] (reverse (map-indexed vector bus-outputs))]
            [:tr {:key bus-index}
 
-            [:td output]
+            [:td (recipe-selector state output
+                                  (fn [e]
+                                    (let [recipe (.. e -target -value)]
+                                      (swap! state state/set-bus-output-recipe bus-index recipe)
+                                      (solve! state))))]
             [:td bus-index]
             [:td
              [:button

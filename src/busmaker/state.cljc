@@ -38,6 +38,17 @@
           (assoc :factories factories)
           (assoc :bus-outputs bus-outputs)))))
 
+(defn add-bus-output
+  [state recipe-name]
+  (cond (not (seq recipe-name))
+        state
+
+        (some #{recipe-name} (mapcat :recipes (:factories state)))
+        state
+
+        :else
+        (update state :bus-outputs bus/add-bus-outputs [recipe-name])))
+
 (defn remove-factory
   [state factory]
   (update state :factories bus/remove-factory factory))
@@ -65,6 +76,16 @@
                                              (take 1 right)
                                              middle
                                              (drop 1 right)))))))
+
+(defn set-bus-output-recipe
+  [state bus-index recipe]
+  (update state :bus-outputs
+          (fn [bus-outputs]
+            (vec (map-indexed (fn [index output]
+                                (if (= index bus-index)
+                                  recipe
+                                  output))
+                              bus-outputs)))))
 
 (defn move-bus-output-down
   [state recipe-name]

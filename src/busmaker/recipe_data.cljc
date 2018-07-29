@@ -32,8 +32,15 @@
                    ["production-science-pack"]
                    ["high-tech-science-pack"]]}))
 
+(def raw
+  '({:name "iron-ore"}
+    {:name "water"}
+    {:name "crude-oil"}
+    {:name "copper-ore"}
+    {:name "coal"}))
+
 (def recipes
-  (into science
+  (into (concat science raw)
         '({:ingredients [["raw-wood" 1]]
            :name "wood"
            :result_count 2
