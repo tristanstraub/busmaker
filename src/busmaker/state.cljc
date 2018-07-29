@@ -5,7 +5,9 @@
             [busmaker.plan :as plan]))
 
 (def default-recipe-names
-  #{"_research_"})
+  #_ #{"_research_"}
+  #{"electronic-circuit"}
+  )
 
 (defn empty-state
   []
