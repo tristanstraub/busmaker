@@ -473,7 +473,7 @@
                                                                   :n-factories n
                                                                   :facility facility
                                                                   :input-indexes input-indexes))
-                                           (update :y - height 1)
+                                           (update :y - height)
                                            ;;                                         (update :x + (+ 9 (* 3 (count bus-index))))
                                            )))
                                    {:x 0 :y 0}
