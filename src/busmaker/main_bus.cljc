@@ -455,7 +455,7 @@
 (defn main-bus
   [factories bus-outputs]
   (let [bus-index (into {} (map-indexed (comp vec reverse vector) bus-outputs))
-        bus-width 6]
+        bus-width 4]
     (apply concat (:output (reduce (fn [{:keys [x y] :as acc} factory]
                                      (let [{:keys [facility n recipes]} factory
                                            ;; TODO fix (first recipes)
