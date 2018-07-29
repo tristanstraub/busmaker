@@ -209,13 +209,13 @@
                  (if (>= i n)
                    (case (mod i (+ 2 bus-width))
                      0 (underground-belt :x (+ x i -2) :y (- y 5) :direction [1 0] :type "output")
-                     1 (transport-belt :x (+ x i -2) :y (- y 5) :direction [1 0]))
+                     1 (transport-belt :x (+ x i -2) :y (- y 5) :direction [0 -1]))
                    (case (mod i (+ 2 bus-width))
                      0 (underground-belt :x (+ x i -2) :y (- y 5) :direction [1 0] :type "output")
                      1 (underground-belt :x (+ x i -2) :y (- y 5) :direction [1 0] :type "input")))))
       ~@(apply concat
-               (for [k (range (dec bus-width))]
-                 (splitter :x (+ x n k)
+               (for [k (range bus-width)]
+                 (splitter :x (+ x n k -1)
                            :y (+ y -6 (- k)))))]))
 
 (defn output-tap-extension
@@ -453,9 +453,8 @@
                  (iterate inc 0)))))
 
 (defn main-bus
-  [factories bus-outputs]
-  (let [bus-index (into {} (map-indexed (comp vec reverse vector) bus-outputs))
-        bus-width 4]
+  [factories bus-outputs bus-width]
+  (let [bus-index (into {} (map-indexed (comp vec reverse vector) bus-outputs))]
     (apply concat (:output (reduce (fn [{:keys [x y] :as acc} factory]
                                      (let [{:keys [facility n recipes]} factory
                                            ;; TODO fix (first recipes)

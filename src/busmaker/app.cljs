@@ -107,13 +107,15 @@
 (defn solve-part!
   [state factory-index]
   (let [part (doall (plan/plan (take 1 (drop factory-index (:factories @state)))
-                               (:bus-outputs @state)))]
+                               (:bus-outputs @state)
+                               (:bus-width @state)))]
     (swap! state assoc :part part)))
 
 (defn solve!
   [state]
   (let [solution (doall (plan/plan (:factories @state)
-                                   (:bus-outputs @state)))]
+                                   (:bus-outputs @state)
+                                   (:bus-width @state)))]
     (swap! state assoc :solution solution)))
 
 (defn load!
@@ -178,6 +180,8 @@
          [:tr
           [:th "Output"]
           [:th "Bus index"]
+          [:th]
+          [:th]
           [:th]]]
         [:tbody
          (for [[bus-index output] (reverse (map-indexed vector bus-outputs))]
@@ -190,7 +194,29 @@
               {:on-click (fn [_]
                            (swap! state state/remove-bus output)
                            (solve! state))}
-              "-"]]])]]])))
+              "-"]]
+            [:td
+             [:button
+              {:on-click (fn [_]
+                           (swap! state state/move-bus-output-up output)
+                           (solve! state))}
+              "up"]]
+            [:td
+             [:button
+              {:on-click (fn [_]
+                           (swap! state state/move-bus-output-down output)
+                           (solve! state))}
+              "down"]]])]]])))
+
+(rum/defc bus-width-input < rum/reactive
+  [state]
+  (let [bus-width (rum/react (rum/cursor-in state [:bus-width]))]
+    [:div.card
+     [:label "Bus width"
+      [:input {:type "number" :value bus-width
+               :on-change (fn [e]
+                            (swap! state state/set-bus-width (js/parseInt (.. e -target -value)))
+                            (solve! state))}]]]))
 
 (rum/defc factories < rum/reactive
   [state]
@@ -246,6 +272,7 @@
            [:tr
             [:th (name key)]
             [:td (pr-str value)]])]]))
+
 
 (rum/defc solution-encoded < rum/reactive
   [solution]
@@ -336,6 +363,7 @@
 
      (blueprint-load-save state)
 
+     (bus-width-input state)
      (factories state)
      (bus state)
      (blueprint-encoded state)
@@ -360,3 +388,4 @@
 (defn reload!
   []
   (init))
+
