@@ -75,14 +75,14 @@ return ((!((x == null))) && (!((void 0 === x))));
 });
 sablono.interpreter.create_element = (function sablono$interpreter$create_element(var_args){
 var args__4534__auto__ = [];
-var len__4531__auto___5525 = arguments.length;
-var i__4532__auto___5526 = (0);
+var len__4531__auto___5204 = arguments.length;
+var i__4532__auto___5205 = (0);
 while(true){
-if((i__4532__auto___5526 < len__4531__auto___5525)){
-args__4534__auto__.push((arguments[i__4532__auto___5526]));
+if((i__4532__auto___5205 < len__4531__auto___5204)){
+args__4534__auto__.push((arguments[i__4532__auto___5205]));
 
-var G__5527 = (i__4532__auto___5526 + (1));
-i__4532__auto___5526 = G__5527;
+var G__5206 = (i__4532__auto___5205 + (1));
+i__4532__auto___5205 = G__5206;
 continue;
 } else {
 }
@@ -94,11 +94,11 @@ return sablono.interpreter.create_element.cljs$core$IFn$_invoke$arity$variadic((
 });
 
 sablono.interpreter.create_element.cljs$core$IFn$_invoke$arity$variadic = (function (type,props,children){
-var class$ = (function (){var or__3949__auto__ = ((!((props == null)))?(function (){var G__5523 = cljs.core.name.call(null,type);
-switch (G__5523) {
+var class$ = (function (){var or__3949__auto__ = ((!((props == null)))?(function (){var G__5202 = cljs.core.name.call(null,type);
+switch (G__5202) {
 case "input":
-var G__5524 = props.type;
-switch (G__5524) {
+var G__5203 = props.type;
+switch (G__5203) {
 case "radio":
 if(cljs.core.truth_(sablono.interpreter.defined_QMARK_.call(null,props.checked))){
 return sablono.interpreter.wrapped_checked;
@@ -176,13 +176,13 @@ return cljs.core.apply.call(null,React.createElement,class$,props,children__$1);
 sablono.interpreter.create_element.cljs$lang$maxFixedArity = (2);
 
 /** @this {Function} */
-sablono.interpreter.create_element.cljs$lang$applyTo = (function (seq5518){
-var G__5519 = cljs.core.first.call(null,seq5518);
-var seq5518__$1 = cljs.core.next.call(null,seq5518);
-var G__5520 = cljs.core.first.call(null,seq5518__$1);
-var seq5518__$2 = cljs.core.next.call(null,seq5518__$1);
+sablono.interpreter.create_element.cljs$lang$applyTo = (function (seq5197){
+var G__5198 = cljs.core.first.call(null,seq5197);
+var seq5197__$1 = cljs.core.next.call(null,seq5197);
+var G__5199 = cljs.core.first.call(null,seq5197__$1);
+var seq5197__$2 = cljs.core.next.call(null,seq5197__$1);
 var self__4518__auto__ = this;
-return self__4518__auto__.cljs$core$IFn$_invoke$arity$variadic(G__5519,G__5520,seq5518__$2);
+return self__4518__auto__.cljs$core$IFn$_invoke$arity$variadic(G__5198,G__5199,seq5197__$2);
 });
 
 sablono.interpreter.attributes = (function sablono$interpreter$attributes(attrs){
@@ -207,10 +207,10 @@ return cljs.core.into.call(null,cljs.core.PersistentVector.EMPTY,cljs.core.map.c
  * Render an element vector as a HTML element.
  */
 sablono.interpreter.element = (function sablono$interpreter$element(element){
-var vec__5530 = sablono.normalize.element.call(null,element);
-var type = cljs.core.nth.call(null,vec__5530,(0),null);
-var attrs = cljs.core.nth.call(null,vec__5530,(1),null);
-var content = cljs.core.nth.call(null,vec__5530,(2),null);
+var vec__5209 = sablono.normalize.element.call(null,element);
+var type = cljs.core.nth.call(null,vec__5209,(0),null);
+var attrs = cljs.core.nth.call(null,vec__5209,(1),null);
+var content = cljs.core.nth.call(null,vec__5209,(2),null);
 return cljs.core.apply.call(null,sablono.interpreter.create_element,type,sablono.interpreter.attributes.call(null,attrs),sablono.interpreter.interpret_seq.call(null,content));
 });
 /**
