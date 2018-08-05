@@ -184,54 +184,53 @@
   (let [factories   (rum/react (rum/cursor-in state [:factories]))
         bus-outputs (rum/react (rum/cursor-in state [:bus-outputs]))
         new-bus-output (rum/react (rum/cursor-in state [:new-bus-output]))]
-    (if (seq bus-outputs)
-      [:div.card
-       [:table.components.table
-        [:thead
-         [:tr
-          [:th "Output"]
-          [:th "Bus index"]
-          [:th]
-          [:th]
-          [:th]]]
-        [:tbody
-         [:tr
-          [:td (recipe-selector state new-bus-output
-                                (fn [recipe]
-                                  (swap! state assoc :new-bus-output recipe))
-                                (fn [_]
-                                  (println :add-bus-output)
-                                  (swap! state state/add-bus-output new-bus-output)
-                                  (solve! state))
-                                recipe-data/buses)]]
-         (for [[bus-index output] (reverse (map-indexed vector bus-outputs))]
-           [:tr {:key bus-index}
+    [:div.card
+     [:table.components.table
+      [:thead
+       [:tr
+        [:th "Output"]
+        [:th "Bus index"]
+        [:th]
+        [:th]
+        [:th]]]
+      [:tbody
+       [:tr
+        [:td (recipe-selector state new-bus-output
+                              (fn [recipe]
+                                (swap! state assoc :new-bus-output recipe))
+                              (fn [_]
+                                (println :add-bus-output)
+                                (swap! state state/add-bus-output new-bus-output)
+                                (solve! state))
+                              recipe-data/buses)]]
+       (for [[bus-index output] (reverse (map-indexed vector bus-outputs))]
+         [:tr {:key bus-index}
 
-            [:td (recipe-selector state output
-                                  (fn [recipe]
-                                    (swap! state state/set-bus-output-recipe bus-index recipe)
-                                    (solve! state))
-                                  nil
-                                  recipe-data/buses)]
-            [:td bus-index]
-            [:td
-             [:button
-              {:on-click (fn [_]
-                           (swap! state state/remove-bus output)
-                           (solve! state))}
-              "-"]]
-            [:td
-             [:button
-              {:on-click (fn [_]
-                           (swap! state state/move-bus-output-up bus-index)
-                           (solve! state))}
-              "up"]]
-            [:td
-             [:button
-              {:on-click (fn [_]
-                           (swap! state state/move-bus-output-down bus-index)
-                           (solve! state))}
-              "down"]]])]]])))
+          [:td (recipe-selector state output
+                                (fn [recipe]
+                                  (swap! state state/set-bus-output-recipe bus-index recipe)
+                                  (solve! state))
+                                nil
+                                recipe-data/buses)]
+          [:td bus-index]
+          [:td
+           [:button
+            {:on-click (fn [_]
+                         (swap! state state/remove-bus output)
+                         (solve! state))}
+            "-"]]
+          [:td
+           [:button
+            {:on-click (fn [_]
+                         (swap! state state/move-bus-output-up bus-index)
+                         (solve! state))}
+            "up"]]
+          [:td
+           [:button
+            {:on-click (fn [_]
+                         (swap! state state/move-bus-output-down bus-index)
+                         (solve! state))}
+            "down"]]])]]]))
 
 (rum/defc bus-width-input < rum/reactive
   [state]
