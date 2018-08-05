@@ -37,7 +37,8 @@
     {:name "water"}
     {:name "crude-oil"}
     {:name "copper-ore"}
-    {:name "coal"}))
+    {:name "coal"}
+    {:name "stone"}))
 
 (def fluid
   '({:name "heavy-oil"}
