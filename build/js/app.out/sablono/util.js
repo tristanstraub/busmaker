@@ -66,14 +66,14 @@ throw cljs.core.missing_protocol.call(null,"ToURI.to-uri",x);
  */
 sablono.util.as_str = (function sablono$util$as_str(var_args){
 var args__4534__auto__ = [];
-var len__4531__auto___5487 = arguments.length;
-var i__4532__auto___5488 = (0);
+var len__4531__auto___5166 = arguments.length;
+var i__4532__auto___5167 = (0);
 while(true){
-if((i__4532__auto___5488 < len__4531__auto___5487)){
-args__4534__auto__.push((arguments[i__4532__auto___5488]));
+if((i__4532__auto___5167 < len__4531__auto___5166)){
+args__4534__auto__.push((arguments[i__4532__auto___5167]));
 
-var G__5489 = (i__4532__auto___5488 + (1));
-i__4532__auto___5488 = G__5489;
+var G__5168 = (i__4532__auto___5167 + (1));
+i__4532__auto___5167 = G__5168;
 continue;
 } else {
 }
@@ -91,9 +91,9 @@ return cljs.core.apply.call(null,cljs.core.str,cljs.core.map.call(null,sablono.u
 sablono.util.as_str.cljs$lang$maxFixedArity = (0);
 
 /** @this {Function} */
-sablono.util.as_str.cljs$lang$applyTo = (function (seq5486){
+sablono.util.as_str.cljs$lang$applyTo = (function (seq5165){
 var self__4519__auto__ = this;
-return self__4519__auto__.cljs$core$IFn$_invoke$arity$variadic(cljs.core.seq.call(null,seq5486));
+return self__4519__auto__.cljs$core$IFn$_invoke$arity$variadic(cljs.core.seq.call(null,seq5165));
 });
 
 /**
@@ -101,12 +101,12 @@ return self__4519__auto__.cljs$core$IFn$_invoke$arity$variadic(cljs.core.seq.cal
  */
 sablono.util.camel_case = (function sablono$util$camel_case(k){
 if((((k instanceof cljs.core.Keyword)) || (typeof k === 'string') || ((k instanceof cljs.core.Symbol)))){
-var vec__5490 = clojure.string.split.call(null,cljs.core.name.call(null,k),/-/);
-var seq__5491 = cljs.core.seq.call(null,vec__5490);
-var first__5492 = cljs.core.first.call(null,seq__5491);
-var seq__5491__$1 = cljs.core.next.call(null,seq__5491);
-var first_word = first__5492;
-var words = seq__5491__$1;
+var vec__5169 = clojure.string.split.call(null,cljs.core.name.call(null,k),/-/);
+var seq__5170 = cljs.core.seq.call(null,vec__5169);
+var first__5171 = cljs.core.first.call(null,seq__5170);
+var seq__5170__$1 = cljs.core.next.call(null,seq__5170);
+var first_word = first__5171;
+var words = seq__5170__$1;
 if(((cljs.core.empty_QMARK_.call(null,words)) || (cljs.core._EQ_.call(null,"aria",first_word)) || (cljs.core._EQ_.call(null,"data",first_word)))){
 return k;
 } else {
@@ -123,11 +123,11 @@ sablono.util.camel_case_keys = (function sablono$util$camel_case_keys(m){
 if(cljs.core.map_QMARK_.call(null,m)){
 var ks = cljs.core.keys.call(null,m);
 var kmap = cljs.core.zipmap.call(null,ks,cljs.core.map.call(null,sablono.util.camel_case,ks));
-var G__5493 = clojure.set.rename_keys.call(null,m,kmap);
+var G__5172 = clojure.set.rename_keys.call(null,m,kmap);
 if(cljs.core.map_QMARK_.call(null,new cljs.core.Keyword(null,"style","style",-496642736).cljs$core$IFn$_invoke$arity$1(m))){
-return cljs.core.update_in.call(null,G__5493,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"style","style",-496642736)], null),sablono.util.camel_case_keys);
+return cljs.core.update_in.call(null,G__5172,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"style","style",-496642736)], null),sablono.util.camel_case_keys);
 } else {
-return G__5493;
+return G__5172;
 }
 } else {
 return m;
@@ -150,11 +150,11 @@ return clojure.set.rename_keys.call(null,sablono.util.camel_case_keys.call(null,
  * Join the `classes` with a whitespace.
  */
 sablono.util.join_classes = (function sablono$util$join_classes(classes){
-return clojure.string.join.call(null," ",cljs.core.remove.call(null,cljs.core.nil_QMARK_,cljs.core.flatten.call(null,cljs.core.map.call(null,(function (p1__5494_SHARP_){
-if(typeof p1__5494_SHARP_ === 'string'){
-return p1__5494_SHARP_;
+return clojure.string.join.call(null," ",cljs.core.remove.call(null,cljs.core.nil_QMARK_,cljs.core.flatten.call(null,cljs.core.map.call(null,(function (p1__5173_SHARP_){
+if(typeof p1__5173_SHARP_ === 'string'){
+return p1__5173_SHARP_;
 } else {
-return cljs.core.seq.call(null,p1__5494_SHARP_);
+return cljs.core.seq.call(null,p1__5173_SHARP_);
 
 }
 }),classes))));
