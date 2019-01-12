@@ -9,6 +9,11 @@
         (re-find #"ore" recipe)                                                               "electric-mining-drill"
         :else                                                                                 "assembling-machine-1"))
 
+(defn factory-width
+  [factory-type]
+  (cond (#{"stone-furnace"} factory-type) 2
+        :else                             3))
+
 (def science
   '({:name "_research_"
      :ingredients [["science-pack-1"]

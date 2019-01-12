@@ -6,7 +6,8 @@
 
 (def default-recipe-names
   #_ #{"_research_"}
-  #{"electronic-circuit"}
+    #{"transport-belt"}
+  
   )
 
 (defn empty-state
@@ -33,7 +34,8 @@
     (let [bus-outputs (bus/add-bus-outputs (:bus-outputs state)
                                            (bus/default-buses [recipe-name]))
           factories (bus/add-factories (:factories state)
-                                       (bus/default-factories [recipe-name]))]
+                                       (bus/default-factories [recipe-name])
+                                       (:bus-outputs state))]
       (-> state
           (assoc :factories factories)
           (assoc :bus-outputs bus-outputs)))))

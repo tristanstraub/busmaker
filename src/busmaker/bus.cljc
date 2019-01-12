@@ -35,9 +35,11 @@
                                (default-buses recipe-names))))))
 
 (defn add-factories
-  [factories new-factories]
-  (let [existing-recipes (set (mapcat :recipes factories))]
+  [factories new-factories existing-buses]
+  (let [existing-recipes (set (mapcat :recipes factories))
+        existing-buses   (set existing-buses)]
     (->> (remove #(every? existing-recipes (:recipes %)) new-factories)
+         (remove #(every? existing-buses (:recipes %)))
          (into (vec factories)))))
 
 (defn add-bus-outputs

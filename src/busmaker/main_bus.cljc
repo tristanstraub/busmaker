@@ -499,4 +499,6 @@
     (vals (into {} (map (juxt #(vector (int (Math/round (double (get-in % ["position" "y"]))))
                                        (int (Math/round (double (get-in % ["position" "x"])))))
                               identity)
-                        entities)))))
+                        (map #(assoc %1 "entity_number" (inc %2))
+                             entities
+                             (iterate inc 0)))))))

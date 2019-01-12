@@ -72,9 +72,18 @@
   [recipe-name]
   (re-find #".*ore|water|coal|^stone$|crude-oil|raw-wood" recipe-name))
 
+
+
+(def ri (comp #(remove raw? %) recipe-ingredients #(recipe-by-name recipe-data/recipes %)))
+
 #_ (take-while seq (iterate #(distinct (mapcat ri %)) ["transport-belt"]))
 
+(defn matrix
+  [recipe]
+  (into {} [[recipe (into {} (mapv matrix 
+                                   (ri recipe)))]]))
 
+#_(clojure.pprint/pprint (matrix "science-pack-2"))
 
 (defn fluid?
   [bus-ingredient]
