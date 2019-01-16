@@ -191,8 +191,8 @@
 (def impi
   {:did-mount (fn [state]
                 (let [drag        (atom {:dragging? false
-                                         :x         100
-                                         :y         100})
+                                         :x         0
+                                         :y         10})
                       [app-state] (:rum/args state)
                       children    (atom (vec (entities-stage-children (:solution @app-state))))
                       id          (rand-int 10000)]
