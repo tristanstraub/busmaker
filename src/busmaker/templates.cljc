@@ -34,6 +34,16 @@
      "position"      {"x" x
                       "y" y}}])
 
+(defn long-handed-inserter
+  [& {:keys [x y direction] :or {direction [0 -1]
+                                 x         0
+                                 y         0}}]
+  [{"direction"     (blueprint-direction-inserter direction)
+     "name"          "long-handed-inserter"
+     "position"      {"x" x
+                      "y" y}}])
+
+
 (defn transport-belt
   [& {:keys [x y direction] :or {direction [0 -1]
                                  x         0

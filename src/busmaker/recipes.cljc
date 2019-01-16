@@ -79,9 +79,11 @@
 #_ (take-while seq (iterate #(distinct (mapcat ri %)) ["transport-belt"]))
 
 (defn matrix
-  [recipe]
-  (into {} [[recipe (into {} (mapv matrix 
-                                   (ri recipe)))]]))
+  ([recipe]
+   (matrix recipe (comp seq (partial into {}))))
+  ([recipe f]
+   (when-not (#{"electric-mining-drill"} (factory-type recipe))
+     (f [[recipe (f (mapv #(matrix % f) (ri recipe)))]]))))
 
 #_(clojure.pprint/pprint (matrix "science-pack-2"))
 
