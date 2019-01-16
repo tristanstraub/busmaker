@@ -130,16 +130,16 @@
                            facility (recipe-data/factory-type recipe) 
                            [dx dy] (facility-type-offset facility)
                            [j2 index] (ingredient-index rows i j)
-                           [x1 y1] (grid-position rows i j2)
+                           [x1 y1] (grid-position rows (dec i) j2)
                            fh (facility-height facility)
-                           recipe-1 (get (vec row) (dec i))
+                           recipe-1 (get row (dec i))
                            recipe-2 (get (vec (get (vec rows) j2))
                                          (dec i))
                            recipe-1-facility-type (if recipe-1 (recipe-data/factory-type recipe-1))
                            recipe-2-facility-type (if recipe-2 (recipe-data/factory-type recipe-2))
                            fh-1 (if recipe-1 (facility-height recipe-1-facility-type))
                            fh-2 (if recipe-2 (facility-height recipe-2-facility-type))]]
-           (do (println recipe (drop 1 (remove nil? (get (vec columns) (inc i)))))
+           (do (println recipe :index index :i i :j j)
                (concat (templates/factory :facility facility
                                           :x (+ x dx)
                                           :y (+ y dy)
@@ -151,7 +151,7 @@
                                        (horizontal-belt rows
                                                         (- x 2)
                                                         y
-                                                        (+ x-left fh (- index))
+                                                        (+ x1 fh-2 (- index))
                                                         y)
 
                                        (<= (+ x (- w1) fh-1 1) (- x 2))
@@ -162,10 +162,11 @@
                                                         y)))
                                (if (< 0 index)
                                  (vertical-belt rows
-                                                (- x index (- w1 fh)) #_(- index n-ingredients 2)
+                                                (+ x1 fh-2 (- index))
                                                 y
-                                                (- x index (- w1 fh))
+                                                (+ x1 fh-2 (- index))
                                                 (+ y1 fh-2 1)))
+
                                (when (not= 0 i)
                                  (templates/inserter :x (dec x)
                                                      :y y
@@ -178,7 +179,7 @@
                                                      :direction [-1 0]))
                                
                                (when (< 0 index)
-                                 (templates/inserter :x (- x index (- w1 fh))
+                                 (templates/inserter :x (+ x1 fh-2 (- index))
                                                      :y (+ y1 fh-2)
                                                      :direction [0 -1]))))))
          (apply concat))))
