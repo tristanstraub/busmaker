@@ -32,7 +32,7 @@
    :underground-belt-input  "widgets/underground-belt-input.svg"
    :underground-belt-output "widgets/underground-belt-output.svg"
    :stone-furnace           "widgets/stone-furnace.svg"
-   :lab                     "widgets/lab.svg"}) 
+   :lab                     "widgets/lab.svg"})
 
 (defn cell
   [entity x y]
@@ -45,57 +45,61 @@
              :pixi.object/rotation     (* Math/PI (/ rotate 180))
              :pixi.object/interactive? true
              :pixi.event/mouse-over    [:mouse-over entity]})]
-    (match [(get entity "name")
-            (direction (get entity "direction"))
-            (keyword (get entity "type"))]
-           ["grass" _ _] (g :grass)
-           ["underground-belt" :n :input]  (g :underground-belt-input)
-           ["underground-belt" :s :input]  (g :underground-belt-input :rotate 180)
-           ["underground-belt" :w :input]  (g :underground-belt-input :rotate -90)
-           ["underground-belt" :e :input]  (g :underground-belt-input :rotate 90)
+    (when entity
+      (match [(get entity "name")
+              (direction (get entity "direction"))
+              (keyword (get entity "type"))]
+             ["grass" _ _] (g :grass)
+             ["underground-belt" :n :input]  (g :underground-belt-input)
+             ["underground-belt" :s :input]  (g :underground-belt-input :rotate 180)
+             ["underground-belt" :w :input]  (g :underground-belt-input :rotate -90)
+             ["underground-belt" :e :input]  (g :underground-belt-input :rotate 90)
 
-           ["underground-belt" :n :output] (g :underground-belt-output)
-           ["underground-belt" :s :output] (g :underground-belt-output :rotate 180)
-           ["underground-belt" :w :output] (g :underground-belt-output :rotate -90)
-           ["underground-belt" :e :output] (g :underground-belt-output :rotate 90)
+             ["underground-belt" :n :output] (g :underground-belt-output)
+             ["underground-belt" :s :output] (g :underground-belt-output :rotate 180)
+             ["underground-belt" :w :output] (g :underground-belt-output :rotate -90)
+             ["underground-belt" :e :output] (g :underground-belt-output :rotate 90)
 
-           ["transport-belt" :n nil]       (g :transport-belt)
-           ["transport-belt" :s nil]       (g :transport-belt :rotate 180)
-           ["transport-belt" :w nil]       (g :transport-belt :rotate -90)
-           ["transport-belt" :e nil]       (g :transport-belt :rotate 90)
+             ["transport-belt" :n nil]       (g :transport-belt)
+             ["transport-belt" :s nil]       (g :transport-belt :rotate 180)
+             ["transport-belt" :w nil]       (g :transport-belt :rotate -90)
+             ["transport-belt" :e nil]       (g :transport-belt :rotate 90)
 
-           ["small-electric-pole" _ _] (g :electrical-pole)
-           ["medium-electric-pole" _ _] (g :electrical-pole)
+             ["small-electric-pole" _ _] (g :electrical-pole)
+             ["medium-electric-pole" _ _] (g :electrical-pole)
 
-           ["pipe" _ _] (g :pipe)
+             ["pipe" _ _] (g :pipe)
 
-           ["pipe-to-ground" :w _] (g :underground-pipe :rotate 90)
-           ["pipe-to-ground" :e _] (g :underground-pipe :rotate -90)
+             ["pipe-to-ground" :w _] (g :underground-pipe :rotate 90)
+             ["pipe-to-ground" :e _] (g :underground-pipe :rotate -90)
 
-           ["assembling-machine-1" _ _]  (g :assembling-machine)
-           ["assembling-machine-2" _ _]  (g :assembling-machine)
-           
-           ["inserter" :s nil]       (g :inserter :rotate 90)
-           ["inserter" :n nil]       (g :inserter :rotate -90)
-           ["inserter" :e nil]       (g :inserter)
-           ["inserter" :w nil]       (g :inserter :rotate 180)
+             ["assembling-machine-1" _ _]  (g :assembling-machine)
+             ["assembling-machine-2" _ _]  (g :assembling-machine)
 
-           ["long-handed-inserter" :s nil]       (g :long-handed-inserter :rotate 90)
-           ["long-handed-inserter" :n nil]       (g :long-handed-inserter :rotate -90)
-           ["long-handed-inserter" :e nil]       (g :long-handed-inserter)
-           ["long-handed-inserter" :w nil]       (g :long-handed-inserter :rotate 180)
-           
-           ["chemical-plant" _ _] (g :chemical-plant)
-           ["oil-refinery" _ _] (g :oil-refinery)
+             ["inserter" :s nil]       (g :inserter :rotate 90)
+             ["inserter" :n nil]       (g :inserter :rotate -90)
+             ["inserter" :e nil]       (g :inserter)
+             ["inserter" :w nil]       (g :inserter :rotate 180)
+
+             ["long-handed-inserter" :s nil]       (g :long-handed-inserter :rotate 90)
+             ["long-handed-inserter" :n nil]       (g :long-handed-inserter :rotate -90)
+             ["long-handed-inserter" :e nil]       (g :long-handed-inserter)
+             ["long-handed-inserter" :w nil]       (g :long-handed-inserter :rotate 180)
+
+             ["chemical-plant" _ _] (g :chemical-plant)
+             ["oil-refinery" _ _] (g :oil-refinery)
 
 
-           ["lab" _ _] (g :lab)
-           ["electric-furnace" _ _] (g :furnace)
-           ["stone-furnace" _ _] (g :stone-furnace :translate [8 8])
-           ["steel-furnace" _ _] (g :stone-furnace :translate [8 8])
-           ["splitter" :n _] (g :splitter :translate [8 0])
-           ["splitter" :e _] (g :splitter :translate [0 8] :rotate 90)
-           ["splitter" _ _] (g :splitter :translate [8 0]))))
+             ["lab" _ _] (g :lab)
+             ["electric-furnace" _ _] (g :furnace)
+             ["stone-furnace" _ _] (g :stone-furnace :translate [8 8])
+             ["steel-furnace" _ _] (g :stone-furnace :translate [8 8])
+             ["splitter" :n _] (g :splitter :translate [8 0])
+             ["splitter" :e _] (g :splitter :translate [0 8] :rotate 90)
+             ["splitter" _ _] (g :splitter :translate [8 0])
+
+             ["electric-mining-drill" _ _] nil
+             #_(g :electric-mining-drill :translate [8 0])))))
 
 (def margin-x 2)
 
@@ -118,9 +122,10 @@
         dy      (inc (- max-y min-y))]
     (for [y (range dy)
           x (range dx)
-          :let [entity (get indexed [(+ y min-y) (+ x min-x)])]
-          :when entity]
-      (assoc (cell entity (+ margin-x x) y)
+          :let [entity (get indexed [(+ y min-y) (+ x min-x)])
+                sprite (cell entity (+ margin-x x) y)]
+          :when (and entity sprite)]
+      (assoc sprite
              :impi/key (str (* y dy) "-" x)))))
 
 (defn solution-stage
@@ -149,17 +154,17 @@
 
     (impi/mount :blueprint
                 {:pixi/renderer  {:pixi.renderer/size [w h]}
-                 
+
                  :pixi/stage     (merge (solution-stage children
                                                         [(get @drag :x 0)
                                                          (get @drag :y 0)])
-                                        
+
                                         {:pixi.object/interactive? true
                                          :pixi.object/contains-point (constantly true)
                                          :pixi.event/pointer-down  [:pointer-down]
                                          :pixi.event/pointer-up    [:pointer-up]
                                          :pixi.event/pointer-move  [:pointer-move]})
-                 
+
                  :pixi/listeners {:mouse-over   (fn [_ entity]
                                                   (swap! app-state assoc :entity entity))
 
@@ -171,7 +176,7 @@
                                                            :x0        x
                                                            :y0        y
                                                            :dragging? true)))
-                                  
+
                                   :pointer-move (fn [^js/PIXI.interaction.InteractionEvent e]
                                                   (when (:dragging? @drag)
                                                     (let [{:keys [x y
@@ -219,7 +224,7 @@
                                                 @(::children state)
                                                 (::id state)))))
                   state)
-   
+
    :will-unmount (fn [state]
                    (remove-watch (::drag state) ::drag)
                    (impi/unmount :blueprint)
@@ -228,8 +233,5 @@
 (rum/defc panel < impi rum/reactive
   [state]
   (rum/react (rum/cursor-in state [:solution]))
-  
+
   [:div])
-
-
-

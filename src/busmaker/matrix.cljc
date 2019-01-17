@@ -22,9 +22,11 @@
   (cond (#{"lab"} facility)                                         3
         (#{"steel-furnace" "stone-furnace"} facility)               2
         (#{"electric-furnace"} facility)                            3
-        (#{"oil-refinery"} facility)                                5
+        (#{"oil-refinery"} facility)                                6
         (#{"assembling-machine-1" "assembling-machine-2"} facility) 3
         (#{"chemical-plant"} facility)                              3
+        (#{"electric-mining-drill"} facility)                       0
+
         :else                                                       3))
 
 (defn facility-width
@@ -127,7 +129,7 @@
                            [x-left y-left] (grid-position rows (dec i) j)
                            [w h] (grid-dimensions rows i j)
                            [w1 h1] (grid-dimensions rows (dec i) j)
-                           facility (recipe-data/factory-type recipe) 
+                           facility (recipe-data/factory-type recipe)
                            [dx dy] (facility-type-offset facility)
                            [j2 index] (ingredient-index rows i j)
                            [x1 y1] (grid-position rows (dec i) j2)
@@ -140,11 +142,12 @@
                            fh-1 (if recipe-1 (facility-height recipe-1-facility-type))
                            fh-2 (if recipe-2 (facility-height recipe-2-facility-type))]]
            (do (println recipe :index index :i i :j j)
-               (concat (templates/factory :facility facility
-                                          :x (+ x dx)
-                                          :y (+ y dy)
-                                          :matrix/width (facility-width recipe)
-                                          :recipe recipe)
+               (concat (when facility
+                         (templates/factory :facility facility
+                                            :x (+ x dx)
+                                            :y (+ y dy)
+                                            :matrix/width (facility-width recipe)
+                                            :recipe recipe))
 
                        (concat (when (not= [i j] [0 0])
                                  (cond (< 0 index)
@@ -171,13 +174,13 @@
                                  (templates/inserter :x (dec x)
                                                      :y y
                                                      :direction [-1 0]))
-                               
+
                                (when (and (= 0 index)
                                           (not= [0 0] [i j]))
                                  (templates/inserter :x (+ x (- w1) fh-1)
                                                      :y y
                                                      :direction [-1 0]))
-                               
+
                                (when (< 0 index)
                                  (templates/inserter :x (+ x1 fh-2 (- index))
                                                      :y (+ y1 fh-2)
@@ -189,5 +192,3 @@
   ;;  (matrix-bus tree))
   ([tree-seq tree]
    (layout tree-seq tree)))
-
-

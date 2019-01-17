@@ -3,11 +3,12 @@
 (defn factory-type
   [recipe]
   (cond (#{"_research_" "_research_full_" "_research_military_" "_research_production_"} recipe) "lab"
-        (#{"iron-plate" "copper-plate" "steel-plate" "stone-brick"} recipe)                   "stone-furnace"
-        (#{"light-oil" "heavy-oil" "petroleum-gas"} recipe)                                   "oil-refinery"
-        (#{"lubricant" "sulfur" "sulfuric-acid" "battery" "plastic-bar" "explosives"} recipe) "chemical-plant"
-        (re-find #"ore" recipe)                                                               "electric-mining-drill"
-        :else                                                                                 "assembling-machine-1"))
+        (#{"iron-plate" "copper-plate" "steel-plate" "stone-brick"} recipe)                      "stone-furnace"
+        (#{"light-oil" "heavy-oil" "petroleum-gas"} recipe)                                      "oil-refinery"
+        (#{"lubricant" "sulfur" "sulfuric-acid" "battery" "plastic-bar" "explosives"} recipe)    "chemical-plant"
+        (re-find #"ore" recipe)                                                                  "electric-mining-drill"
+        (#{"coal"} recipe)                                                                       nil
+        :else                                                                                    "assembling-machine-1"))
 
 (defn factory-width
   [factory-type]
@@ -1769,5 +1770,3 @@
 
 (def buses
   (concat extra-buses recipes))
-
-

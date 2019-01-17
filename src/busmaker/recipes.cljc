@@ -75,6 +75,7 @@
 
 
 (def ri (comp #(remove raw? %) recipe-ingredients #(recipe-by-name recipe-data/recipes %)))
+(def ri-with-raw (comp recipe-ingredients #(recipe-by-name recipe-data/recipes %)))
 
 #_ (take-while seq (iterate #(distinct (mapcat ri %)) ["transport-belt"]))
 
@@ -82,8 +83,16 @@
   ([recipe]
    (matrix recipe (comp seq (partial into {}))))
   ([recipe f]
-   (when-not (#{"electric-mining-drill"} (factory-type recipe))
-     (f [[recipe (f (mapv #(matrix % f) (ri recipe)))]]))))
+
+   (cond (= "coal" recipe) nil
+
+         (#{"stone-furnace"} (factory-type recipe))
+         (f [[recipe (conj (f (mapv #(matrix % f) (ri-with-raw recipe)))
+                           ["coal" nil])]])
+
+         :else
+         (f [[recipe (f (mapv #(matrix % f) (ri-with-raw recipe)))]]))
+   #_   (f [[recipe (f (mapv #(matrix % f) (ri-with-raw recipe)))]])))
 
 #_(clojure.pprint/pprint (matrix "science-pack-2"))
 
