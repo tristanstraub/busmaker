@@ -141,50 +141,49 @@
                            recipe-2-facility-type (if recipe-2 (recipe-data/factory-type recipe-2))
                            fh-1 (if recipe-1 (facility-height recipe-1-facility-type))
                            fh-2 (if recipe-2 (facility-height recipe-2-facility-type))]]
-           (do (println recipe :index index :i i :j j)
-               (concat (when facility
-                         (templates/factory :facility facility
-                                            :x (+ x dx)
-                                            :y (+ y dy)
-                                            :matrix/width (facility-width recipe)
-                                            :recipe recipe))
+           (concat (when facility
+                     (templates/factory :facility facility
+                                        :x (+ x dx)
+                                        :y (+ y dy)
+                                        :matrix/width (facility-width recipe)
+                                        :recipe recipe))
 
-                       (concat (when (not= [i j] [0 0])
-                                 (cond (< 0 index)
-                                       (horizontal-belt rows
-                                                        (- x 2)
-                                                        y
-                                                        (+ x1 fh-2 (- index))
-                                                        y)
+                   (concat (when (not= [i j] [0 0])
+                             (cond (< 0 index)
+                                   (horizontal-belt rows
+                                                    (- x 2)
+                                                    y
+                                                    (+ x1 fh-2 (- index))
+                                                    y)
 
-                                       (<= (+ x (- w1) fh-1 1) (- x 2))
-                                       (horizontal-belt rows
-                                                        (- x 2)
-                                                        y
-                                                        (+ x (- w1) fh-1 1)
-                                                        y)))
-                               (if (< 0 index)
-                                 (vertical-belt rows
-                                                (+ x1 fh-2 (- index))
-                                                y
-                                                (+ x1 fh-2 (- index))
-                                                (+ y1 fh-2 1)))
+                                   (<= (+ x (- w1) fh-1 1) (- x 2))
+                                   (horizontal-belt rows
+                                                    (- x 2)
+                                                    y
+                                                    (+ x (- w1) fh-1 1)
+                                                    y)))
+                           (if (< 0 index)
+                             (vertical-belt rows
+                                            (+ x1 fh-2 (- index))
+                                            y
+                                            (+ x1 fh-2 (- index))
+                                            (+ y1 fh-2 1)))
 
-                               (when (not= 0 i)
-                                 (templates/inserter :x (dec x)
-                                                     :y y
-                                                     :direction [-1 0]))
+                           (when (not= 0 i)
+                             (templates/inserter :x (dec x)
+                                                 :y y
+                                                 :direction [-1 0]))
 
-                               (when (and (= 0 index)
-                                          (not= [0 0] [i j]))
-                                 (templates/inserter :x (+ x (- w1) fh-1)
-                                                     :y y
-                                                     :direction [-1 0]))
+                           (when (and (= 0 index)
+                                      (not= [0 0] [i j]))
+                             (templates/inserter :x (+ x (- w1) fh-1)
+                                                 :y y
+                                                 :direction [-1 0]))
 
-                               (when (< 0 index)
-                                 (templates/inserter :x (+ x1 fh-2 (- index))
-                                                     :y (+ y1 fh-2)
-                                                     :direction [0 -1]))))))
+                           (when (< 0 index)
+                             (templates/inserter :x (+ x1 fh-2 (- index))
+                                                 :y (+ y1 fh-2)
+                                                 :direction [0 -1])))))
          (apply concat))))
 
 (defn matrix-bus
