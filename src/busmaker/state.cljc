@@ -25,7 +25,7 @@
     (merge state
            {:factories    factories
             :bus-outputs  bus-outputs
-            :solution     (plan/plan factories bus-outputs (:bus-width state))})))
+            :solution     (plan/plan :matrix factories bus-outputs (:bus-width state))})))
 
 (defn add-recipe
   [state recipe-name]

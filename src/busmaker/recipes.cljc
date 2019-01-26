@@ -35,6 +35,11 @@
         :else
         nil))
 
+(defn ingredients
+  [recipe-name]
+  (-> (recipe-by-name recipe-data/recipes recipe-name)
+      recipe-ingredients))
+
 (defn recipe-order
   [g recipes recipe-name]
   (let [r (recipe-by-name recipes recipe-name)]
@@ -81,18 +86,19 @@
 
 (defn matrix
   ([recipe]
-   (matrix recipe (comp seq (partial into {}))))
-  ([recipe f]
-
+   (matrix recipe
+            #(and (seq %) (vec %))))
+  ([recipe f-items]
    (cond (= "coal" recipe) nil
 
          (#{"stone-furnace"} (factory-type recipe))
-         (f [[recipe (conj (f (mapv #(matrix % f) (ri-with-raw recipe)))
-                           ["coal" nil])]])
+         [[recipe (f-items (conj (mapcat #(matrix % f-items) (ri-with-raw recipe))
+                                  ["coal" nil]))]]
 
          :else
-         (f [[recipe (f (mapv #(matrix % f) (ri-with-raw recipe)))]]))
-   #_   (f [[recipe (f (mapv #(matrix % f) (ri-with-raw recipe)))]])))
+         [[recipe (f-items (mapcat #(matrix % f-items) (ri-with-raw recipe)))]])))
+
+
 
 #_(clojure.pprint/pprint (matrix "science-pack-2"))
 

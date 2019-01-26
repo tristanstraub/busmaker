@@ -96,6 +96,23 @@
      "position"      {"x" x
                       "y" y}}])
 
+(defn rotate-90
+  [[x y]]
+  [(- y) x])
+
+(defn splitter
+  [& {:keys [x y direction] :or {direction [0 -1]
+                                 x         0
+                                 y         0}}]
+  
+  (let [[dx dy] (rotate-90 direction)]
+    [{"direction"     (blueprint-direction direction)
+      "name"          "splitter"
+      "position"      {"x" (+ (* (Math/abs dx) 0.5)
+                              x)
+                       "y" (+ (* (Math/abs dy) 0.5)
+                              y)}}]))
+
 (defn factory-line
   [& {:keys [x y recipes n-factories facility] :or {x           0
                                                     y           0
@@ -181,3 +198,4 @@
   (let [{:keys [template/constructor]} (templates key)]
     (assert constructor)
     (apply constructor options)))
+

@@ -25,7 +25,7 @@
         (#{"oil-refinery"} facility)                                6
         (#{"assembling-machine-1" "assembling-machine-2"} facility) 3
         (#{"chemical-plant"} facility)                              3
-        (#{"electric-mining-drill"} facility)                       0
+        (#{"electric-mining-drill"} facility)                       1
 
         :else                                                       3))
 
@@ -57,7 +57,7 @@
 
 (defn pad*
   [coll n]
-  (take n (concat coll (repeat nil))))
+  (vec (take n (concat coll (repeat nil)))))
 
 (defn pad
   [m]
@@ -102,7 +102,7 @@
          (apply concat))))
 
 (defn vertical-belt
-  [rows x0 y0 x1 y1]
+  [x0 y0 x1 y1]
   (let [Dy (- y1 y0)
         s  (if (< 0 Dy) 1 -1)]
     (->> (for [dy (range (inc (Math/abs Dy)))]
@@ -117,77 +117,125 @@
       (update-in ["position" "x"] + (d 0))
       (update-in ["position" "y"] + (d 1))))
 
+(defn last-not-nil
+  [coll]
+  (first (drop-while nil? (reverse coll))))
+
 (defn layout
-  [tree-seq tree]
-  (let [rows    (rows tree-seq)
-        columns (transpose rows)]
-    (->> (for [[j row]    (map-indexed vector rows)
-               [i recipe] (map-indexed vector row)
-               :when      recipe
-               :let       [n-ingredients 3
-                           [x y] (grid-position rows i j)
-                           [x-left y-left] (grid-position rows (dec i) j)
-                           [w h] (grid-dimensions rows i j)
-                           [w1 h1] (grid-dimensions rows (dec i) j)
-                           facility (recipe-data/factory-type recipe)
-                           [dx dy] (facility-type-offset facility)
-                           [j2 index] (ingredient-index rows i j)
-                           [x1 y1] (grid-position rows (dec i) j2)
-                           fh (facility-height facility)
-                           recipe-1 (get row (dec i))
-                           recipe-2 (get (vec (get (vec rows) j2))
-                                         (dec i))
-                           recipe-1-facility-type (if recipe-1 (recipe-data/factory-type recipe-1))
-                           recipe-2-facility-type (if recipe-2 (recipe-data/factory-type recipe-2))
-                           fh-1 (if recipe-1 (facility-height recipe-1-facility-type))
-                           fh-2 (if recipe-2 (facility-height recipe-2-facility-type))]]
-           (concat (when facility
-                     (templates/factory :facility facility
-                                        :x (+ x dx)
-                                        :y (+ y dy)
-                                        :matrix/width (facility-width recipe)
-                                        :recipe recipe))
+  [tree-seq]
+  (let [rows            (pad (rows tree-seq))
+        columns         (transpose rows)
+        [bus-x0 bus-y0] (grid-position rows (count columns) 0)
+        [bus-x1 bus-y1] (grid-position rows (count columns) (count rows))
+        bus-ingredients (into {} (vec (map (comp vec reverse) (map-indexed vector (distinct (map last-not-nil rows))))))]
 
-                   (concat (when (not= [i j] [0 0])
-                             (cond (< 0 index)
+    (println :bus-ingredients bus-ingredients)
+    (concat 
+            
+     (apply concat
+            (for [[j row]    (map-indexed vector rows)
+                  [i recipe] (map-indexed vector row)
+                  :when      recipe]
+              (let [n-ingredients          3
+                    [x y]                  (grid-position rows i j)
+                    [x-left y-left]        (grid-position rows (dec i) j)
+                    [w h]                  (grid-dimensions rows i j)
+                    [w1 h1]                (grid-dimensions rows (dec i) j)
+                    facility               (recipe-data/factory-type recipe)
+                    [dx dy]                (facility-type-offset facility)
+                    [j2 index]             (ingredient-index rows i j)
+                    [x1 y1]                (grid-position rows (dec i) j2)
+                    [x2 y2]                (grid-position rows i j)
+                    [x3 y3]                (grid-position rows (dec (count row)) j)
+                    fh                     (facility-height facility)
+                    recipe-1               (get row (dec i))
+                    recipe-2               (get (vec (get (vec rows) j2))
+                                                (dec i))
+                    recipe-1-facility-type (if recipe-1 (recipe-data/factory-type recipe-1))
+                    recipe-2-facility-type (if recipe-2 (recipe-data/factory-type recipe-2))
+                    fh-1                   (if recipe-1 (facility-height recipe-1-facility-type))
+                    fh-2                   (if recipe-2 (facility-height recipe-2-facility-type))]
+                (concat (when facility
+                          (templates/factory :facility facility
+                                             :x (+ x dx)
+                                             :y (+ y dy)
+                                             :matrix/width (facility-width recipe)
+                                             :recipe recipe))
+
+                        (concat (when (not= [i j] [0 0])
+                                  (cond (< 0 index)
+                                        (horizontal-belt rows
+                                                         (- x 2)
+                                                         y
+                                                         (+ x1 fh-2 (- index))
+                                                         y)
+
+                                        (<= (+ x (- w1) fh-1 1) (- x 2))
+                                        (horizontal-belt rows
+                                                         (- x 2)
+                                                         y
+                                                         (+ x (- w1) fh-1 1)
+                                                         y)))
+
+                                (if (not (get row (inc i)))
+                                  (concat
                                    (horizontal-belt rows
-                                                    (- x 2)
+                                                    (+ x3 3 (* 3 (get bus-ingredients recipe)))
                                                     y
-                                                    (+ x1 fh-2 (- index))
+                                                    (dec x2)
                                                     y)
+                                   (apply concat
+                                          (for [i (range 0 (get bus-ingredients recipe))]
+                                            (concat (templates/underground-belt :x (+ (* i 3)
+                                                                                      bus-x0
+                                                                                      1)
+                                                                                :y y
+                                                                                :direction [-1 0]
+                                                                                :type "input")
+                                                    (templates/underground-belt :x (+ (* i 3)
+                                                                                      bus-x0
+                                                                                      -1)
+                                                                                :y y
+                                                                                :direction [-1 0]
+                                                                                :type "output"))))
+                                   (let [i (get bus-ingredients recipe)]
+                                     (templates/splitter :x (+ (* i 3)
+                                                               bus-x0
+                                                               -1)
+                                                         :y (inc y)
+                                                         :direction [0 1]))))
+                                       
+                                (if (< 0 index)
+                                  (vertical-belt (+ x1 fh-2 (- index))
+                                                 y
+                                                 (+ x1 fh-2 (- index))
+                                                 (+ y1 fh-2 1)))
 
-                                   (<= (+ x (- w1) fh-1 1) (- x 2))
-                                   (horizontal-belt rows
-                                                    (- x 2)
-                                                    y
-                                                    (+ x (- w1) fh-1 1)
-                                                    y)))
-                           (if (< 0 index)
-                             (vertical-belt rows
-                                            (+ x1 fh-2 (- index))
-                                            y
-                                            (+ x1 fh-2 (- index))
-                                            (+ y1 fh-2 1)))
+                                (when (and (not= 0 i)
+                                           (get row (inc i)))
+                                  (templates/inserter :x (dec x)
+                                                      :y y
+                                                      :direction [-1 0]))
 
-                           (when (not= 0 i)
-                             (templates/inserter :x (dec x)
-                                                 :y y
-                                                 :direction [-1 0]))
+                                (when (and (= 0 index)
+                                           (not= [0 0] [i j]))
+                                  (templates/inserter :x (+ x (- w1) fh-1)
+                                                      :y y
+                                                      :direction [-1 0]))
 
-                           (when (and (= 0 index)
-                                      (not= [0 0] [i j]))
-                             (templates/inserter :x (+ x (- w1) fh-1)
-                                                 :y y
-                                                 :direction [-1 0]))
-
-                           (when (< 0 index)
-                             (templates/inserter :x (+ x1 fh-2 (- index))
-                                                 :y (+ y1 fh-2)
-                                                 :direction [0 -1])))))
-         (apply concat))))
+                                (when (< 0 index)
+                                  (templates/inserter :x (+ x1 fh-2 (- index))
+                                                      :y (+ y1 fh-2)
+                                                      :direction [0 -1])))))))
+     (apply concat
+            (for [i (range (count bus-ingredients))]
+              (vertical-belt (+ (* i 3)
+                                bus-x0)
+                             bus-y1
+                             (+ (* i 3)
+                                bus-x0)
+                             bus-y0))))))
 
 (defn matrix-bus
-  ;; ([tree _ _ _]
-  ;;  (matrix-bus tree))
-  ([tree-seq tree]
-   (layout tree-seq tree)))
+  [tree-seq]
+  (layout tree-seq))

@@ -107,14 +107,17 @@
 
 (defn solve-part!
   [state factory-index]
-  (let [part (doall (plan/plan (take 1 (drop factory-index (:factories @state)))
+  (let [part (doall (plan/plan (or (:layout @state) :bus)
+                               (take 1 (drop factory-index (:factories @state)))
                                (:bus-outputs @state)
                                (:bus-width @state)))]
     (swap! state assoc :part part)))
 
+
 (defn solve!
   [state]
-  (let [solution (doall (plan/plan (:factories @state)
+  (let [solution (doall (plan/plan (or (:layout @state) :bus)
+                                   (:factories @state)
                                    (:bus-outputs @state)
                                    (:bus-width @state)))]
     (swap! state assoc :solution solution)))
@@ -124,6 +127,20 @@
   (swap! state (fn [state]
                  (merge state (get-in state [:store :settings (:blueprint-name state)]))))
   (solve! state))
+
+(rum/defc layout-selector < rum/reactive
+  [state]
+  (let [layout (rum/cursor-in state [:layout])]
+    [:label "Layout"
+     [:select {:value (pr-str (rum/react layout))
+               :on-change (fn [e]
+                            (reset! layout (edn/read-string (.. e -target -value)))
+                            (solve! state))}
+      [:option "Select layout"]
+      [:option {:key (pr-str :bus) :value (pr-str :bus)}
+       "Bus"]
+      [:option {:key (pr-str :matrix) :value (pr-str :matrix)}
+       "Matrix"]]]))
 
 (rum/defc recipe-selector < rum/reactive
   ([state]
@@ -370,6 +387,8 @@
                                  (delete-blueprint! state blueprint-name)))}
           "Delete"]]])]]])
 
+
+
 (rum/defc blueprint
   [state]
   [:div.bg-light.d-flex
@@ -377,6 +396,8 @@
     [:div.d-flex.flex-column
      [:div
       (recipe-selector state)]
+     [:div
+      (layout-selector state)]
 
 ;;     (generate-button state)
 
