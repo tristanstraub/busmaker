@@ -68,7 +68,10 @@
              ["small-electric-pole" _ _] (g :electrical-pole)
              ["medium-electric-pole" _ _] (g :electrical-pole)
 
+             ["pipe" :w _] (g :pipe :rotate 90)
+             ["pipe" :e _] (g :pipe :rotate 90)
              ["pipe" _ _] (g :pipe)
+             
 
              ["pipe-to-ground" :w _] (g :underground-pipe :rotate 90)
              ["pipe-to-ground" :e _] (g :underground-pipe :rotate -90)
@@ -96,6 +99,7 @@
              ["steel-furnace" _ _] (g :stone-furnace :translate [8 8])
              ["splitter" :n _] (g :splitter :translate [8 0])
              ["splitter" :e _] (g :splitter :translate [0 8] :rotate 90)
+             ["splitter" :w _] (g :splitter :translate [0 8] :rotate 270)
              ["splitter" _ _] (g :splitter :translate [8 0])
 
              ["electric-mining-drill" _ _] nil

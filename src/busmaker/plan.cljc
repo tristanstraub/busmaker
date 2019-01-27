@@ -18,13 +18,13 @@
                                                items)))]
         (main-bus/normalize (matrix/matrix-bus solution))))
 
-    
+    :bus
     (let [result (main-bus/normalize (main-bus/main-bus factories bus-outputs bus-width))]
       (prn result)
-      result))
-
-  #_(when (last bus-outputs)
-      (main-bus/normalize (autoroute/matrix-bus (recipes/matrix (last bus-outputs)))))
+      result)
+    
+    (when (last bus-outputs)
+      (main-bus/normalize (autoroute/matrix-bus (recipes/matrix (last bus-outputs))))))
   
   #_(main-bus/normalize (matrix/matrix-bus (recipes/matrix "science-pack-2")))
   )

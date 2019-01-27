@@ -140,7 +140,9 @@
       [:option {:key (pr-str :bus) :value (pr-str :bus)}
        "Bus"]
       [:option {:key (pr-str :matrix) :value (pr-str :matrix)}
-       "Matrix"]]]))
+       "Matrix"]
+      [:option {:key (pr-str :autoroute) :value (pr-str :autoroute)}
+       "Autoroute"]]]))
 
 (rum/defc recipe-selector < rum/reactive
   ([state]
@@ -432,5 +434,9 @@
 
 (defn reload!
   []
-  (init))
+  (solve! state)
+
+;;  (init)
+  )
+
 

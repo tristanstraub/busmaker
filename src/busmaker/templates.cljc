@@ -64,6 +64,24 @@
      "position"      {"x" x
                       "y" y}}])
 
+(defn pipe
+  [& {:keys [x y direction] :or {direction [0 -1]
+                                 x         0
+                                 y         0}}]
+  [{"name"          "pipe"
+    "direction"     (blueprint-direction direction)
+    "position"      {"x" x
+                     "y" y}}])
+
+(defn pipe-to-ground
+  [& {:keys [x y direction type] :or {direction [0 -1]
+                                      x         0
+                                      y         0}}]
+  [{"direction"     (blueprint-direction direction)
+     "name"          "pipe-to-ground"
+     "position"      {"x" x
+                      "y" y}}])
+
 (defn small-electric-pole
   [& {:keys [x y] :or {
                        x         0

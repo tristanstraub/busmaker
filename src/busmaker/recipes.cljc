@@ -51,11 +51,31 @@
               g
               (recipe-ingredients r)))))
 
+
+
 (defn sorted-recipe-order
   [recipe-name]
   (dep/topo-sort (recipe-order (dep/graph)
                                recipe-data/recipes
                                recipe-name)))
+
+(defn raw?
+  [recipe-name]
+  (re-find #".*ore|water|coal|^stone$|crude-oil|raw-wood" recipe-name))
+
+(defn raw-sort
+  [coll]
+  (concat (sort (filter raw? coll))
+          (sort (remove raw? coll))))
+
+(defn immediate-ingredients
+  [recipe-name]
+  (let [coal?       (#{"stone-furnace"} (factory-type recipe-name))
+        ;; TODO replace oil-refinery with other output/input mechanism
+        oil?        (#{"oil-refinery"} (factory-type recipe-name))]
+    (raw-sort (distinct (cond->> (recipe-ingredients (recipe-by-name recipe-data/recipes recipe-name))
+                      coal? (into ["coal"])
+                      oil? (into ["water" "crude-oil"]))))))
 
 (defn ingredients-by-recipe-recursive
   [recipe-name]
@@ -63,9 +83,9 @@
         coal?       (some #{"stone-furnace"} (map factory-type (conj ingredients recipe-name)))
         ;; TODO replace oil-refinery with other output/input mechanism
         oil?        (some #{"oil-refinery"} (map factory-type (conj ingredients recipe-name)))]
-    (distinct (cond->> ingredients
-                coal? (into ["coal"])
-                oil? (into ["water" "crude-oil"])))))
+    (raw-sort (distinct (cond->> ingredients
+                          coal? (into ["coal"])
+                          oil? (into ["water" "crude-oil"]))))))
 
 (defn required-ingredients
   [recipe-names]
@@ -73,9 +93,7 @@
                  (ingredients-by-recipe-recursive recipe-name))
                recipe-names)))
 
-(defn raw?
-  [recipe-name]
-  (re-find #".*ore|water|coal|^stone$|crude-oil|raw-wood" recipe-name))
+
 
 
 
@@ -87,13 +105,18 @@
 (defn matrix
   ([recipe]
    (matrix recipe
-            #(and (seq %) (vec %))))
+           #(and (seq %) (vec %))))
   ([recipe f-items]
-   (cond (= "coal" recipe) nil
+   (cond ;; (#{"oil-refinery"} (factory-type recipe))
+         ;; [[recipe (f-items (conj (mapcat #(matrix % f-items) (ri-with-raw recipe))
+         ;;                         ["crude-oil" nil]
+         ;;                         ["water" nil]))]]
 
-         (#{"stone-furnace"} (factory-type recipe))
-         [[recipe (f-items (conj (mapcat #(matrix % f-items) (ri-with-raw recipe))
-                                  ["coal" nil]))]]
+         (raw? recipe) nil
+
+         ;; (#{"stone-furnace"} (factory-type recipe))
+         ;; [[recipe (f-items (conj (mapcat #(matrix % f-items) (ri-with-raw recipe))
+         ;;                          ["coal" nil]))]]
 
          :else
          [[recipe (f-items (mapcat #(matrix % f-items) (ri-with-raw recipe)))]])))
