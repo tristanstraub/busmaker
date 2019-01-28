@@ -314,7 +314,12 @@
        ~@(for [[key value] (sort-by first entity)]
            [:tr
             [:th (name key)]
-            [:td (pr-str value)]])]]))
+            [:td (pr-str value)]])
+       [:tr
+        [:th "ingredients"]
+        [:td ~(when (:recipe entity)
+                (pr-str (recipes/immediate-ingredients (:recipe entity))))]
+        ]]]))
 
 
 (rum/defc solution-encoded < rum/reactive
@@ -391,7 +396,7 @@
 
 
 
-(rum/defc blueprint
+(rum/defc blueprint < rum/reactive
   [state]
   [:div.bg-light.d-flex
    [:div.d-flex.flex-row
@@ -401,7 +406,7 @@
      [:div
       (layout-selector state)]
 
-;;     (generate-button state)
+     ;;     (generate-button state)
 
      [:button {:on-click (fn [_]
                            (reset! state (assoc (state/empty-state)
@@ -435,6 +440,8 @@
 (defn reload!
   []
   (solve! state)
+  
+  ;;(swap! state assoc :dragging (pixi/g state :assembling-machine))
 
 ;;  (init)
   )

@@ -34,6 +34,49 @@
    :stone-furnace           "widgets/stone-furnace.svg"
    :lab                     "widgets/lab.svg"})
 
+(defn g
+  [app-state v & {:keys [rotate translate position entity]
+        :or {translate [0 0]
+             rotate    0
+             position  [0 0]}}]
+  (let [[x y] position]
+    {:pixi.object/type           :pixi.object.type/sprite
+     :pixi.object/position       (mapv + [(* 16 x) (* 16 y)] translate)
+     :pixi.sprite/anchor         [0.5 0.5]
+     :pixi.sprite/texture        {:pixi.texture/source (widgets v)}
+     :pixi.object/rotation       (* Math/PI (/ rotate 180))
+     
+     :pixi.object/interactive?   true
+     :pixi.event/mouse-over      [:mouse-over entity]
+     :pixi.object/contains-point (constantly true)
+     :pixi.event/pointer-down    [:pointer-down]
+     :pixi.event/pointer-up      [:pointer-up]
+     :pixi.event/pointer-move    [:pointer-move]
+     
+     :pixi/listeners             {:pointer-down (fn [^js/PIXI.interaction.InteractionEvent e]
+                                                  (let [{:keys [x y]} (:dragging @app-state)]
+                                                    (swap! app-state update :dragging
+                                                           (fn [v]
+                                                             (assoc v
+                                                                    :mx0       (.. e -data -originalEvent -clientX)
+                                                                    :my0       (.. e -data -originalEvent -clientY)
+                                                                    :x0        x
+                                                                    :y0        y
+                                                                    :dragging? true)))))
+
+                                  :pointer-move (fn [^js/PIXI.interaction.InteractionEvent e]
+                                                  (when (get-in @app-state [:dragging :dragging?])
+                                                    (let [{:keys [x y
+                                                                  mx0 my0
+                                                                  x0 y0]} (get-in @app-state [:dragging])
+                                                          dmx (- mx0 (.. e -data -originalEvent -clientX))
+                                                          dmy (- my0 (.. e -data -originalEvent -clientY))]
+                                                      (swap! app-state update (fn [v] (assoc v :x (- x0 dmx) :y (- y0 dmy)))))))
+
+                                  :pointer-up   (fn [_]
+                                                  (swap! app-state update :dragging
+                                                         (fn [v] (assoc v :dragging? false))))}}))
+
 (defn cell
   [entity x y]
   (let [g (fn [v & {:keys [rotate translate] :or {translate [0 0]
@@ -134,10 +177,7 @@
 
 (defn solution-stage
   [children position]
-  {:impi/key                :stage
-   :pixi.object/position    position
-   :pixi.object/type        :pixi.object.type/container
-   :pixi.container/children children})
+)
 
 (defmethod impi/update-prop! :pixi.event/pointer-down [object index _ listener]
   (impi/replace-listener object "pointerdown" index listener))
@@ -153,21 +193,26 @@
 
 (defn render-stage!
   [state drag children id]
-  (let [[w h]       [2000 800]
+  (let [size        ^js/goog.math.Size (dom/getViewportSize)
+        w           (.-width size)
+        h           (.-height size)
         [app-state] (:rum/args state)]
 
     (impi/mount :blueprint
                 {:pixi/renderer  {:pixi.renderer/size [w h]}
 
-                 :pixi/stage     (merge (solution-stage children
-                                                        [(get @drag :x 0)
-                                                         (get @drag :y 0)])
+                 :pixi/stage     {:impi/key                   :solution-stage
+                                  :pixi.object/position       [(get @drag :x 0)
+                                                               (get @drag :y 0)]
+                                  :pixi.object/type           :pixi.object.type/container
+                                  :pixi.container/children    children
 
-                                        {:pixi.object/interactive? true
-                                         :pixi.object/contains-point (constantly true)
-                                         :pixi.event/pointer-down  [:pointer-down]
-                                         :pixi.event/pointer-up    [:pointer-up]
-                                         :pixi.event/pointer-move  [:pointer-move]})
+                                  :pixi.object/interactive?   true
+                                  :pixi.object/contains-point (constantly true)
+                                  :pixi.event/pointer-down    [:pointer-down]
+                                  :pixi.event/pointer-up      [:pointer-up]
+                                  :pixi.event/pointer-move    [:pointer-move]
+                                  }
 
                  :pixi/listeners {:mouse-over   (fn [_ entity]
                                                   (swap! app-state assoc :entity entity))
