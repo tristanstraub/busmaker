@@ -53,8 +53,8 @@ busmaker.state.remove_recipe = (function busmaker$state$remove_recipe(state,reci
 return busmaker.state.remove_factory.call(null,state,busmaker.bus.get_factory.call(null,new cljs.core.Keyword(null,"factories","factories",1443149712).cljs$core$IFn$_invoke$arity$1(state),recipe_name));
 });
 busmaker.state.remove_bus = (function busmaker$state$remove_bus(state,recipe_name){
-return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584),(function (p1__8635_SHARP_){
-return cljs.core.vec.call(null,cljs.core.remove.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),p1__8635_SHARP_));
+return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584),(function (p1__8538_SHARP_){
+return cljs.core.vec.call(null,cljs.core.remove.call(null,cljs.core.PersistentHashSet.createAsIfByAssoc([recipe_name]),p1__8538_SHARP_));
 }));
 });
 busmaker.state.set_bus_output_recipe = (function busmaker$state$set_bus_output_recipe(state,bus_index,recipe){
@@ -69,45 +69,45 @@ return output;
 }));
 });
 busmaker.state.move_bus_output_up = (function busmaker$state$move_bus_output_up(state,bus_index){
-var map__8636 = state;
-var map__8636__$1 = ((((!((map__8636 == null)))?(((((map__8636.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8636.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8636):map__8636);
-var bus_outputs = cljs.core.get.call(null,map__8636__$1,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584));
-var vec__8637 = new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.subvec.call(null,bus_outputs,(0),bus_index),cljs.core.subvec.call(null,bus_outputs,bus_index,(bus_index + (1))),cljs.core.subvec.call(null,bus_outputs,(bus_index + (1)))], null);
-var left = cljs.core.nth.call(null,vec__8637,(0),null);
-var middle = cljs.core.nth.call(null,vec__8637,(1),null);
-var right = cljs.core.nth.call(null,vec__8637,(2),null);
+var map__8539 = state;
+var map__8539__$1 = ((((!((map__8539 == null)))?(((((map__8539.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8539.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8539):map__8539);
+var bus_outputs = cljs.core.get.call(null,map__8539__$1,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584));
+var vec__8540 = new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.subvec.call(null,bus_outputs,(0),bus_index),cljs.core.subvec.call(null,bus_outputs,bus_index,(bus_index + (1))),cljs.core.subvec.call(null,bus_outputs,(bus_index + (1)))], null);
+var left = cljs.core.nth.call(null,vec__8540,(0),null);
+var middle = cljs.core.nth.call(null,vec__8540,(1),null);
+var right = cljs.core.nth.call(null,vec__8540,(2),null);
 return cljs.core.assoc.call(null,state,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584),cljs.core.vec.call(null,cljs.core.concat.call(null,left,cljs.core.take.call(null,(1),right),middle,cljs.core.drop.call(null,(1),right))));
 });
 busmaker.state.move_bus_output_down = (function busmaker$state$move_bus_output_down(state,bus_index){
-var map__8641 = state;
-var map__8641__$1 = ((((!((map__8641 == null)))?(((((map__8641.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8641.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8641):map__8641);
-var bus_outputs = cljs.core.get.call(null,map__8641__$1,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584));
-var vec__8642 = new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.subvec.call(null,bus_outputs,(0),bus_index),cljs.core.subvec.call(null,bus_outputs,bus_index,(bus_index + (1))),cljs.core.subvec.call(null,bus_outputs,(bus_index + (1)))], null);
-var left = cljs.core.nth.call(null,vec__8642,(0),null);
-var middle = cljs.core.nth.call(null,vec__8642,(1),null);
-var right = cljs.core.nth.call(null,vec__8642,(2),null);
+var map__8544 = state;
+var map__8544__$1 = ((((!((map__8544 == null)))?(((((map__8544.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__8544.cljs$core$ISeq$))))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__8544):map__8544);
+var bus_outputs = cljs.core.get.call(null,map__8544__$1,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584));
+var vec__8545 = new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.subvec.call(null,bus_outputs,(0),bus_index),cljs.core.subvec.call(null,bus_outputs,bus_index,(bus_index + (1))),cljs.core.subvec.call(null,bus_outputs,(bus_index + (1)))], null);
+var left = cljs.core.nth.call(null,vec__8545,(0),null);
+var middle = cljs.core.nth.call(null,vec__8545,(1),null);
+var right = cljs.core.nth.call(null,vec__8545,(2),null);
 return cljs.core.assoc.call(null,state,new cljs.core.Keyword(null,"bus-outputs","bus-outputs",-2007555584),cljs.core.vec.call(null,cljs.core.concat.call(null,cljs.core.butlast.call(null,left),middle,cljs.core.take_last.call(null,(1),left),right)));
 });
 busmaker.state.swap_facility = (function busmaker$state$swap_facility(state,factory,facility){
-return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8646_SHARP_){
+return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8549_SHARP_){
 return cljs.core.mapv.call(null,(function (f){
 if(cljs.core._EQ_.call(null,factory,f)){
 return cljs.core.assoc.call(null,f,new cljs.core.Keyword(null,"facility","facility",-2118099900),facility);
 } else {
 return f;
 }
-}),p1__8646_SHARP_);
+}),p1__8549_SHARP_);
 }));
 });
 busmaker.state.change_facility_line_length = (function busmaker$state$change_facility_line_length(state,factory,n){
-return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8647_SHARP_){
+return cljs.core.update.call(null,state,new cljs.core.Keyword(null,"factories","factories",1443149712),(function (p1__8550_SHARP_){
 return cljs.core.mapv.call(null,(function (f){
 if(cljs.core._EQ_.call(null,factory,f)){
 return cljs.core.assoc.call(null,f,new cljs.core.Keyword(null,"n","n",562130025),n);
 } else {
 return f;
 }
-}),p1__8647_SHARP_);
+}),p1__8550_SHARP_);
 }));
 });
 busmaker.state.set_bus_width = (function busmaker$state$set_bus_width(state,bus_width){
