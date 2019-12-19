@@ -95,7 +95,7 @@
                  (assoc-in state [:store :settings (:blueprint-name state)]
                            ;; TODO eliminate dissoc
                            (dissoc state :store))))
-  
+
   (serialize-to-store! state))
 
 (defn delete-blueprint!
@@ -348,7 +348,7 @@
     [:input {:value     (rum/react (rum/cursor-in state [:blueprint-name]))
              :on-change (fn [e]
                           (swap! state assoc :blueprint-name (.. e -target -value)))}]]
-   
+
    [:button {:on-click (fn [_]
                          (save! state))}
     "Save"]
@@ -405,11 +405,12 @@
   []
   (swap! state assoc :store (busmaker-store))
   (solve! state)
+
   (rum/mount (blueprint state)
              (. js/document (getElementById "container")))
+
   (enable-console-print!))
 
 (defn reload!
   []
   (init))
-

@@ -32,7 +32,7 @@
    :underground-belt-input  "widgets/underground-belt-input.svg"
    :underground-belt-output "widgets/underground-belt-output.svg"
    :stone-furnace           "widgets/stone-furnace.svg"
-   :lab                     "widgets/lab.svg"}) 
+   :lab                     "widgets/lab.svg"})
 
 (defn cell
   [entity x y]
@@ -74,7 +74,7 @@
 
            ["assembling-machine-1" _ _]  (g :assembling-machine)
            ["assembling-machine-2" _ _]  (g :assembling-machine)
-           
+
            ["inserter" :s nil]       (g :inserter :rotate 90)
            ["inserter" :n nil]       (g :inserter :rotate -90)
            ["inserter" :e nil]       (g :inserter)
@@ -84,7 +84,7 @@
            ["long-handed-inserter" :n nil]       (g :long-handed-inserter :rotate -90)
            ["long-handed-inserter" :e nil]       (g :long-handed-inserter)
            ["long-handed-inserter" :w nil]       (g :long-handed-inserter :rotate 180)
-           
+
            ["chemical-plant" _ _] (g :chemical-plant)
            ["oil-refinery" _ _] (g :oil-refinery)
 
@@ -124,9 +124,11 @@
              :impi/key (str (* y dy) "-" x)))))
 
 (defn solution-stage
-  [children position]
+  [children position drag]
   {:impi/key                :stage
    :pixi.object/position    position
+   :pixi.object/scale       [(get drag :scale-x 1)
+                             (get drag :scale-y 1)]
    :pixi.object/type        :pixi.object.type/container
    :pixi.container/children children})
 
@@ -142,6 +144,20 @@
 (defmethod impi/update-prop! :pixi.object/button-mode? [^js/PIXI.DisplayObject object _ _ button-mode?]
   (set! (.-buttonMode object) button-mode?))
 
+(defn zoom
+  [old-pos old-scale s x y]
+  (let [s              (if (> s 0) 1.1 0.9)
+        world-pos      [(/ (- x (old-pos 0)) (old-scale 0))
+                        (/ (- y (old-pos 1)) (old-scale 1))]
+        new-scale      [(* s (old-scale 0))
+                        (* s (old-scale 1))]
+        new-screen-pos [(+ (old-pos 0) (* (world-pos 0) (new-scale 0)))
+                        (+ (old-pos 1) (* (world-pos 1) (new-scale 1)))]
+
+        new-stage-pos  [(- (old-pos 0) (- (new-screen-pos 0) x))
+                        (- (old-pos 1) (- (new-screen-pos 1) y))]]
+    [new-stage-pos new-scale]))
+
 (defn render-stage!
   [state drag children id]
   (let [[w h]       [2000 800]
@@ -149,17 +165,18 @@
 
     (impi/mount :blueprint
                 {:pixi/renderer  {:pixi.renderer/size [w h]}
-                 
+
                  :pixi/stage     (merge (solution-stage children
                                                         [(get @drag :x 0)
-                                                         (get @drag :y 0)])
-                                        
+                                                         (get @drag :y 0)]
+                                                        @drag)
+
                                         {:pixi.object/interactive? true
                                          :pixi.object/contains-point (constantly true)
                                          :pixi.event/pointer-down  [:pointer-down]
                                          :pixi.event/pointer-up    [:pointer-up]
                                          :pixi.event/pointer-move  [:pointer-move]})
-                 
+
                  :pixi/listeners {:mouse-over   (fn [_ entity]
                                                   (swap! app-state assoc :entity entity))
 
@@ -171,7 +188,7 @@
                                                            :x0        x
                                                            :y0        y
                                                            :dragging? true)))
-                                  
+
                                   :pointer-move (fn [^js/PIXI.interaction.InteractionEvent e]
                                                   (when (:dragging? @drag)
                                                     (let [{:keys [x y
@@ -188,16 +205,37 @@
                                                   (swap! drag assoc :dragging? false))}}
                 (rum/dom-node state))))
 
+(defn listen!
+  [drag]
+  (fn [^js/WheelEvent e]
+    (.preventDefault e)
+
+    (let [[new-stage-pos new-scale] (zoom [(get @drag :x 0)
+                                           (get @drag :y 0)]
+                                          [(get @drag :scale-x 1)
+                                           (get @drag :scale-y 1)]
+                                          (- (.. e -deltaY)) (.. e -offsetX) (.. e -offsetY))]
+      (swap! drag (fn [drag]
+                    (assoc drag
+                           :x (new-stage-pos 0)
+                           :y (new-stage-pos 1)
+                           :scale-x (new-scale 0)
+                           :scale-y (new-scale 1)))))))
+
 (def impi
   {:did-mount (fn [state]
                 (let [drag        (atom {:dragging? false
                                          :x         0
-                                         :y         0})
+                                         :y         0
+                                         :scale-x   1
+                                         :scale-y   1})
                       [app-state] (:rum/args state)
                       children    (atom (vec (entities-stage-children (:solution @app-state))))
                       id          (rand-int 10000)]
 
                   (render-stage! state drag @children id)
+
+                  (.addEventListener ^js/DomElement (rum/dom-node state) "wheel" (listen! drag))
 
                   (add-watch drag ::drag (fn [& _]
                                            (render-stage! state drag @children id)))
@@ -219,7 +257,7 @@
                                                 @(::children state)
                                                 (::id state)))))
                   state)
-   
+
    :will-unmount (fn [state]
                    (remove-watch (::drag state) ::drag)
                    (impi/unmount :blueprint)
@@ -228,8 +266,5 @@
 (rum/defc panel < impi rum/reactive
   [state]
   (rum/react (rum/cursor-in state [:solution]))
-  
+
   [:div])
-
-
-
